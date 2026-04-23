@@ -1,0 +1,12 @@
+name = "oshi-link"
+compatibility_date = "2024-04-05"
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "oshi-link-db"
+database_id = "00000000-0000-0000-0000-000000000000" # Placeholder, will be replaced when actually creating
+
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "oshi-link-images"
