@@ -1,11 +1,12 @@
 'use client';
 import { useState } from 'react';
-import { Calendar, CheckCircle, AlertTriangle, Users, Hexagon, Star, Plus, ShieldCheck } from 'lucide-react';
+import { Calendar, CheckCircle, AlertTriangle, Users, Hexagon, Star, Plus, ShieldCheck, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { createCheckoutSession } from '@/app/actions/stripe';
 
 // Mocks
 const MOCK_GROUPS = [
@@ -22,6 +23,30 @@ const MOCK_EVENTS = [
 
 export default function App() {
   const [activeGroupId, setActiveGroupId] = useState('1');
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubscribe() {
+    setLoading(true);
+    try {
+      const { url } = await createCheckoutSession();
+      if (url) window.location.href = url;
+    } catch (e) {
+      console.error(e);
+      alert('Stripe key is missing or invalid. Set STRIPE_SECRET_KEY in env.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleAddEvent(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    
+    // In a real app, this would be a POST to /api/events
+    console.log('Adding event:', data);
+    alert('MVP mode: Event data logged to console. In production, this saves to D1.');
+  }
 
   return (
     <div className="flex h-screen w-full bg-[#f2f2f2]">
@@ -50,7 +75,13 @@ export default function App() {
             <p className="text-sm font-medium text-gray-500">ファン参加型カレンダー</p>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="rounded-full shadow-sm hover-shadow bg-white text-[#222222] border-gray-200 h-10 px-6 font-medium">
+            <Button 
+              onClick={handleSubscribe}
+              disabled={loading}
+              variant="outline" 
+              className="rounded-full shadow-sm hover-shadow bg-white text-[#222222] border-gray-200 h-10 px-6 font-medium"
+            >
+              {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : null}
               Subscribe Premium (¥500/mo)
             </Button>
             <Avatar className="h-10 w-10 ring-2 ring-primary/20">
@@ -65,6 +96,7 @@ export default function App() {
             <div className="flex justify-between items-end">
               <h2 className="text-[28px] font-bold tracking-tight text-[#222222]">Upcoming Events</h2>
               <Dialog>
+                {/* @ts-ignore */}
                 <DialogTrigger asChild>
                   <Button className="bg-[#ff385c] hover:bg-[#e00b41] text-white rounded-lg h-12 px-6 font-semibold shadow-md">
                     <Plus className="mr-2 h-5 w-5" /> Add Event
@@ -77,12 +109,12 @@ export default function App() {
                       ファンコミュニティに推しの予定を共有しましょう。
                     </DialogDescription>
                   </DialogHeader>
-                  <div className="space-y-4 py-4">
-                    <input className="w-full h-12 border border-gray-200 rounded-lg px-4 focus:ring-2 focus:ring-[#ff385c] outline-none" placeholder="イベントタイトル" />
-                    <input type="date" className="w-full h-12 border border-gray-200 rounded-lg px-4 focus:ring-2 focus:ring-[#ff385c] outline-none" />
-                    <input className="w-full h-12 border border-gray-200 rounded-lg px-4 focus:ring-2 focus:ring-[#ff385c] outline-none" placeholder="ソースURL" />
-                    <Button className="w-full bg-[#222222] text-white h-12 rounded-lg">Submit for Verification</Button>
-                  </div>
+                  <form onSubmit={handleAddEvent} className="space-y-4 py-4">
+                    <input name="title" className="w-full h-12 border border-gray-200 rounded-lg px-4 focus:ring-2 focus:ring-[#ff385c] outline-none" placeholder="イベントタイトル" required />
+                    <input name="date" type="date" className="w-full h-12 border border-gray-200 rounded-lg px-4 focus:ring-2 focus:ring-[#ff385c] outline-none" required />
+                    <input name="source_url" className="w-full h-12 border border-gray-200 rounded-lg px-4 focus:ring-2 focus:ring-[#ff385c] outline-none" placeholder="ソースURL" required />
+                    <Button type="submit" className="w-full bg-[#222222] text-white h-12 rounded-lg font-semibold">Submit for Verification</Button>
+                  </form>
                 </DialogContent>
               </Dialog>
             </div>
