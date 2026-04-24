@@ -1,12 +1,10 @@
 name = "oshi-link"
-compatibility_date = "2024-04-05"
+compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "oshi-link-db"
-database_id = "00000000-0000-0000-0000-000000000000" # Placeholder, will be replaced when actually creating
+database_id = "48e42e89-7a9e-485e-82d2-a1f20e53d88e"
 
-[[r2_buckets]]
-binding = "IMAGES"
-bucket_name = "oshi-link-images"

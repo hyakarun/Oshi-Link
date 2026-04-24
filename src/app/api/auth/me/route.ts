@@ -1,0 +1,55 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getRequestContext } from '@cloudflare/next-on-pages';
+
+export const runtime = 'edge';
+
+interface Env {
+  DB: D1Database;
+}
+
+// セッショントークンからユーザーを取得する共通関数（他のAPIからも利用可能）
+export async function getSessionUser(db: D1Database, request: NextRequest) {
+  const authHeader = request.headers.get('Authorization');
+  const token = authHeader?.replace('Bearer ', '') || '';
+  if (!token) return null;
+
+  const session = await db.prepare(
+    'SELECT s.*, u.id as uid, u.name, u.email FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
+  ).bind(token).first() as {
+    token: string; user_id: string; expires_at: string;
+    uid: string; name: string; email: string;
+  } | null;
+
+  if (!session) return null;
+  if (new Date(session.expires_at) < new Date()) return null;
+
+  return { id: session.uid, name: session.name, email: session.email };
+}
+
+// GET /api/auth/me  → セッションから現在のユーザーを取得
+export async function GET(request: NextRequest) {
+  const { env } = getRequestContext();
+  const db = (env as unknown as Env).DB;
+
+  const user = await getSessionUser(db, request);
+  if (!user) {
+    return NextResponse.json({ user: null }, { status: 401 });
+  }
+
+  return NextResponse.json({ user });
+}
+
+// DELETE /api/auth/me  → ログアウト（セッション削除）
+export async function DELETE(request: NextRequest) {
+  const { env } = getRequestContext();
+  const db = (env as unknown as Env).DB;
+
+  const authHeader = request.headers.get('Authorization');
+  const token = authHeader?.replace('Bearer ', '') || '';
+
+  if (token) {
+    await db.prepare('DELETE FROM sessions WHERE token = ?').bind(token).run();
+  }
+
+  return NextResponse.json({ ok: true });
+}
