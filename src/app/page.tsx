@@ -1,9 +1,11 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
+import Script from 'next/script';
 import { Calendar, Clock, MapPin, Plus, ShieldCheck, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, X, Check, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 import {
   format,
   startOfMonth,
@@ -76,6 +78,8 @@ function GroupAvatar({ group, size = 'md' }: { group: Group; size?: 'sm' | 'md' 
 export default function App() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [followedGroups, setFollowedGroups] = useState<Group[]>([]);
+  const router = useRouter();
+
   const [events, setEvents] = useState<Event[]>([]);
   const [activeGroupId, setActiveGroupId] = useState<string>('0');
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -84,15 +88,12 @@ export default function App() {
   const [sessionToken, setSessionToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [isDiscoverOpen, setIsDiscoverOpen] = useState(false);
-
-  // Magic Link 認証の状態
-  const [authStep, setAuthStep] = useState<'idle' | 'sent' | 'logging_in'>('idle');
-  const [authEmail, setAuthEmail] = useState('');
 
   const [discoverSearch, setDiscoverSearch] = useState('');
   const [followLoading, setFollowLoading] = useState<string | null>(null);
@@ -108,33 +109,10 @@ export default function App() {
     return headers;
   }
 
-  // 初期ロード: URLトークン or ローカルセッションを確認
+  // 初期ロード: ローカルセッションを確認
   useEffect(() => {
     setMounted(true);
     async function init() {
-      // 1. URLに ?token=xxx があればMagic Link認証
-      const params = new URLSearchParams(window.location.search);
-      const urlToken = params.get('token');
-      if (urlToken) {
-        setAuthStep('logging_in');
-        try {
-          const res = await fetch(`/api/auth/verify?token=${urlToken}`);
-          const data = await res.json() as { ok?: boolean; sessionToken?: string; user?: User; error?: string };
-          if (data.ok && data.sessionToken && data.user) {
-            localStorage.setItem('oshi_session', data.sessionToken);
-            setSessionToken(data.sessionToken);
-            setUser(data.user);
-            // URLからtokenを消す
-            window.history.replaceState({}, '', window.location.pathname);
-          } else {
-            alert(data.error || 'ログインリンクが無効です');
-          }
-        } catch {}
-        setAuthStep('idle');
-        return;
-      }
-
-      // 2. 保存済みセッションがあれば検証
       const saved = localStorage.getItem('oshi_session');
       if (saved) {
         setSessionToken(saved);
@@ -144,17 +122,23 @@ export default function App() {
           });
           if (res.ok) {
             const data = await res.json() as { user?: User };
-            if (data.user) setUser(data.user);
-          } else {
-            // セッション期限切れ
-            localStorage.removeItem('oshi_session');
-            setSessionToken(null);
+            if (data.user) {
+              setUser(data.user);
+              setIsAuthChecking(false);
+              return;
+            }
           }
+          localStorage.removeItem('oshi_session');
+          setSessionToken(null);
         } catch {}
       }
+      
+      // 未認証の場合はログイン画面へ
+      setIsAuthChecking(false);
+      router.push('/login');
     }
     init();
-  }, []);
+  }, [router]);
 
   const loadGroups = useCallback(async (userId?: string) => {
     try {
@@ -241,33 +225,6 @@ export default function App() {
     setLoading(false);
   }
 
-  // Magic Link を送信
-  async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    const fd = new FormData(e.currentTarget);
-    const email = fd.get('email') as string;
-    const name = fd.get('name') as string;
-    setAuthEmail(email);
-    try {
-      const res = await fetch('/api/auth/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
-      });
-      const data = await res.json() as { ok?: boolean; error?: string; devUrl?: string };
-      if (data.ok) {
-        setAuthStep('sent');
-        // 開発環境: devUrlがあれば自動で遷移（本番では不要）
-        if (data.devUrl) {
-          console.log('[DEV] クリックしてログイン:', data.devUrl);
-        }
-      } else {
-        alert(data.error || '送信に失敗しました');
-      }
-    } catch { alert('送信に失敗しました'); }
-    setLoading(false);
-  }
 
   // ログアウト
   async function handleLogout() {
@@ -282,7 +239,6 @@ export default function App() {
     setSessionToken(null);
     setUser(null);
     setFollowedGroups([]);
-    setAuthStep('idle');
     setIsProfileModalOpen(false);
     await loadGroups();
   }
@@ -550,8 +506,24 @@ export default function App() {
     return <div className="border-t border-l border-gray-100 rounded-xl overflow-hidden shadow-xl animate-in fade-in duration-500">{rows}</div>;
   };
 
+  if (!mounted || isAuthChecking) {
+    return (
+      <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+          <p className="text-sm font-bold text-gray-400">認証情報を確認中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null; // The redirect will handle navigating away
+  }
+
   return (
-    <div className="flex h-screen w-full bg-[#f2f2f2]" suppressHydrationWarning>
+    <>
+      <div className="flex h-screen w-full bg-[#f2f2f2] transition-all" suppressHydrationWarning>
 
       {/* Left Sidebar - Following Calendars */}
       <aside className="w-[260px] bg-white border-r border-gray-100 h-full flex flex-col flex-shrink-0">
@@ -993,15 +965,10 @@ export default function App() {
         </DialogContent>
       </Dialog>
 
-      {/* Profile / Auth Modal */}
-      <Dialog open={isProfileModalOpen} onOpenChange={(open) => {
-        setIsProfileModalOpen(open);
-        if (!open) { setAuthStep('idle'); setAuthEmail(''); }
-      }}>
-        <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl">
-
-          {/* ログイン済み: プロフィール表示 */}
-          {user ? (
+      {/* Profile Modal */}
+      {user && (
+        <Dialog open={isProfileModalOpen} onOpenChange={setIsProfileModalOpen}>
+          <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl">
             <div className="p-8 space-y-6">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-gradient-to-br from-[#ff385c] to-[#e00b41] rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg">
@@ -1032,65 +999,9 @@ export default function App() {
                 ログアウト
               </button>
             </div>
-          ) : authStep === 'logging_in' ? (
-            /* ログイン中 */
-            <div className="p-12 flex flex-col items-center gap-4">
-              <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
-              <DialogTitle className="text-lg font-black text-[#222222]">ログイン中...</DialogTitle>
-            </div>
-          ) : authStep === 'sent' ? (
-            /* メール送信済み */
-            <div className="p-8 text-center space-y-4">
-              <div className="w-16 h-16 bg-[#fff0f3] rounded-2xl flex items-center justify-center mx-auto">
-                <span className="text-3xl">📧</span>
-              </div>
-              <DialogTitle className="text-xl font-black text-[#222222]">メールを確認してください</DialogTitle>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                <span className="font-bold text-[#222222]">{authEmail}</span> にログインリンクを送りました。<br />
-                メール内のボタンをクリックするとログインできます。
-              </p>
-              <p className="text-xs text-gray-400">リンクは15分間有効です</p>
-              <button
-                onClick={() => { setAuthStep('idle'); setAuthEmail(''); }}
-                className="text-sm font-bold text-[#ff385c] hover:underline"
-              >
-                別のメールアドレスで試す
-              </button>
-            </div>
-          ) : (
-            /* 未ログイン: メール入力 */
-            <div className="p-8 space-y-6">
-              <div className="text-center space-y-2">
-                <div className="w-14 h-14 bg-[#ff385c] rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-4">
-                  <Calendar className="w-7 h-7" />
-                </div>
-                <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight">Oshi-Linkにログイン</DialogTitle>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  メールアドレスを入力すると、ログインリンクが届きます。<br />
-                  パスワード不要・安全・簡単。
-                </p>
-              </div>
-              <form onSubmit={handleSendMagicLink} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">お名前（初回のみ）</label>
-                  <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">メールアドレス <span className="text-red-500">*</span></label>
-                  <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" required />
-                </div>
-                <button type="submit" disabled={loading} className="w-full h-14 bg-[#ff385c] hover:bg-[#e00b41] text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base">
-                  {loading ? <Loader2 className="animate-spin h-5 w-5 mx-auto" /> : 'ログインリンクを送る 📧'}
-                </button>
-              </form>
-              <p className="text-center text-[11px] text-gray-400">
-                アカウントがない場合は自動で作成されます
-              </p>
-            </div>
-          )}
-
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
 
 
       {/* Create Group Modal */}
@@ -1119,5 +1030,6 @@ export default function App() {
       </Dialog>
 
     </div>
+    </>
   );
 }

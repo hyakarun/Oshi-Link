@@ -9,6 +9,7 @@ CREATE TABLE users (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
+  google_id TEXT UNIQUE, -- Googleアカウントの識別子
   role TEXT DEFAULT 'user',
   premium_status TEXT DEFAULT 'free',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -1,0 +1,272 @@
+"use client";
+
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Calendar, Loader2 } from 'lucide-react';
+
+// Minimal User interface to match existing
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar_url?: string;
+  role: string;
+}
+
+function LoginContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [mounted, setMounted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [authStep, setAuthStep] = useState<'idle' | 'sent' | 'logging_in'>('idle');
+  const [authEmail, setAuthEmail] = useState('');
+  const [googleLoaded, setGoogleLoaded] = useState(false);
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
+
+  // 1. セッションが既にあるか、URLトークンがあるかチェック
+  useEffect(() => {
+    setMounted(true);
+    async function checkAuth() {
+      const urlToken = searchParams.get('token');
+      if (urlToken) {
+        setAuthStep('logging_in');
+        try {
+          const res = await fetch(`/api/auth/verify?token=${urlToken}`);
+          const data = await res.json() as { ok?: boolean; sessionToken?: string; user?: User; error?: string };
+          if (data.ok && data.sessionToken && data.user) {
+            localStorage.setItem('oshi_session', data.sessionToken);
+            router.push('/');
+            return;
+          } else {
+            alert(data.error || 'ログインリンクが無効です');
+          }
+        } catch {}
+        setAuthStep('idle');
+      }
+
+      const saved = localStorage.getItem('oshi_session');
+      if (saved) {
+        try {
+          const res = await fetch('/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${saved}` },
+          });
+          if (res.ok) {
+            const data = await res.json() as { user?: User };
+            if (data.user) {
+              router.push('/');
+              return;
+            }
+          } else {
+            localStorage.removeItem('oshi_session');
+          }
+        } catch {}
+      }
+      setIsAuthChecking(false);
+    }
+    checkAuth();
+  }, [router, searchParams]);
+
+
+  // 2. Googleスクリプトの動的読み込み
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if ((window as any).google) {
+      setGoogleLoaded(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => setGoogleLoaded(true);
+    document.body.appendChild(script);
+  }, []);
+
+  // 3. Googleログインボタンの描画
+  useEffect(() => {
+    if (isAuthChecking || authStep !== 'idle') return;
+
+    let initTimer: NodeJS.Timeout;
+
+    const setupGoogle = () => {
+      if (typeof window === 'undefined' || !(window as any).google) {
+        initTimer = setTimeout(setupGoogle, 200);
+        return;
+      }
+
+      const btnEl = document.getElementById('google-login-btn');
+      if (!btnEl) {
+        initTimer = setTimeout(setupGoogle, 200);
+        return;
+      }
+
+      const clientId = '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
+      try {
+        (window as any).google.accounts.id.initialize({
+          client_id: clientId,
+          callback: async (response: any) => {
+            setAuthStep('logging_in');
+            try {
+              const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential }),
+              });
+              const text = await res.text();
+              let data;
+              try { data = JSON.parse(text); } catch { data = { error: 'Unknown server error' }; }
+              
+              if (res.ok && data.ok && data.sessionToken && data.user) {
+                localStorage.setItem('oshi_session', data.sessionToken);
+                router.push('/');
+              } else {
+                alert('ログイン処理に失敗しました: ' + (data.error || text));
+                setAuthStep('idle');
+              }
+            } catch (err: any) {
+              alert('通信エラー: ' + err.message);
+              setAuthStep('idle');
+            }
+          },
+        });
+
+        btnEl.innerHTML = '';
+        (window as any).google.accounts.id.renderButton(btnEl, {
+          theme: 'filled_blue',
+          size: 'large',
+          width: 320,
+          shape: 'pill',
+          text: 'continue_with',
+          locale: 'ja',
+        });
+      } catch (e) {
+        console.error('Google init error:', e);
+      }
+    };
+
+    setupGoogle();
+
+    return () => {
+      if (initTimer) clearTimeout(initTimer);
+    };
+  }, [isAuthChecking, authStep, router]);
+
+  async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    const fd = new FormData(e.currentTarget);
+    const email = fd.get('email') as string;
+    const name = fd.get('name') as string;
+    try {
+      const res = await fetch('/api/auth/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name }),
+      });
+      if (res.ok) {
+        setAuthEmail(email);
+        setAuthStep('sent');
+      } else {
+        alert('エラーが発生しました');
+      }
+    } catch {
+      alert('エラーが発生しました');
+    }
+    setLoading(false);
+  }
+
+  if (!mounted || isAuthChecking) {
+    return (
+      <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+          <p className="text-sm font-bold text-gray-400">認証情報を確認中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-screen w-full bg-gradient-to-br from-[#f2f2f2] to-gray-100 items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full animate-in fade-in zoom-in-95 duration-500">
+        {authStep === 'logging_in' ? (
+          <div className="py-12 flex flex-col items-center gap-4">
+            <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+            <h2 className="text-lg font-black text-[#222222]">ログイン中...</h2>
+          </div>
+        ) : authStep === 'sent' ? (
+          <div className="text-center space-y-4 py-8">
+            <div className="w-16 h-16 bg-[#fff0f3] rounded-2xl flex items-center justify-center mx-auto">
+              <span className="text-3xl">📧</span>
+            </div>
+            <h2 className="text-xl font-black text-[#222222]">メールを確認してください</h2>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              <span className="font-bold text-[#222222]">{authEmail}</span> にログインリンクを送りました。<br />
+              メール内のボタンをクリックするとログインできます。
+            </p>
+            <p className="text-xs text-gray-400 mt-4">リンクは15分間有効です</p>
+            <button
+              onClick={() => { setAuthStep('idle'); setAuthEmail(''); }}
+              className="text-sm font-bold text-[#ff385c] hover:underline mt-4"
+            >
+              別のメールアドレスで試す
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <div className="text-center space-y-2">
+              <div className="w-14 h-14 bg-[#ff385c] rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-4">
+                <Calendar className="w-7 h-7" />
+              </div>
+              <h2 className="text-2xl font-black text-[#222222] tracking-tight">Oshi-Link をはじめる</h2>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                Googleアカウントで 1秒で登録・ログイン。<br />
+                面倒なパスワード設定は不要です。
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div id="google-login-btn" className="flex justify-center h-11"></div>
+
+              <div className="flex items-center gap-4 py-2">
+                <div className="h-[1px] bg-gray-100 flex-1"></div>
+                <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">または</span>
+                <div className="h-[1px] bg-gray-100 flex-1"></div>
+              </div>
+
+              <form onSubmit={handleSendMagicLink} className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">お名前（初回のみ）</label>
+                  <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">メールアドレス <span className="text-red-500">*</span></label>
+                  <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" required />
+                </div>
+                <button type="submit" disabled={loading} className="w-full h-14 bg-[#ff385c] hover:bg-[#e00b41] text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base">
+                  {loading ? <Loader2 className="animate-spin h-5 w-5 mx-auto" /> : 'ログインリンクを送る 📧'}
+                </button>
+              </form>
+              <p className="text-center text-[11px] text-gray-400 mt-2">
+                アカウントがない場合は自動で作成されます
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
+        <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
+  );
+}
