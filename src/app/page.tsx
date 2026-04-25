@@ -659,21 +659,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Bottom actions */}
-        <div className="px-3 py-3 border-t border-gray-100 flex gap-2">
-          <button
-            onClick={() => setIsGroupModalOpen(true)}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-[#ff385c] transition-all text-[11px] font-bold"
-          >
-            <Plus className="w-3.5 h-3.5" /> 新規作成
-          </button>
-          <button
-            onClick={() => setIsDiscoverOpen(true)}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl bg-[#fff0f3] text-[#ff385c] hover:bg-[#ffe0e6] transition-all text-[11px] font-bold"
-          >
-            <Search className="w-3.5 h-3.5" /> 探す
-          </button>
-        </div>
+
 
       </aside>
 
