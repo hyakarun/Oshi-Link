@@ -2,9 +2,9 @@
 var define_ROUTES_default = { version: 1, description: "Built with @cloudflare/next-on-pages@1.13.16.", include: ["/*"], exclude: ["/_next/static/*"] };
 
 // node_modules/wrangler/templates/pages-dev-pipeline.ts
-import worker from "/Users/mukulogi/Oshi-Link/.wrangler/tmp/pages-aFjIOT/bundledWorker-0.9068705890934554.mjs";
+import worker from "/Users/mukulogi/Oshi-Link/.wrangler/tmp/pages-aFjIOT/bundledWorker-0.9513822237077947.mjs";
 import { isRoutingRuleMatch } from "/Users/mukulogi/Oshi-Link/node_modules/wrangler/templates/pages-dev-util.ts";
-export * from "/Users/mukulogi/Oshi-Link/.wrangler/tmp/pages-aFjIOT/bundledWorker-0.9068705890934554.mjs";
+export * from "/Users/mukulogi/Oshi-Link/.wrangler/tmp/pages-aFjIOT/bundledWorker-0.9513822237077947.mjs";
 var routes = define_ROUTES_default;
 var pages_dev_pipeline_default = {
   fetch(request, env, context) {

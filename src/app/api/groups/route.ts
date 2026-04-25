@@ -58,6 +58,22 @@ export async function POST(request: Request) {
     const { name, description, avatar_url, created_by } = await request.json() as {
       name: string; description?: string; avatar_url?: string; created_by?: string;
     };
+    
+    let safeAvatarUrl = avatar_url;
+    if (safeAvatarUrl) {
+      if (!safeAvatarUrl.startsWith('http://') && !safeAvatarUrl.startsWith('https://')) {
+        safeAvatarUrl = 'https://' + safeAvatarUrl;
+      }
+      try {
+        const u = new URL(safeAvatarUrl);
+        if (u.protocol !== 'http:' && u.protocol !== 'https:') {
+          return NextResponse.json({ error: '無効なURLプロトコルです' }, { status: 400 });
+        }
+        safeAvatarUrl = u.toString();
+      } catch {
+        return NextResponse.json({ error: '無効なURLフォーマットです' }, { status: 400 });
+      }
+    }
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -66,7 +82,7 @@ export async function POST(request: Request) {
     const id = crypto.randomUUID();
     await db.prepare(
       'INSERT INTO groups (id, name, description, avatar_url) VALUES (?, ?, ?, ?)'
-    ).bind(id, name, description || null, avatar_url || null).run();
+    ).bind(id, name, description || null, safeAvatarUrl || null).run();
 
     // 作成者を自動フォロー
     if (created_by) {

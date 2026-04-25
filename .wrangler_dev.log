@@ -886,3 +886,230 @@ Attaching additional modules:
 ✨ Compiled Worker successfully
 ✨ Compiled Worker successfully
 ✨ Compiled Worker successfully
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). The promise rejected with the reason:
+Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.vercel/output/static/_worker.js'
+    at async Object.readdir (node:internal/fs/promises:952:18)
+    at async getFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49192:23)
+    at async matchFiles (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49345:20)
+    at async findAdditionalModules (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:49239:20)
+    at async produceWorkerBundleForWorkerJSDirectory (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:238703:29)
+    at async runBuild (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244422:34)
+    at async FSWatcher.<anonymous> (/Users/mukulogi/Oshi-Link/node_modules/wrangler/wrangler-dist/cli.js:244440:15)
+⎔ Reloading local server...
+⎔ Local server updated and ready
