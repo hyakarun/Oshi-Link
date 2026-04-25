@@ -100,6 +100,7 @@ export default function App() {
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [view, setView] = useState<View>('month');
+  const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
 
   // セッション認証ヘルパー
   function authHeaders(): Record<string, string> {
@@ -112,6 +113,7 @@ export default function App() {
   // 初期ロード: ローカルセッションを確認
   useEffect(() => {
     setMounted(true);
+
     async function init() {
       const saved = localStorage.getItem('oshi_session');
       if (saved) {
@@ -143,10 +145,11 @@ export default function App() {
   const loadGroups = useCallback(async (userId?: string) => {
     try {
       const uid = userId || user?.id || '';
-      const url = uid ? `\u002fapi\u002fgroups?user_id=${uid}` : '\u002fapi\u002fgroups';
-      const res = await fetch(url);
+      let url = uid ? `/api/groups?user_id=${uid}` : '/api/groups';
+      url += (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+      const res = await fetch(url, { cache: 'no-store' });
       const data = await res.json() as { groups?: Group[] };
-      const groups = data.groups || [];
+      const groups = data.groups || data as unknown as Group[] || [];
       setAllGroups(groups);
       setFollowedGroups(groups.filter(g => g.is_following));
     } catch {}
@@ -154,9 +157,11 @@ export default function App() {
 
   const loadEvents = useCallback(async () => {
     try {
-      const res = await fetch('\u002fapi\u002fevents');
+      const res = await fetch('/api/events?t=' + Date.now(), { cache: 'no-store' });
       const data = await res.json() as { events?: Event[] };
-      setEvents(data.events || []);
+      // /api/events サーバーは配列を直接返す
+      const eventList = data.events || data as unknown as Event[] || [];
+      setEvents(eventList);
     } catch {}
   }, []);
 
@@ -912,6 +917,17 @@ export default function App() {
                     {selectedEvent.description && (
                       <p className="text-gray-600 text-sm leading-relaxed">{selectedEvent.description}</p>
                     )}
+                    {selectedEvent.source_url && (
+                      <div className="pt-2">
+                        <button
+                          onClick={() => setExternalUrlWarning(selectedEvent.source_url!)}
+                          className="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-[#ff385c] text-xs font-bold rounded-xl transition-all"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                          公式情報・リンクを開く
+                        </button>
+                      </div>
+                    )}
                     <div className="space-y-3 border-t border-gray-100 pt-6">
                       <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">コミュニティ検証</h3>
                       <div className="grid grid-cols-2 gap-3">
@@ -962,6 +978,37 @@ export default function App() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* External Link Warning Modal */}
+      <Dialog open={!!externalUrlWarning} onOpenChange={(open) => !open && setExternalUrlWarning(null)}>
+        <DialogContent className="max-w-md p-8 border-none rounded-[32px] bg-white shadow-2xl">
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-2">
+              <AlertCircle className="w-8 h-8 text-orange-500" />
+            </div>
+            <DialogTitle className="text-2xl font-black text-[#222222]">外部サイトへ移動します</DialogTitle>
+            <p className="text-sm font-medium text-gray-500 bg-gray-50 p-4 rounded-xl break-all w-full text-left max-h-[100px] overflow-y-auto">
+              {externalUrlWarning}
+            </p>
+            <DialogDescription className="text-sm text-gray-500">
+              Oshi-Linkから離れ、コミュニティによって登録された外部サイトに移動しようとしています。<br/><br/>
+              <span className="text-orange-600 font-bold">フィッシング詐欺や悪質なウイルスが含まれる可能性があるリンクには十分にご注意ください。怪しい場合は絶対に開かないでください。</span>
+            </DialogDescription>
+            <div className="flex gap-3 w-full mt-4">
+              <Button onClick={() => setExternalUrlWarning(null)} className="flex-1 bg-gray-100 text-gray-600 h-12 rounded-2xl font-black hover:bg-gray-200 shadow-sm active:scale-95 transition-all">キャンセル</Button>
+              <a 
+                href={externalUrlWarning || '#'} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex-1 bg-orange-500 text-white h-12 rounded-2xl font-black flex items-center justify-center hover:bg-orange-600 shadow-md active:scale-95 transition-all" 
+                onClick={() => setExternalUrlWarning(null)}
+              >
+                自己責任で開く
+              </a>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 

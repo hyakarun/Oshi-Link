@@ -28,11 +28,29 @@ export async function POST(request: Request) {
     const db = (ctx.env as any).DB;
 
     const body = await request.json() as any;
-    const { group_id, title, date, end_time, description, image_url, added_by, source_url } = body;
+    const { group_id, title, date, end_time, description, image_url, user_id, source_url } = body;
+    const added_by = user_id;
 
     // Validate required fields
     if (!group_id || !title || !date) {
       return NextResponse.json({ error: 'Missing required fields: group_id, title, date' }, { status: 400 });
+    }
+
+    // Validate URL safety if source_url is provided
+    let safeSourceUrl = source_url;
+    if (safeSourceUrl) {
+      if (!safeSourceUrl.startsWith('http://') && !safeSourceUrl.startsWith('https://')) {
+        safeSourceUrl = 'https://' + safeSourceUrl;
+      }
+      try {
+        const u = new URL(safeSourceUrl);
+        if (u.protocol !== 'http:' && u.protocol !== 'https:') {
+          return NextResponse.json({ error: '無効なURLプロトコルです' }, { status: 400 });
+        }
+        safeSourceUrl = u.toString();
+      } catch {
+        return NextResponse.json({ error: '無効なURLフォーマットです' }, { status: 400 });
+      }
     }
 
     // Generate UUID safely
@@ -58,7 +76,7 @@ export async function POST(request: Request) {
       end_time || null, 
       description || null, 
       image_url || 'https://images.unsplash.com/photo-1540039155732-d67414bc5c4a?w=800&q=80',
-      source_url || null, 
+      safeSourceUrl || null, 
       target_added_by
     ).run();
 

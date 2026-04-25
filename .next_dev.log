@@ -5,7 +5,7 @@
 ▲ Next.js 16.2.4 (Turbopack)
 - Local:         http://localhost:3000
 - Network:       http://172.20.10.5:3000
-✓ Ready in 374ms
+✓ Ready in 349ms
 ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
  We detected multiple lockfiles and selected the directory of /Users/mukulogi/package-lock.json as the root directory.
  To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
@@ -14,10 +14,7 @@
    * /Users/mukulogi/Oshi-Link/package-lock.json
 
 
- GET / 200 in 2.5s (next.js: 2.3s, application-code: 146ms)
- GET /login 200 in 366ms (next.js: 342ms, application-code: 25ms)
- GET /api/events 500 in 488ms
- GET /api/groups 500 in 531ms
+ GET /login 200 in 305ms (next.js: 155ms, application-code: 151ms)
 ⨯ Error: Failed to retrieve the Cloudflare request context.
 
 For local development (using the Next.js dev server) remember to include
@@ -52,19 +49,5 @@ For more details visit:
   14 |   const db = (env as unknown as Env).DB;
   15 |   const clientId = (env as unknown as Env).GOOGLE_CLIENT_ID;
   16 |
- POST /api/auth/google 500 in 1308ms (next.js: 1239ms, application-code: 69ms)
-✓ Compiled in 168ms
-[browser] The final argument passed to useEffect changed size between renders. The order and size of this array must remain constant.
-
-Previous: [false, [object Object]]
-Incoming: [false, idle, [object Object]] 
-    at LoginContent (src/app/login/page.tsx:87:12)
-    at Set.forEach (<anonymous>)
-  85 |
-  86 |   // 3. Googleログインボタンの描画
-> 87 |   useEffect(() => {
-     |            ^
-  88 |     if (isAuthChecking || authStep !== 'idle') return;
-  89 |
-  90 |     let initTimer: NodeJS.Timeout; (src/app/login/page.tsx:87:12)
-[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:85:460)
+ POST /api/auth/google 500 in 307ms (next.js: 220ms, application-code: 87ms)
+[?25h
