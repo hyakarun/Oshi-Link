@@ -874,7 +874,7 @@ export default function App() {
       <Dialog open={!!selectedEvent} onOpenChange={(open) => {
         if (!open) { setSelectedEvent(null); setIsEditing(false); }
       }}>
-        <DialogContent className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
+        <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
           {selectedEvent && (
             <div className="flex flex-col bg-white">
               <div className="relative aspect-video overflow-hidden">
