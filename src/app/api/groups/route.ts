@@ -88,6 +88,12 @@ export async function POST(request: NextRequest) {
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
     }
+    if (name.length > 50) {
+      return NextResponse.json({ error: '名前が長すぎます（最大50文字）' }, { status: 400 });
+    }
+    if (description && description.length > 500) {
+      return NextResponse.json({ error: '説明文が長すぎます（最大500文字）' }, { status: 400 });
+    }
 
     const id = crypto.randomUUID();
     await db.prepare(

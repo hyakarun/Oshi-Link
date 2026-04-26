@@ -35,9 +35,15 @@ export async function POST(request: NextRequest) {
     const { group_id, title, date, end_time, description, category, location, source_url } = body;
     const added_by = user.id;
 
-    // Validate required fields
+    // Validate required fields and lengths
     if (!group_id || !title || !date) {
       return NextResponse.json({ error: 'Missing required fields: group_id, title, date' }, { status: 400 });
+    }
+    if (title.length > 100) {
+      return NextResponse.json({ error: 'タイトルが長すぎます（最大100文字）' }, { status: 400 });
+    }
+    if (description && description.length > 2000) {
+      return NextResponse.json({ error: '説明文が長すぎます（最大2000文字）' }, { status: 400 });
     }
 
     // Validate URL safety
