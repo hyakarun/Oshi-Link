@@ -6,6 +6,8 @@ export type Group = {
   event_count?: number;
   follower_count?: number;
   is_following?: boolean;
+  custom_bg_image?: string;
+  custom_theme_color?: string;
 };
 
 export type Event = {

@@ -66,3 +66,30 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }
+
+// PATCH /api/groups/follow  → 個人設定 (カスタム背景/カラー) の更新
+export async function PATCH(request: NextRequest) {
+  const env = process.env as unknown as Env;
+
+  try {
+    const body = await request.json() as { user_id: string; group_id: string; custom_bg_image: string | null; custom_theme_color: string | null };
+    const { user_id, group_id, custom_bg_image, custom_theme_color } = body;
+
+    if (!user_id || !group_id) {
+      return NextResponse.json({ error: 'user_id and group_id required' }, { status: 400 });
+    }
+
+    // UPDATE
+    const updateResult = await env.DB.prepare(
+      'UPDATE user_group_follows SET custom_bg_image = ?, custom_theme_color = ? WHERE user_id = ? AND group_id = ?'
+    ).bind(custom_bg_image || null, custom_theme_color || null, user_id, group_id).run();
+
+    if (updateResult.meta.changes === 0) {
+      return NextResponse.json({ error: 'Not following this group' }, { status: 404 });
+    }
+
+    return NextResponse.json({ status: 'updated' });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
+}

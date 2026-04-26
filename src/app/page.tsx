@@ -14,6 +14,7 @@ import { CreateGroupModal } from '@/components/modals/CreateGroupModal';
 import { LinkWarningModal } from '@/components/modals/LinkWarningModal';
 import { DiscoverModal } from '@/components/modals/DiscoverModal';
 import { EventDetailModal } from '@/components/modals/EventDetailModal';
+import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
 
 export default function App() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
@@ -34,6 +35,7 @@ export default function App() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [isDiscoverOpen, setIsDiscoverOpen] = useState(false);
+  const [personalizationOpen, setPersonalizationOpen] = useState(false);
 
   const [discoverSearch, setDiscoverSearch] = useState('');
   const [followLoading, setFollowLoading] = useState<string | null>(null);
@@ -237,6 +239,29 @@ export default function App() {
     setLoading(false);
   }
 
+  async function handleSavePersonalization(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!user) return;
+    setLoading(true);
+    const fd = new FormData(e.currentTarget);
+    const body = {
+      user_id: user.id,
+      group_id: fd.get('group_id'),
+      custom_bg_image: fd.get('custom_bg_image') as string || null,
+      custom_theme_color: fd.get('custom_theme_color') as string || null,
+    };
+    try {
+      await fetch('/api/groups/follow', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      await loadGroups(user.id);
+      setPersonalizationOpen(false);
+    } catch {}
+    setLoading(false);
+  }
+
   function handleSubscribe(groupId: string) {
     const base = window.location.origin;
     const url = base + '\u002fapi\u002fgroups\u002fexport?id=' + groupId;
@@ -249,9 +274,12 @@ export default function App() {
   );
 
   const discoverFiltered = allGroups.filter(g =>
-    g.name.toLowerCase().includes(discoverSearch.toLowerCase()) ||
-    (g.description || '').toLowerCase().includes(discoverSearch.toLowerCase())
+    !discoverSearch || g.name.toLowerCase().includes(discoverSearch.toLowerCase()) || (g.description || '').toLowerCase().includes(discoverSearch.toLowerCase())
   );
+
+  const activeGroupData = allGroups.find(g => g.id === activeGroupId);
+  const themeColor = activeGroupData?.custom_theme_color || '#ff385c';
+  const bgImage = activeGroupData?.custom_bg_image || null;
 
   const sidebarGroups = followedGroups.length > 0 ? followedGroups : allGroups.slice(0, 5);
 
@@ -423,9 +451,12 @@ export default function App() {
         days.push(
           <div
             key={day.toString()}
-            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-red-50' : ''}`}
+            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50/50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50/50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-red-50/20' : ''}`}
           >
-            <span className={`text-[10px] md:text-xs font-black absolute top-1 md:top-3 right-1 md:right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'bg-[#ff385c] text-white w-5 h-5 md:w-7 md:h-7 rounded-full shadow-lg' : 'text-gray-400'}`}>
+            <span 
+              className={`text-[10px] md:text-xs font-black absolute top-1 md:top-3 right-1 md:right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'text-white w-5 h-5 md:w-7 md:h-7 rounded-full shadow-lg' : 'text-gray-400'}`}
+              style={isSameDay(day, new Date()) ? { backgroundColor: themeColor } : {}}
+            >
               {format(day, 'd')}
             </span>
             <div className="space-y-1 mt-5 md:mt-6">
@@ -433,7 +464,8 @@ export default function App() {
                 <div
                   key={idx}
                   onClick={() => setSelectedEvent(e)}
-                  className="text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md px-1 md:px-2 py-0.5 md:py-1 truncate cursor-pointer hover:border-[#ff385c] hover:shadow-md transition-all font-medium text-[#222222]"
+                  className="text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md px-1 md:px-2 py-0.5 md:py-1 truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222]"
+                  style={{ borderLeftColor: themeColor, borderLeftWidth: '3px' }}
                 >
                   {e.title}
                 </div>
@@ -564,15 +596,16 @@ export default function App() {
                     key={g.id}
                     onClick={() => setActiveGroupId(g.id)}
                     className={`p-2.5 rounded-xl cursor-pointer transition-all group ${
-                      isActive ? 'bg-[#fff0f3]' : 'hover:bg-gray-50'
+                      isActive ? 'bg-gray-50' : 'hover:bg-gray-50'
                     }`}
+                    style={isActive && g.custom_theme_color ? { backgroundColor: `${g.custom_theme_color}15` } : {}}
                   >
                     <div className="flex items-center gap-2.5">
                       <GroupAvatar group={g} size="sm" />
                       <div className="flex-1 min-w-0">
                         <p className={`text-[12px] font-black truncate ${
-                          isActive ? 'text-[#ff385c]' : 'text-[#222222]'
-                        }`}>{g.name}</p>
+                          !isActive ? 'text-[#222222]' : ''
+                        }`} style={isActive ? { color: g.custom_theme_color || '#ff385c' } : {}}>{g.name}</p>
                         <p className="text-[10px] text-gray-400">
                           {g.event_count || 0}件 · {g.follower_count || 0}人
                         </p>
@@ -586,7 +619,7 @@ export default function App() {
                       </button>
                     </div>
                     {nextEvent && (
-                      <div className="mt-1.5 ml-10 pl-2 border-l-2 border-[#ff385c] border-opacity-30">
+                      <div className="mt-1.5 ml-10 pl-2 border-l-2 border-opacity-30" style={{ borderColor: g.custom_theme_color || '#ff385c' }}>
                         <p className="text-[9px] text-gray-500 font-bold truncate">{nextEvent.title}</p>
                         <p className="text-[9px] text-gray-400">{format(parseISO(nextEvent.date), 'MM月dd日 HH:mm')}</p>
                       </div>
@@ -617,6 +650,13 @@ export default function App() {
 
         {/* Calendar Area */}
         <div className="flex-1 flex flex-col bg-white md:rounded-l-[32px] overflow-hidden shadow-2xl relative z-0">
+          {bgImage && (
+            <div 
+              className="absolute inset-0 z-[-1] opacity-[0.08] pointer-events-none" 
+              style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }} 
+            />
+          )}
+
           <header className="h-16 md:h-20 border-b flex items-center justify-between px-4 md:px-8 bg-white/95 backdrop-blur-md sticky top-0 z-10 shrink-0">
             <div className="flex items-center gap-3">
               <Button 
@@ -629,15 +669,27 @@ export default function App() {
               </Button>
               <div>
                 <h1 className="text-lg md:text-xl font-bold tracking-tight text-[#222222]">Oshi-Link</h1>
-                <p className="text-[10px] md:text-[12px] font-medium text-gray-500 uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]">
+                <p className="text-[10px] md:text-[12px] font-medium uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]" style={{ color: themeColor }}>
                   {allGroups.find(g => g.id === activeGroupId)?.name || (activeGroupId === '0' ? '全ての予定' : '')}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 md:gap-3">
+              {activeGroupId !== '0' && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => setPersonalizationOpen(true)}
+                  className="rounded-xl text-gray-500"
+                  title="個人設定（背景・カラー）"
+                >
+                  <img src="https://api.iconify.design/lucide:palette.svg?color=%236b7280" alt="設定" className="w-5 h-5" />
+                </Button>
+              )}
+
               <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
                 <DialogTrigger render={
-                  <Button className="bg-[#ff385c] hover:bg-[#e00b41] text-white rounded-xl h-10 px-6 font-bold shadow-md active:scale-95 transition-all">
+                  <Button style={{ backgroundColor: themeColor }} className="text-white rounded-xl h-10 px-6 font-bold shadow-md active:scale-95 transition-all">
                     <Plus className="mr-2 h-4 w-4" /> 予定を追加
                   </Button>
                 } />
@@ -721,6 +773,15 @@ export default function App() {
         handleFollowToggle={handleFollowToggle}
         handleSubscribe={handleSubscribe}
         openCreateGroup={() => { setIsDiscoverOpen(false); setIsGroupModalOpen(true); }}
+      />
+
+      {/* Group Settings Modal */}
+      <GroupSettingsModal
+        isOpen={personalizationOpen}
+        onOpenChange={setPersonalizationOpen}
+        group={activeGroupData || null}
+        loading={loading}
+        handleSavePersonalization={handleSavePersonalization}
       />
 
       {/* Event Detail Modal */}

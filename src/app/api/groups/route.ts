@@ -27,12 +27,15 @@ export async function GET(request: NextRequest) {
       ORDER BY follower_count DESC, g.name ASC
     `).all();
 
-    let followedIds: Set<string> = new Set();
+    let userFollowData: Record<string, { custom_bg_image: string | null; custom_theme_color: string | null }> = {};
     if (userId) {
       const followResult = await db.prepare(
-        'SELECT group_id FROM user_group_follows WHERE user_id = ?'
+        'SELECT group_id, custom_bg_image, custom_theme_color FROM user_group_follows WHERE user_id = ?'
       ).bind(userId).all();
-      followedIds = new Set((followResult.results as { group_id: string }[]).map(r => r.group_id));
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (followResult.results as any[]).forEach(r => {
+        userFollowData[r.group_id] = { custom_bg_image: r.custom_bg_image, custom_theme_color: r.custom_theme_color };
+      });
     }
 
     const groups = (result.results as {
@@ -40,7 +43,9 @@ export async function GET(request: NextRequest) {
       avatar_url?: string; event_count: number; follower_count: number;
     }[]).map(g => ({
       ...g,
-      is_following: followedIds.has(g.id),
+      is_following: !!userFollowData[g.id],
+      custom_bg_image: userFollowData[g.id]?.custom_bg_image,
+      custom_theme_color: userFollowData[g.id]?.custom_theme_color,
     }));
 
     return NextResponse.json({ groups });
