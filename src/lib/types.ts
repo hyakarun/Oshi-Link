@@ -22,6 +22,9 @@ export type Event = {
   source_url?: string;
   verified?: boolean;
   disputed?: boolean;
+  is_tentative?: boolean;
+  confirms_count?: number;
+  disputes_count?: number;
 };
 
 export type User = { 

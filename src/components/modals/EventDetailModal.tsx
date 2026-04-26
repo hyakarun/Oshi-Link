@@ -38,80 +38,100 @@ export function EventDetailModal({
       <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
         <div className="flex flex-col bg-white">
           <div className="relative aspect-video overflow-hidden">
-            <img src={selectedEvent.image_url || FALLBACK_IMG} alt={selectedEvent.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-6 flex items-center gap-2">
-              {selectedEvent.verified ? (
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/90 backdrop-blur-md rounded-full text-white">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">正確な情報</span>
+            <img src={selectedEvent.image_url || FALLBACK_IMG} alt={selectedEvent.title} className="w-full h-full object-cover transition-transform hover:scale-105 duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-8 flex items-center gap-3">
+              {selectedEvent.is_tentative ? (
+                <div className="flex items-center gap-2 px-4 py-1.5 bg-yellow-400/90 backdrop-blur-md rounded-full text-black shadow-lg">
+                  <AlertCircle className="w-4 h-4" />
+                  <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 低（仮）</span>
                 </div>
-              ) : selectedEvent.disputed ? (
-                <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-500/90 backdrop-blur-md rounded-full text-white">
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  <span className="text-[10px] font-black uppercase tracking-widest">要検証</span>
+              ) : (
+                <div className="flex items-center gap-2 px-4 py-1.5 bg-green-500/90 backdrop-blur-md rounded-full text-white shadow-lg">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 高（確定）</span>
                 </div>
-              ) : null}
+              )}
             </div>
           </div>
 
           <div className="p-8">
             {!isEditing ? (
               <>
-                <div className="mb-6">
-                  <h2 className="text-3xl font-black text-[#222222] tracking-tight leading-tight mb-4">{selectedEvent.title}</h2>
+                <div className="mb-8">
+                  <h2 className="text-3xl font-black text-[#222222] tracking-tight leading-tight mb-4">
+                    {selectedEvent.is_tentative && <span className="text-[#ff385c] mr-2">[(仮)]</span>}
+                    {selectedEvent.title}
+                  </h2>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm font-bold">{format(parseISO(selectedEvent.date), 'yyyy年MM月dd日 HH:mm')}</span>
+                    <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                      <Calendar className="w-4 h-4 text-[#ff385c]" />
+                      <span className="text-sm font-bold text-gray-700">{format(parseISO(selectedEvent.date), 'yyyy年MM月dd日 HH:mm')}</span>
                     </div>
                     {selectedEvent.location && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm font-bold">{selectedEvent.location}</span>
+                      <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                        <MapPin className="w-4 h-4 text-[#ff385c]" />
+                        <span className="text-sm font-bold text-gray-700">{selectedEvent.location}</span>
                       </div>
                     )}
                   </div>
                 </div>
+
                 {selectedEvent.description && (
-                  <p className="text-gray-600 text-sm leading-relaxed">{selectedEvent.description}</p>
+                  <div className="bg-gray-50/50 p-5 rounded-2xl border border-gray-100 mb-6">
+                    <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">{selectedEvent.description}</p>
+                  </div>
                 )}
+
                 {selectedEvent.source_url && (
-                  <div className="pt-2">
+                  <div className="mb-8 pt-2">
                     <button
                       onClick={() => setExternalUrlWarning(selectedEvent.source_url!)}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-[#ff385c] text-xs font-bold rounded-xl transition-all"
+                      className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#ff385c] hover:bg-[#e03150] text-white text-sm font-black rounded-2xl transition-all shadow-lg active:scale-95"
                     >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                      公式情報・リンクを開く
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                      公式ソース・関連リンクを開く
                     </button>
                   </div>
                 )}
-                <div className="space-y-3 border-t border-gray-100 pt-6 mt-6">
-                  <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">コミュニティ検証</h3>
-                  <div className="grid grid-cols-2 gap-3">
+
+                <div className="space-y-4 border-t border-gray-100 pt-8 mt-4 bg-gray-50/30 -mx-8 px-8 pb-8">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">情報の正確さを投票</h3>
+                    <div className="flex gap-4">
+                      <span className="text-[10px] font-bold text-green-600">正確: {selectedEvent.confirms_count || 0}</span>
+                      <span className="text-[10px] font-bold text-orange-600">不正確: {selectedEvent.disputes_count || 0} / 5件で自動削除</span>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
                     <Button
                       onClick={() => handleVerify('confirmed')}
                       disabled={loading}
-                      className={`rounded-2xl h-12 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${selectedEvent.verified ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-blue-600 border-2 border-blue-100 hover:bg-blue-50'}`}
+                      variant="outline"
+                      className="rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all bg-white border-2 border-green-100 text-green-600 hover:bg-green-50 hover:border-green-200"
                     >
-                      <ShieldCheck className="w-4 h-4" /> 正確です
+                      <ShieldCheck className="w-5 h-5" /> 正確（{selectedEvent.confirms_count || 0}）
                     </Button>
                     <Button
                       onClick={() => handleVerify('disputed')}
                       disabled={loading}
-                      className="rounded-2xl h-12 bg-white border-2 border-gray-200 text-gray-400 hover:text-orange-600 hover:border-orange-200 transition-all active:scale-95 font-black flex items-center justify-center gap-2"
+                      variant="outline"
+                      className="rounded-2xl h-14 bg-white border-2 border-orange-100 text-orange-600 hover:bg-orange-50 hover:border-orange-200 transition-all active:scale-95 font-black flex items-center justify-center gap-2"
                     >
-                      <AlertCircle className="w-4 h-4" /> 要修正
+                      <AlertCircle className="w-5 h-5" /> 不正確（{selectedEvent.disputes_count || 0}）
                     </Button>
                   </div>
+                  <p className="text-[10px] text-gray-400 text-center font-medium mt-2">
+                    ※不正確な投票が5件集まると、この予定は自動的に削除されます。
+                  </p>
                 </div>
-                <div className="flex gap-3 mt-6">
-                  <Button onClick={() => setIsEditing(true)} className="flex-1 bg-[#222222] hover:bg-black text-white h-12 rounded-2xl font-black shadow-xl active:scale-95 transition-all">
-                    内容を修正
+
+                <div className="flex gap-4 mt-8">
+                  <Button onClick={() => setIsEditing(true)} className="flex-1 bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black shadow-xl active:scale-95 transition-all">
+                    情報を修正する
                   </Button>
-                  <Button onClick={() => handleSubscribe(selectedEvent.group_id)} variant="outline" className="flex-1 border-gray-200 h-12 rounded-2xl font-black hover:bg-gray-50 transition-all">
-                    iCalに追加
+                  <Button onClick={() => handleSubscribe(selectedEvent.group_id)} variant="outline" className="flex-1 border-gray-200 h-14 rounded-2xl font-black hover:bg-gray-50 transition-all text-gray-600">
+                    外部連携 (iCal)
                   </Button>
                 </div>
               </>

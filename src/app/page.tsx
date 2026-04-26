@@ -512,11 +512,14 @@ export default function App() {
                             <div
                               key={idx}
                               onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                              className="absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-md hover:scale-[1.05] transition-all cursor-pointer z-20 border border-gray-100 border-l-[8px]"
+                              className={`absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-md hover:scale-[1.05] transition-all cursor-pointer z-20 border border-gray-100 border-l-[8px] ${e.is_tentative ? 'opacity-90 grayscale-[0.2]' : ''}`}
                               style={{ borderLeftColor: getGroupColor(e.group_id) }}
                             >
                               <div className="flex-1 p-3 flex items-center min-w-0">
-                                <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
+                                <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">
+                                  {e.is_tentative && <span className="text-red-500 mr-1">[(仮)]</span>}
+                                  {e.title}
+                                </h5>
                               </div>
                             </div>
                           );
@@ -566,9 +569,10 @@ export default function App() {
                 <div
                   key={idx}
                   onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className="flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px]"
+                  className={`flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
                   style={{ borderLeftColor: getGroupColor(e.group_id) }}
                 >
+                  {e.is_tentative && <span className="text-red-500 mr-1 font-black">[(仮)]</span>}
                   {e.title}
                 </div>
               ))}
