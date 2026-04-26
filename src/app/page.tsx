@@ -775,8 +775,7 @@ export default function App() {
                 <Menu className="w-5 h-5" />
               </Button>
               <div>
-
-                <p className="text-[10px] md:text-[12px] font-medium text-gray-500 uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]">
+                <p className="text-lg md:text-2xl font-black text-[#222222] tracking-tight truncate max-w-[200px] md:max-w-[none]">
                   {allGroups.find(g => g.id === activeGroupId)?.name || (activeGroupId === '0' ? '全ての予定' : '')}
                 </p>
               </div>
