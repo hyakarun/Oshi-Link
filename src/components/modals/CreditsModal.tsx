@@ -68,7 +68,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           {activeTab === 'terms' && (
             <div className="prose prose-sm max-w-none space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <TermSection title="第1条（適用）">
-                本規約は、Oshi-Link（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。
+                本規約は、団体「TSUKURO!」（以下「当団体」）が提供するサービス「Oshi-Link」（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。
               </TermSection>
               <TermSection title="第2条（禁止事項）">
                 ユーザーは、以下の行為を行ってはなりません。
@@ -80,10 +80,10 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                 </ul>
               </TermSection>
               <TermSection title="第3条（免責事項）">
-                本サービスは、提供する情報の正確性や完全性を保証するものではありません。情報の利用はユーザーの責任において行ってください。本サービスに関連して生じた損害について、運営者は一切の責任を負いません。
+                本サービスは、提供する情報の正確性や完全性を保証するものではありません。情報の利用はユーザーの責任において行ってください。本サービスに関連して生じた損害について、当団体は一切の責任を負いません。
               </TermSection>
               <TermSection title="第4条（サービスの中断・停止）">
-                運営者は、システムの保守、事故、その他必要と判断した場合には、予告なく本サービスの提供を中断または停止できるものとします。
+                当団体は、システムの保守、事故、その他必要と判断した場合には、予告なく本サービスの提供を中断または停止できるものとします。
               </TermSection>
             </div>
           )}
@@ -99,7 +99,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                 </ul>
               </TermSection>
               <TermSection title="2. 利用目的">
-                取得した情報は以下の目的でのみ利用します。
+                当団体は、取得した情報を以下の目的でのみ利用します。
                 <ul className="list-disc ml-5 mt-2 space-y-1">
                   <li>本サービスへのログインおよび本人確認</li>
                   <li>サービス内でのユーザープロフィール（名前・アイコン）の表示</li>
@@ -111,20 +111,20 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                 ユーザー情報は、暗号化通信（SSL/TLS）を用いて保護され、セキュアなデータベース（Cloudflare D1）にて安全に保管されます。
               </TermSection>
               <TermSection title="4. 第三者への開示">
-                法令に基づく場合を除き、ユーザーの同意なしに個人情報を第三者に提供・販売することはありません。認証処理の過程でGoogleのAPIを利用しますが、これは認証のみを目的としています。
+                法令に基づく場合を除き、当団体がユーザーの同意なしに個人情報を第三者に提供・販売することはありません。
               </TermSection>
               <TermSection title="5. データの削除">
-                ユーザーは、アカウントの削除を希望する場合、または情報の開示・訂正を求める場合は、お問い合わせ窓口より申請することができます。削除申請があった場合、速やかに関連する個人データをサーバーから抹消します。
+                ユーザーは、アカウントの削除を希望する場合、当団体のお問い合わせ窓口（または公式SNS等）より申請することができます。
               </TermSection>
             </div>
           )}
         </div>
 
-        <div className="p-6 border-t border-gray-100 bg-gray-50 shrink-0">
-          <p className="text-[12px] text-gray-400 font-bold flex items-center justify-center gap-1.5 uppercase tracking-widest leading-none mb-1">
-            Made with <Heart className="w-3 h-3 text-[#ff385c] fill-[#ff385c]" /> for Oshi-Katsu
+        <div className="p-6 border-t border-gray-100 bg-gray-50 shrink-0 text-center">
+          <p className="text-[12px] text-gray-400 font-bold flex items-center justify-center gap-1.5 uppercase tracking-widest leading-none mb-2">
+            Presented by <span className="text-[#ff385c]">TSUKURO!</span>
           </p>
-          <p className="text-[10px] text-gray-300 text-center font-medium">© 2026 Oshi-Link Community. All rights reserved.</p>
+          <p className="text-[10px] text-gray-300 font-medium">© 2026 TSUKURO! All rights reserved.</p>
         </div>
       </DialogContent>
     </Dialog>
