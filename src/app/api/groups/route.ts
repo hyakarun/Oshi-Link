@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getSessionUser } from '@/app/api/auth/me/route';
 
 export const runtime = 'edge';
 
-// GET /api/groups?user_id=xxx  → 全グループ一覧 + フォロー状態 + フォロワー数
+// GET /api/groups → 全グループ一覧 + フォロー状態 + フォロワー数
 export async function GET(request: NextRequest) {
   try {
     const { env } = getRequestContext();
     const db = (env as unknown as { DB: D1Database }).DB;
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('user_id');
+
+    // セッションがあればそのユーザーのフォロー状態を取得
+    const user = await getSessionUser(db, request);
+    const userId = user?.id;
 
     const result = await db.prepare(`
       SELECT
@@ -32,16 +35,13 @@ export async function GET(request: NextRequest) {
       const followResult = await db.prepare(
         'SELECT group_id, custom_bg_image, custom_theme_color FROM user_group_follows WHERE user_id = ?'
       ).bind(userId).all();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      
       (followResult.results as any[]).forEach(r => {
         userFollowData[r.group_id] = { custom_bg_image: r.custom_bg_image, custom_theme_color: r.custom_theme_color };
       });
     }
 
-    const groups = (result.results as {
-      id: string; name: string; description?: string;
-      avatar_url?: string; event_count: number; follower_count: number;
-    }[]).map(g => ({
+    const groups = (result.results as any[]).map(g => ({
       ...g,
       is_following: !!userFollowData[g.id],
       custom_bg_image: userFollowData[g.id]?.custom_bg_image,
@@ -49,19 +49,24 @@ export async function GET(request: NextRequest) {
     }));
 
     return NextResponse.json({ groups });
-  } catch (error) {
-    const e = error as Error;
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// POST /api/groups  → グループを新規作成（誰でも作れるWiki型）
-export async function POST(request: Request) {
+// POST /api/groups → グループを新規作成
+export async function POST(request: NextRequest) {
   try {
     const { env } = getRequestContext();
     const db = (env as unknown as { DB: D1Database }).DB;
-    const { name, description, avatar_url, created_by } = await request.json() as {
-      name: string; description?: string; avatar_url?: string; created_by?: string;
+
+    const user = await getSessionUser(db, request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { name, description, avatar_url } = await request.json() as {
+      name: string; description?: string; avatar_url?: string;
     };
     
     let safeAvatarUrl = avatar_url;
@@ -90,19 +95,16 @@ export async function POST(request: Request) {
     ).bind(id, name, description || null, safeAvatarUrl || null).run();
 
     // 作成者を自動フォロー
-    if (created_by) {
-      const followId = crypto.randomUUID();
-      await db.prepare(
-        'INSERT OR IGNORE INTO user_group_follows (id, user_id, group_id) VALUES (?, ?, ?)'
-      ).bind(followId, created_by, id).run();
-    }
+    const followId = crypto.randomUUID();
+    await db.prepare(
+      'INSERT OR IGNORE INTO user_group_follows (id, user_id, group_id) VALUES (?, ?, ?)'
+    ).bind(followId, user.id, id).run();
 
     return NextResponse.json(
-      { id, name, description, avatar_url, event_count: 0, follower_count: 0, is_following: true },
+      { id, name, description, avatar_url, event_count: 0, follower_count: 1, is_following: true },
       { status: 201 }
     );
-  } catch (error) {
-    const e = error as Error;
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

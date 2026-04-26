@@ -1,39 +1,38 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getSessionUser } from '@/app/api/auth/me/route';
 
 export const runtime = 'edge';
 
-// Get or Create User
-export async function POST(request: Request) {
+// Update current user profile
+export async function POST(request: NextRequest) {
   try {
     const { env } = getRequestContext();
     const db = (env as any).DB;
-    
-    const { id, name, email } = await request.json() as any;
 
-    if (!name || !email) {
-      return NextResponse.json({ error: 'Name and Email are required' }, { status: 400 });
+    const user = await getSessionUser(db, request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    
+    const { name, avatar_url } = await request.json() as any;
+
+    if (!name) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
     }
 
-    // IDがない場合は新規生成（登録）、ある場合は更新
-    const userId = id || crypto.randomUUID();
-
     await db.prepare(`
-      INSERT INTO users (id, name, email)
-      VALUES (?, ?, ?)
-      ON CONFLICT(id) DO UPDATE SET
-        name = excluded.name,
-        email = excluded.email
-    `).bind(userId, name, email).run();
+      UPDATE users SET name = ?, avatar_url = ? WHERE id = ?
+    `).bind(name, avatar_url || null, user.id).run();
 
-    return NextResponse.json({ id: userId, name, email }, { status: 200 });
+    return NextResponse.json({ id: user.id, name, avatar_url }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// Get User Detail
-export async function GET(request: Request) {
+// Get User (Safe fields only)
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('id');
@@ -43,7 +42,8 @@ export async function GET(request: Request) {
     const { env } = getRequestContext();
     const db = (env as any).DB;
 
-    const user = await db.prepare('SELECT * FROM users WHERE id = ?').bind(userId).first();
+    // プライバシーのため、emailやgoogle_idは返さない
+    const user = await db.prepare('SELECT id, name, avatar_url FROM users WHERE id = ?').bind(userId).first();
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });

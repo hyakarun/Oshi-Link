@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getSessionUser } from '@/app/api/auth/me/route';
 
 export const runtime = 'edge';
 
@@ -7,8 +8,16 @@ export async function POST(request: Request) {
   try {
     const { env } = getRequestContext();
     const db = (env as any).DB;
+    
+    // セッションからユーザーを取得（外部からの user_id 指定を無視し、自身のIDを強制）
+    const user = await getSessionUser(db, request as any);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json() as any;
-    const { event_id, user_id, status, comment } = body;
+    const { event_id, status, comment } = body;
+    const user_id = user.id;
 
     console.log('Verify Request:', { event_id, user_id, status });
 
