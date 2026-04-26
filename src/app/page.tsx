@@ -47,6 +47,17 @@ export default function App() {
   const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Initialize activeGroupId from localStorage if available
+  useEffect(() => {
+    const savedId = localStorage.getItem('oshi_active_group');
+    if (savedId) setActiveGroupId(savedId);
+  }, []);
+
+  // Persist activeGroupId to localStorage
+  useEffect(() => {
+    if (mounted) localStorage.setItem('oshi_active_group', activeGroupId);
+  }, [activeGroupId, mounted]);
+
   // セッション認証ヘルパー
   function authHeaders(): Record<string, string> {
     const token = sessionToken || (typeof window !== 'undefined' ? localStorage.getItem('oshi_session') : null);
@@ -111,9 +122,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    loadGroups();
-    loadEvents();
-  }, [loadGroups, loadEvents]);
+    // Wait until auth check is done or user is loaded to fetch groups with personalization
+    if (!isAuthChecking) {
+      loadGroups();
+      loadEvents();
+    }
+  }, [loadGroups, loadEvents, isAuthChecking]);
 
   // フォロー/アンフォロー
   async function handleFollowToggle(group: Group) {
