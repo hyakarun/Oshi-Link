@@ -293,6 +293,11 @@ export default function App() {
     !discoverSearch || g.name.toLowerCase().includes(discoverSearch.toLowerCase()) || (g.description || '').toLowerCase().includes(discoverSearch.toLowerCase())
   );
 
+  function getGroupColor(groupId: string) {
+    const g = allGroups.find(item => item.id === groupId);
+    return g?.custom_theme_color || groupColorSolid(groupId);
+  }
+
   const activeGroupData = allGroups.find(g => g.id === activeGroupId);
   const themeColor = activeGroupData?.custom_theme_color || (activeGroupId !== '0' ? groupColorSolid(activeGroupId) : '#ff385c');
   const bgImage = activeGroupData?.custom_bg_image || null;
@@ -393,7 +398,7 @@ export default function App() {
                       key={idx}
                       onClick={() => setSelectedEvent(e)}
                       className="absolute inset-x-4 top-2 bottom-2 text-white p-4 rounded-3xl shadow-lg hover:scale-[1.02] transition-all cursor-pointer z-20"
-                      style={{ backgroundColor: themeColor }}
+                      style={{ backgroundColor: getGroupColor(e.group_id) }}
                     >
                       <h4 className="text-lg font-bold leading-tight">{e.title}</h4>
                     </div>
@@ -437,7 +442,7 @@ export default function App() {
                             key={idx}
                             onClick={() => setSelectedEvent(e)}
                             className="absolute inset-x-2 top-2 bottom-2 bg-white border-l-4 shadow-lg rounded-xl p-3 hover:scale-[1.05] transition-all cursor-pointer z-20"
-                            style={{ borderLeftColor: themeColor }}
+                            style={{ borderLeftColor: getGroupColor(e.group_id) }}
                           >
                             <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
                           </div>
@@ -484,7 +489,7 @@ export default function App() {
                   key={idx}
                   onClick={() => setSelectedEvent(e)}
                   className="text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md px-1 md:px-2 py-0.5 md:py-1 truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222]"
-                  style={{ borderLeftColor: themeColor, borderLeftWidth: '3px' }}
+                  style={{ borderLeftColor: getGroupColor(e.group_id), borderLeftWidth: '3px' }}
                 >
                   {e.title}
                 </div>
