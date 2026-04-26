@@ -14,16 +14,16 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
   if (!token) return null;
 
   const session = await db.prepare(
-    'SELECT s.*, u.id as uid, u.name, u.email FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
+    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
   ).bind(token).first() as {
     token: string; user_id: string; expires_at: string;
-    uid: string; name: string; email: string;
+    uid: string; name: string; email: string; avatar_url: string;
   } | null;
 
   if (!session) return null;
   if (new Date(session.expires_at) < new Date()) return null;
 
-  return { id: session.uid, name: session.name, email: session.email };
+  return { id: session.uid, name: session.name, email: session.email, avatar_url: session.avatar_url };
 }
 
 // GET /api/auth/me  → セッションから現在のユーザーを取得

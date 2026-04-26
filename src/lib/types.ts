@@ -27,7 +27,8 @@ export type Event = {
 export type User = { 
   id: string; 
   name: string; 
-  email: string 
+  email: string;
+  avatar_url?: string;
 };
 
 export type View = 'month' | 'week' | 'day';

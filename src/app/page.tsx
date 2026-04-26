@@ -626,10 +626,14 @@ export default function App() {
           </div>
           <button
             onClick={() => setIsProfileModalOpen(true)}
-            className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-all shrink-0"
+            className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-all shrink-0 overflow-hidden"
           >
             {user ? (
-              <span className="text-[11px] font-black text-gray-700">{user.name[0]}</span>
+              user.avatar_url ? (
+                <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-[11px] font-black text-gray-700">{user.name[0]}</span>
+              )
             ) : (
               <UserCircle className="w-4 h-4" />
             )}

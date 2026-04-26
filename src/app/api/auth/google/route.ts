@@ -43,18 +43,18 @@ export async function POST(request: NextRequest) {
     // 3. ユーザーを検索・登録
     let user = await db.prepare('SELECT * FROM users WHERE google_id = ? OR email = ?')
       .bind(profile.sub, profile.email)
-      .first() as { id: string; name: string; email: string; google_id?: string } | null;
+      .first() as { id: string; name: string; email: string; google_id?: string, avatar_url?: string } | null;
 
     if (!user) {
       const userId = crypto.randomUUID();
-      await db.prepare('INSERT INTO users (id, name, email, google_id) VALUES (?, ?, ?, ?)')
-        .bind(userId, profile.name, profile.email, profile.sub)
+      await db.prepare('INSERT INTO users (id, name, email, google_id, avatar_url) VALUES (?, ?, ?, ?, ?)')
+        .bind(userId, profile.name, profile.email, profile.sub, profile.picture || null)
         .run();
-      user = { id: userId, name: profile.name, email: profile.email, google_id: profile.sub };
-    } else if (!user.google_id) {
-      // 既存のメールアドレスユーザーにGoogle IDを紐付け
-      await db.prepare('UPDATE users SET google_id = ? WHERE id = ?')
-        .bind(profile.sub, user.id)
+      user = { id: userId, name: profile.name, email: profile.email, google_id: profile.sub, avatar_url: profile.picture };
+    } else {
+      // 既存ユーザー情報の更新（Google IDの紐付けやアイコンの更新）
+      await db.prepare('UPDATE users SET google_id = ?, avatar_url = ? WHERE id = ?')
+        .bind(profile.sub, profile.picture || null, user.id)
         .run();
     }
 
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       ok: true,
       sessionToken,
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email, avatar_url: profile.picture },
     });
 
   } catch (e) {
