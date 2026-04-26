@@ -248,14 +248,25 @@ export default function App() {
     setLoading(false);
   }
 
-  async function handleVerify(verdict: 'confirmed' | 'disputed') {
+  async function handleVerify(status: 'confirmed' | 'disputed') {
     if (!user || !selectedEvent) { setIsProfileModalOpen(true); return; }
     setLoading(true);
-    const body = { event_id: selectedEvent.id, user_id: user.id, verdict };
     try {
-      await fetch('\u002fapi\u002fevents\u002fverify', { method: 'POST', headers: { 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
-      await loadEvents();
-    } catch {}
+      const res = await fetch('/api/events/verify', { 
+        method: 'POST', 
+        headers: authHeaders(), 
+        body: JSON.stringify({ event_id: selectedEvent.id, user_id: user.id, status }) 
+      });
+      if (res.ok) {
+        const data = await res.json() as { deleted?: boolean };
+        if (data.deleted) {
+          setSelectedEvent(null);
+        }
+        await loadEvents();
+      }
+    } catch (e) {
+      console.error('Verify error:', e);
+    }
     setLoading(false);
   }
 
