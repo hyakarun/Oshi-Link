@@ -202,12 +202,11 @@ export default function App() {
         headers: { 'Authorization': `Bearer ${token}` },
       }).catch(() => {});
     }
+    setIsProfileModalOpen(false);
     localStorage.removeItem('oshi_session');
     setSessionToken(null);
     setUser(null);
-    setFollowedGroups([]);
-    setIsProfileModalOpen(false);
-    await loadGroups();
+    router.push('/login');
   }
 
   // プロフィール更新（ログイン済みユーザーの名前変更のみ）
