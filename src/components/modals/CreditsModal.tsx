@@ -27,21 +27,21 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           <div className="flex gap-2 p-1 bg-gray-100 rounded-xl w-full">
             <button 
               onClick={() => setActiveTab('credits')}
-              className={`flex-1 px-4 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all whitespace-nowrap ${activeTab === 'credits' ? 'bg-white text-[#ff385c] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'credits' ? 'bg-white text-[#ff385c] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
             >
-              TECH CREDITS
+              TECH<br />CREDITS
             </button>
             <button 
               onClick={() => setActiveTab('terms')}
-              className={`flex-1 px-4 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all whitespace-nowrap ${activeTab === 'terms' ? 'bg-white text-[#ff385c] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'terms' ? 'bg-white text-[#ff385c] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
             >
               利用規約
             </button>
             <button 
               onClick={() => setActiveTab('privacy')}
-              className={`flex-1 px-4 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all whitespace-nowrap ${activeTab === 'privacy' ? 'bg-white text-[#ff385c] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'privacy' ? 'bg-white text-[#ff385c] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
             >
-              プライバシーポリシー
+              プライバシー<br />ポリシー
             </button>
           </div>
         </DialogHeader>
