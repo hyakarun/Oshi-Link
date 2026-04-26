@@ -15,6 +15,7 @@ import { LinkWarningModal } from '@/components/modals/LinkWarningModal';
 import { DiscoverModal } from '@/components/modals/DiscoverModal';
 import { EventDetailModal } from '@/components/modals/EventDetailModal';
 import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
+import { CreditsModal } from '@/components/modals/CreditsModal';
 import { groupColorSolid } from '@/components/ui/shared';
 
 export default function App() {
@@ -41,6 +42,7 @@ export default function App() {
 
   const [discoverSearch, setDiscoverSearch] = useState('');
   const [followLoading, setFollowLoading] = useState<string | null>(null);
+  const [isCreditsOpen, setIsCreditsOpen] = useState(false);
 
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [view, setView] = useState<View>('month');
@@ -753,6 +755,16 @@ export default function App() {
               <Plus className="w-3 h-3" /> カレンダーを追加
             </button>
           </div>
+
+          {/* Footer credits link */}
+          <div className="mt-auto pt-4 px-5">
+            <button
+              onClick={() => setIsCreditsOpen(true)}
+              className="text-[10px] font-black text-gray-300 hover:text-gray-500 uppercase tracking-[0.2em] transition-colors"
+            >
+              Credits & Terms
+            </button>
+          </div>
         </div>
 
 
@@ -954,6 +966,12 @@ export default function App() {
         onOpenChange={setIsGroupModalOpen}
         handleCreateGroup={handleCreateGroup}
         loading={loading}
+      />
+
+      {/* Credits Modal */}
+      <CreditsModal
+        isOpen={isCreditsOpen}
+        onOpenChange={setIsCreditsOpen}
       />
 
     </div>
