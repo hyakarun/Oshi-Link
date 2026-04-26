@@ -15,6 +15,7 @@ import { LinkWarningModal } from '@/components/modals/LinkWarningModal';
 import { DiscoverModal } from '@/components/modals/DiscoverModal';
 import { EventDetailModal } from '@/components/modals/EventDetailModal';
 import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
+import { groupColorSolid } from '@/components/ui/shared';
 
 export default function App() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
@@ -36,6 +37,7 @@ export default function App() {
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [isDiscoverOpen, setIsDiscoverOpen] = useState(false);
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
+  const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
 
   const [discoverSearch, setDiscoverSearch] = useState('');
   const [followLoading, setFollowLoading] = useState<string | null>(null);
@@ -278,7 +280,7 @@ export default function App() {
   );
 
   const activeGroupData = allGroups.find(g => g.id === activeGroupId);
-  const themeColor = activeGroupData?.custom_theme_color || '#ff385c';
+  const themeColor = activeGroupData?.custom_theme_color || (activeGroupId !== '0' ? groupColorSolid(activeGroupId) : '#ff385c');
   const bgImage = activeGroupData?.custom_bg_image || null;
 
   const sidebarGroups = followedGroups.length > 0 ? followedGroups : allGroups.slice(0, 5);
@@ -614,7 +616,7 @@ export default function App() {
                       </div>
                       <div className="flex items-center shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
-                          onClick={(ev) => { ev.stopPropagation(); setActiveGroupId(g.id); setPersonalizationOpen(true); }}
+                          onClick={(ev) => { ev.stopPropagation(); setEditingGroupId(g.id); setPersonalizationOpen(true); }}
                           className="p-1 rounded-lg hover:bg-gray-100"
                           title="個人設定（色・背景）"
                         >
@@ -782,8 +784,8 @@ export default function App() {
       {/* Group Settings Modal */}
       <GroupSettingsModal
         isOpen={personalizationOpen}
-        onOpenChange={setPersonalizationOpen}
-        group={activeGroupData || null}
+        onOpenChange={(open) => { setPersonalizationOpen(open); if (!open) setEditingGroupId(null); }}
+        group={allGroups.find(g => g.id === editingGroupId) || null}
         loading={loading}
         handleSavePersonalization={handleSavePersonalization}
       />

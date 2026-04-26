@@ -13,10 +13,26 @@ export const GROUP_COLORS = [
   'from-cyan-500 to-cyan-700',
 ];
 
+export const GROUP_COLORS_SOLID = [
+  '#ff385c', // Default Oshi Pink
+  '#a855f7', // Purple
+  '#3b82f6', // Blue
+  '#10b981', // Emerald
+  '#f59e0b', // Orange
+  '#ec4899', // Pink
+  '#06b6d4', // Cyan
+];
+
 export function groupColor(id: string): string {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
   return GROUP_COLORS[Math.abs(hash) % GROUP_COLORS.length];
+}
+
+export function groupColorSolid(id: string): string {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  return GROUP_COLORS_SOLID[Math.abs(hash) % GROUP_COLORS_SOLID.length];
 }
 
 export function GroupAvatar({ group, size = 'md' }: { group: Group; size?: 'sm' | 'md' | 'lg' }) {
