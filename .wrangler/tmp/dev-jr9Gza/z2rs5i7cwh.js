@@ -2701,7 +2701,7 @@ function transformRoutingRuleToRegExp(rule) {
 __name(transformRoutingRuleToRegExp, "transformRoutingRuleToRegExp");
 
 // .wrangler/tmp/pages-x4fl24/z2rs5i7cwh.js
-var define_ROUTES_default = { version: 1, description: "Built with @cloudflare/next-on-pages@1.13.16.", include: ["/*"], exclude: ["/_next/static/*"] };
+var define_ROUTES_default = { version: 1, include: ["/*"], exclude: [] };
 var routes = define_ROUTES_default;
 var pages_dev_pipeline_default = {
   fetch(request, env3, context3) {

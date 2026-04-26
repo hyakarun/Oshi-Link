@@ -1,5 +1,5 @@
 // <define:__ROUTES__>
-var define_ROUTES_default = { version: 1, description: "Built with @cloudflare/next-on-pages@1.13.16.", include: ["/*"], exclude: ["/_next/static/*"] };
+var define_ROUTES_default = { version: 1, include: ["/*"], exclude: [] };
 
 // node_modules/wrangler/templates/pages-dev-pipeline.ts
 import worker from "/Users/mukulogi/Oshi-Link/.wrangler/tmp/pages-x4fl24/bundledWorker-0.8162746756970576.mjs";

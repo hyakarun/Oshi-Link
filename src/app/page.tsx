@@ -512,10 +512,15 @@ export default function App() {
                             <div
                               key={idx}
                               onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                              className="absolute inset-x-2 top-2 bottom-2 bg-white border-l-4 shadow-lg rounded-xl p-3 hover:scale-[1.05] transition-all cursor-pointer z-20"
-                              style={{ borderLeftColor: getGroupColor(e.group_id) }}
+                              className="absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-xl overflow-hidden hover:scale-[1.05] transition-all cursor-pointer z-20"
                             >
-                              <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
+                              <div 
+                                className="w-1.5 shrink-0 self-stretch" 
+                                style={{ backgroundColor: getGroupColor(e.group_id) }} 
+                              />
+                              <div className="flex-1 p-3 min-w-0">
+                                <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
+                              </div>
                             </div>
                           );
                           return null;
@@ -564,10 +569,15 @@ export default function App() {
                 <div
                   key={idx}
                   onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className="text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md px-1 md:px-2 py-0.5 md:py-1 truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222]"
-                  style={{ borderLeftColor: getGroupColor(e.group_id), borderLeftWidth: '3px' }}
+                  className="flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md overflow-hidden cursor-pointer hover:shadow-md transition-all font-medium text-[#222222]"
                 >
-                  {e.title}
+                  <div 
+                    className="w-1 shrink-0 self-stretch" 
+                    style={{ backgroundColor: getGroupColor(e.group_id) }} 
+                  />
+                  <div className="px-1 md:px-2 py-0.5 md:py-1 truncate flex-1">
+                    {e.title}
+                  </div>
                 </div>
               ))}
               {dayEvents.length > 3 && (
