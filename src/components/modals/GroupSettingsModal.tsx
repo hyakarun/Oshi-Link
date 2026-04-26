@@ -35,18 +35,6 @@ export function GroupSettingsModal({
           
           <div className="space-y-1.5">
             <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em] flex items-center gap-1.5">
-              <ImageIcon className="w-3.5 h-3.5" /> 背景画像URL
-            </label>
-            <input 
-              name="custom_bg_image" 
-              defaultValue={group.custom_bg_image || ''}
-              className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" 
-              placeholder="https://..." 
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em] flex items-center gap-1.5">
               <Palette className="w-3.5 h-3.5" /> テーマカラー（文字色など）
             </label>
             <div className="flex items-center gap-4">
