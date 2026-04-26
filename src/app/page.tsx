@@ -610,13 +610,22 @@ export default function App() {
                           {g.event_count || 0}件 · {g.follower_count || 0}人
                         </p>
                       </div>
-                      <button
-                        onClick={(ev) => { ev.stopPropagation(); handleSubscribe(g.id); }}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg hover:bg-gray-100 shrink-0"
-                        title="iCalに追加"
-                      >
-                        <Bell className="w-3 h-3 text-gray-400" />
-                      </button>
+                      <div className="flex items-center shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(ev) => { ev.stopPropagation(); setActiveGroupId(g.id); setPersonalizationOpen(true); }}
+                          className="p-1 rounded-lg hover:bg-gray-100"
+                          title="個人設定（色・背景）"
+                        >
+                          <img src="https://api.iconify.design/lucide:palette.svg?color=%239ca3af" alt="設定" className="w-3 h-3" />
+                        </button>
+                        <button
+                          onClick={(ev) => { ev.stopPropagation(); handleSubscribe(g.id); }}
+                          className="p-1 rounded-lg hover:bg-gray-100"
+                          title="iCalに追加"
+                        >
+                          <Bell className="w-3 h-3 text-gray-400" />
+                        </button>
+                      </div>
                     </div>
                     {nextEvent && (
                       <div className="mt-1.5 ml-10 pl-2 border-l-2 border-opacity-30" style={{ borderColor: g.custom_theme_color || '#ff385c' }}>
