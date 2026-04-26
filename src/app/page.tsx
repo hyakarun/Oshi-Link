@@ -46,6 +46,7 @@ export default function App() {
   const [view, setView] = useState<View>('month');
   const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string } | null>(null);
 
   // Initialize activeGroupId from localStorage if available
   useEffect(() => {
@@ -390,7 +391,17 @@ export default function App() {
               <span className="text-sm font-black text-[#222222] uppercase tracking-widest">{format(currentMonth, 'eeee, MMM d')}</span>
             </div>
             {hours.map(h => (
-              <div key={h} className="h-20 border-b border-gray-50 relative">
+              <div 
+                key={h} 
+                className="h-20 border-b border-gray-50 relative cursor-pointer hover:bg-gray-50/50 transition-colors"
+                onClick={() => {
+                  setDefaultEventData({ 
+                    date: format(currentMonth, 'yyyy-MM-dd'),
+                    startTime: `${String(h).padStart(2, '0')}:00` 
+                  });
+                  setIsAddModalOpen(true);
+                }}
+              >
                 {dayEvents.map((e, idx) => {
                   const startHour = 10 + (idx * 2);
                   if (h === startHour) return (
@@ -428,29 +439,41 @@ export default function App() {
               const d = addDays(startDate, i);
               const dayEvents = filteredEvents.filter(e => isSameDay(parseISO(e.date), d));
               return (
-                <div key={i} className={`flex-1 border-r border-gray-50 relative pt-20 min-h-[3072px]`} style={isSameDay(d, new Date()) ? { backgroundColor: `${themeColor}08` } : {}}>
+                <div key={i} className="flex-1 border-r border-gray-50 relative pt-20 min-h-[3072px]" style={isSameDay(d, new Date()) ? { backgroundColor: `${themeColor}08` } : {}}>
                   <div className="absolute top-0 left-0 right-0 h-20 border-b border-gray-50 flex flex-col items-center justify-center bg-white backdrop-blur-sm z-10">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">{format(d, 'eee')}</p>
                     <p className="text-xl font-black" style={isSameDay(d, new Date()) ? { color: themeColor } : { color: '#222222' }}>{format(d, 'd')}</p>
                   </div>
-                  {hours.map(h => (
-                    <div key={h} className="h-32 border-b border-gray-50 relative">
-                      {dayEvents.map((e, idx) => {
-                        const startHour = 10 + (idx * 3);
-                        if (h === startHour) return (
-                          <div
-                            key={idx}
-                            onClick={() => setSelectedEvent(e)}
-                            className="absolute inset-x-2 top-2 bottom-2 bg-white border-l-4 shadow-lg rounded-xl p-3 hover:scale-[1.05] transition-all cursor-pointer z-20"
-                            style={{ borderLeftColor: getGroupColor(e.group_id) }}
-                          >
-                            <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
-                          </div>
-                        );
-                        return null;
-                      })}
-                    </div>
-                  ))}
+                  <div className="flex flex-col flex-1">
+                    {hours.map(h => (
+                      <div 
+                        key={h} 
+                        className="h-32 border-b border-gray-50 relative cursor-pointer hover:bg-gray-50/50 transition-colors"
+                        onClick={() => {
+                          setDefaultEventData({ 
+                            date: format(d, 'yyyy-MM-dd'), 
+                            startTime: `${String(h).padStart(2, '0')}:00` 
+                          });
+                          setIsAddModalOpen(true);
+                        }}
+                      >
+                        {dayEvents.map((e, idx) => {
+                          const startHour = 10 + (idx * 3);
+                          if (h === startHour) return (
+                            <div
+                              key={idx}
+                              onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
+                              className="absolute inset-x-2 top-2 bottom-2 bg-white border-l-4 shadow-lg rounded-xl p-3 hover:scale-[1.05] transition-all cursor-pointer z-20"
+                              style={{ borderLeftColor: getGroupColor(e.group_id) }}
+                            >
+                              <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
+                            </div>
+                          );
+                          return null;
+                        })}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               );
             })}
@@ -474,8 +497,12 @@ export default function App() {
         days.push(
           <div
             key={day.toString()}
-            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50/50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50/50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-gray-50/50' : ''}`}
+            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-100/50 relative cursor-pointer ${!isSameMonth(day, monthStart) ? 'bg-gray-50/50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-gray-50/50' : ''}`}
             style={isSameDay(day, new Date()) ? { backgroundColor: `${themeColor}08` } : {}}
+            onClick={() => {
+              setDefaultEventData({ date: format(cloneDay, 'yyyy-MM-dd') });
+              setIsAddModalOpen(true);
+            }}
           >
             <span 
               className={`text-[10px] md:text-xs font-black absolute top-1 md:top-3 right-1 md:right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'text-white w-5 h-5 md:w-7 md:h-7 rounded-full shadow-lg' : 'text-gray-400'}`}
@@ -487,7 +514,7 @@ export default function App() {
               {dayEvents.slice(0, 3).map((e, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setSelectedEvent(e)}
+                  onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
                   className="text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md px-1 md:px-2 py-0.5 md:py-1 truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222]"
                   style={{ borderLeftColor: getGroupColor(e.group_id), borderLeftWidth: '3px' }}
                 >
@@ -716,9 +743,13 @@ export default function App() {
                 </Button>
               )}
 
-              <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+              <Dialog open={isAddModalOpen} onOpenChange={(open) => { setIsAddModalOpen(open); if (!open) setDefaultEventData(null); }}>
                 <DialogTrigger render={
-                  <Button style={{ backgroundColor: themeColor }} className="text-white rounded-xl h-10 px-6 font-bold shadow-md active:scale-95 transition-all">
+                  <Button 
+                    style={{ backgroundColor: themeColor }} 
+                    className="text-white rounded-xl h-10 px-6 font-bold shadow-md active:scale-95 transition-all"
+                    onClick={() => { setDefaultEventData(null); setIsAddModalOpen(true); }}
+                  >
                     <Plus className="mr-2 h-4 w-4" /> 予定を追加
                   </Button>
                 } />
@@ -734,12 +765,24 @@ export default function App() {
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">年月日 <span className="text-red-500">*</span></label>
-                      <input name="date" type="date" max="9999-12-31" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" required />
+                      <input 
+                        name="date" 
+                        type="date" 
+                        max="9999-12-31" 
+                        defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
+                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                        required 
+                      />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">開始時刻</label>
-                        <input name="startTime" type="time" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" />
+                        <input 
+                          name="startTime" 
+                          type="time" 
+                          defaultValue={defaultEventData?.startTime || '10:00'}
+                          className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                        />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">終了時刻</label>
