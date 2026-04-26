@@ -775,24 +775,14 @@ export default function App() {
                 <Menu className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg md:text-xl font-bold tracking-tight text-[#222222]">Oshi-Link</h1>
+
                 <p className="text-[10px] md:text-[12px] font-medium text-gray-500 uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]">
                   {allGroups.find(g => g.id === activeGroupId)?.name || (activeGroupId === '0' ? '全ての予定' : '')}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2 md:gap-3">
-              {activeGroupId !== '0' && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => setPersonalizationOpen(true)}
-                  className="rounded-xl text-gray-500"
-                  title="個人設定（背景・カラー）"
-                >
-                  <img src="https://api.iconify.design/lucide:palette.svg?color=%236b7280" alt="設定" className="w-5 h-5" />
-                </Button>
-              )}
+
 
               <Dialog open={isAddModalOpen} onOpenChange={(open) => { setIsAddModalOpen(open); if (!open) setDefaultEventData(null); }}>
                 <DialogTrigger render={
