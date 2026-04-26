@@ -48,6 +48,7 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
   const [draggingRange, setDraggingRange] = useState<{ date: string; start: number; end: number } | null>(null);
+  const [eventCategory, setEventCategory] = useState('出演');
 
   // Initialize activeGroupId from localStorage if available
   useEffect(() => {
@@ -161,10 +162,10 @@ export default function App() {
       title: fd.get('title'),
       date: dateStr,
       end_time: endStr,
+      category: eventCategory,
       location: fd.get('location'),
       description: fd.get('description'),
       source_url: fd.get('source_url'),
-      image_url: fd.get('image_url'),
       user_id: user.id,
     };
     try {
@@ -842,8 +843,26 @@ export default function App() {
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">場所</label>
-                      <input name="location" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="会場名" />
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">カテゴリー <span className="text-red-500">*</span></label>
+                      <select 
+                        value={eventCategory} 
+                        onChange={(e) => setEventCategory(e.target.value)}
+                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]"
+                      >
+                        <option value="コンサート">コンサート</option>
+                        <option value="出演">出演</option>
+                        <option value="動画配信">動画配信</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">
+                        {eventCategory === '動画配信' ? '配信URL' : '場所'}
+                      </label>
+                      <input 
+                        name="location" 
+                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                        placeholder={eventCategory === '動画配信' ? 'YouTubeのURLなど' : '会場名'} 
+                      />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">説明・備考</label>
@@ -852,10 +871,6 @@ export default function App() {
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">ソースURL <span className="text-red-500">*</span></label>
                       <input name="source_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="公式Twitterの告知URLなど" required />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">画像URL</label>
-                      <input name="image_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="イベント画像のURL" />
                     </div>
                     <Button type="submit" disabled={loading} className="w-full text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all" style={{ backgroundColor: themeColor }}>
                       {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : '登録する'}
