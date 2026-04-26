@@ -512,12 +512,9 @@ export default function App() {
                             <div
                               key={idx}
                               onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                              className="absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-md overflow-hidden hover:scale-[1.05] transition-all cursor-pointer z-20 border border-gray-100"
+                              className="absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-md hover:scale-[1.05] transition-all cursor-pointer z-20 border border-gray-100 border-l-[8px]"
+                              style={{ borderLeftColor: getGroupColor(e.group_id) }}
                             >
-                              <div 
-                                className="w-3 shrink-0 self-stretch" 
-                                style={{ backgroundColor: getGroupColor(e.group_id) }} 
-                              />
                               <div className="flex-1 p-3 flex items-center min-w-0">
                                 <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
                               </div>
@@ -569,15 +566,10 @@ export default function App() {
                 <div
                   key={idx}
                   onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className="flex items-stretch text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded overflow-hidden cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6"
+                  className="flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px]"
+                  style={{ borderLeftColor: getGroupColor(e.group_id) }}
                 >
-                  <div 
-                    className="w-2 md:w-3 shrink-0" 
-                    style={{ backgroundColor: getGroupColor(e.group_id) }} 
-                  />
-                  <div className="px-1.5 md:px-2 flex items-center truncate flex-1 leading-none">
-                    {e.title}
-                  </div>
+                  {e.title}
                 </div>
               ))}
               {dayEvents.length > 3 && (
