@@ -54,7 +54,7 @@ export function DiscoverModal({
           </div>
         </div>
 
-        <div className="overflow-y-auto max-h-[70vh]">
+        <div className="overflow-y-auto max-h-[480px]">
           {discoverFiltered.length === 0 ? (
             <div className="p-12 text-center">
               <p className="text-gray-400 font-bold">見つかりませんでした</p>
