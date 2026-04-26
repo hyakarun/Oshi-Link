@@ -299,8 +299,8 @@ export default function App() {
         <div className="flex flex-col">
           <h2 className="text-[32px] font-extrabold tracking-tight text-[#222222]">{title}</h2>
           <div className="flex items-center gap-2 mt-1">
-            <span className="w-2 h-2 rounded-full bg-[#ff385c] animate-pulse" />
-            <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest">{view} schedule</p>
+            <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: themeColor }} />
+            <p className="text-[12px] font-bold uppercase tracking-widest" style={{ color: themeColor }}>{view} schedule</p>
           </div>
         </div>
         <div className="flex items-center bg-[#f7f7f7] p-1.5 rounded-[20px] border border-gray-100">
@@ -516,7 +516,7 @@ export default function App() {
 
         {/* App Logo + User */}
         <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#ff385c] rounded-xl flex items-center justify-center text-white shrink-0 shadow-md">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md" style={{ backgroundColor: themeColor }}>
             <Calendar className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
@@ -543,13 +543,14 @@ export default function App() {
             onClick={() => setActiveGroupId('0')}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold text-sm ${
               activeGroupId === '0'
-                ? 'bg-[#fff0f3] text-[#ff385c]'
+                ? 'text-[#222222] bg-gray-50'
                 : 'text-gray-500 hover:bg-gray-50'
             }`}
+            style={activeGroupId === '0' ? { backgroundColor: `${themeColor}15`, color: themeColor } : {}}
           >
             <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-              activeGroupId === '0' ? 'bg-[#ff385c] text-white' : 'bg-gray-100 text-gray-400'
-            }`}>
+              activeGroupId === '0' ? '' : 'bg-gray-100 text-gray-400'
+            }`} style={activeGroupId === '0' ? { backgroundColor: themeColor, color: 'white' } : {}}>
               <Star className="w-3.5 h-3.5" />
             </div>
             全ての予定
@@ -561,7 +562,8 @@ export default function App() {
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em]">追っているカレンダー</p>
           <button
             onClick={() => setIsDiscoverOpen(true)}
-            className="text-[10px] font-bold text-[#ff385c] hover:underline flex items-center gap-0.5"
+            className="text-[10px] font-bold hover:underline flex items-center gap-0.5"
+            style={{ color: themeColor }}
           >
             <Search className="w-2.5 h-2.5" /> 探す
           </button>
@@ -604,8 +606,8 @@ export default function App() {
                       <GroupAvatar group={g} size="sm" />
                       <div className="flex-1 min-w-0">
                         <p className={`text-[12px] font-black truncate ${
-                          !isActive ? 'text-[#222222]' : ''
-                        }`} style={isActive ? { color: g.custom_theme_color || '#ff385c' } : {}}>{g.name}</p>
+                          !isActive ? 'text-[#222222]' : 'text-gray-400'
+                        }`}>{g.name}</p>
                         <p className="text-[10px] text-gray-400">
                           {g.event_count || 0}件 · {g.follower_count || 0}人
                         </p>
@@ -671,7 +673,7 @@ export default function App() {
               </Button>
               <div>
                 <h1 className="text-lg md:text-xl font-bold tracking-tight text-[#222222]">Oshi-Link</h1>
-                <p className="text-[10px] md:text-[12px] font-medium uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]" style={{ color: themeColor }}>
+                <p className="text-[10px] md:text-[12px] font-medium text-gray-500 uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]">
                   {allGroups.find(g => g.id === activeGroupId)?.name || (activeGroupId === '0' ? '全ての予定' : '')}
                 </p>
               </div>
