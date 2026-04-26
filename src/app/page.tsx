@@ -392,7 +392,8 @@ export default function App() {
                     <div
                       key={idx}
                       onClick={() => setSelectedEvent(e)}
-                      className="absolute inset-x-4 top-2 bottom-2 bg-gradient-to-br from-[#ff385c] to-[#e00b41] text-white p-4 rounded-3xl shadow-lg hover:scale-[1.02] transition-all cursor-pointer z-20"
+                      className="absolute inset-x-4 top-2 bottom-2 text-white p-4 rounded-3xl shadow-lg hover:scale-[1.02] transition-all cursor-pointer z-20"
+                      style={{ backgroundColor: themeColor }}
                     >
                       <h4 className="text-lg font-bold leading-tight">{e.title}</h4>
                     </div>
@@ -422,10 +423,10 @@ export default function App() {
               const d = addDays(startDate, i);
               const dayEvents = filteredEvents.filter(e => isSameDay(parseISO(e.date), d));
               return (
-                <div key={i} className={`flex-1 border-r border-gray-50 relative pt-20 min-h-[3072px] ${isSameDay(d, new Date()) ? 'bg-red-50' : ''}`}>
+                <div key={i} className={`flex-1 border-r border-gray-50 relative pt-20 min-h-[3072px]`} style={isSameDay(d, new Date()) ? { backgroundColor: `${themeColor}08` } : {}}>
                   <div className="absolute top-0 left-0 right-0 h-20 border-b border-gray-50 flex flex-col items-center justify-center bg-white backdrop-blur-sm z-10">
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">{format(d, 'eee')}</p>
-                    <p className={`text-xl font-black ${isSameDay(d, new Date()) ? 'text-[#ff385c]' : 'text-[#222222]'}`}>{format(d, 'd')}</p>
+                    <p className="text-xl font-black" style={isSameDay(d, new Date()) ? { color: themeColor } : { color: '#222222' }}>{format(d, 'd')}</p>
                   </div>
                   {hours.map(h => (
                     <div key={h} className="h-32 border-b border-gray-50 relative">
@@ -435,7 +436,8 @@ export default function App() {
                           <div
                             key={idx}
                             onClick={() => setSelectedEvent(e)}
-                            className="absolute inset-x-2 top-2 bottom-2 bg-white border-l-4 border-[#ff385c] shadow-lg rounded-xl p-3 hover:scale-[1.05] transition-all cursor-pointer z-20"
+                            className="absolute inset-x-2 top-2 bottom-2 bg-white border-l-4 shadow-lg rounded-xl p-3 hover:scale-[1.05] transition-all cursor-pointer z-20"
+                            style={{ borderLeftColor: themeColor }}
                           >
                             <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
                           </div>
@@ -467,7 +469,8 @@ export default function App() {
         days.push(
           <div
             key={day.toString()}
-            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50/50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50/50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-red-50/20' : ''}`}
+            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50/50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50/50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-gray-50/50' : ''}`}
+            style={isSameDay(day, new Date()) ? { backgroundColor: `${themeColor}08` } : {}}
           >
             <span 
               className={`text-[10px] md:text-xs font-black absolute top-1 md:top-3 right-1 md:right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'text-white w-5 h-5 md:w-7 md:h-7 rounded-full shadow-lg' : 'text-gray-400'}`}
@@ -504,7 +507,7 @@ export default function App() {
     return (
       <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
         <div className="flex flex-col items-center gap-6">
-          <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+          <Loader2 className="animate-spin h-10 w-10" style={{ color: themeColor }} />
           <p className="text-sm font-bold text-gray-400">認証情報を確認中...</p>
         </div>
       </div>
@@ -596,7 +599,8 @@ export default function App() {
               <p className="text-[10px] text-gray-300 mb-3 leading-relaxed">推しグループのカレンダーをフォローしよう</p>
               <Button
                 onClick={() => setIsDiscoverOpen(true)}
-                className="bg-[#ff385c] text-white rounded-xl h-8 px-3 text-xs font-bold"
+                className="text-white rounded-xl h-8 px-3 text-xs font-bold"
+                style={{ backgroundColor: themeColor }}
               >
                 カレンダーを探す
               </Button>
@@ -721,25 +725,25 @@ export default function App() {
                   <form onSubmit={handleAddEvent} className="p-8 space-y-4 bg-white">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">イベント名 <span className="text-red-500">*</span></label>
-                      <input name="title" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" placeholder="LIVE TOUR 2026" required />
+                      <input name="title" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="LIVE TOUR 2026" required />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">年月日 <span className="text-red-500">*</span></label>
-                      <input name="date" type="date" max="9999-12-31" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" required />
+                      <input name="date" type="date" max="9999-12-31" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" required />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">開始時刻</label>
-                        <input name="startTime" type="time" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" />
+                        <input name="startTime" type="time" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">終了時刻</label>
-                        <input name="endTime" type="time" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" />
+                        <input name="endTime" type="time" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" />
                       </div>
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">場所</label>
-                      <input name="location" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" placeholder="会場名" />
+                      <input name="location" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="会場名" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">説明・備考</label>
@@ -747,13 +751,13 @@ export default function App() {
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">ソースURL <span className="text-red-500">*</span></label>
-                      <input name="source_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" placeholder="公式Twitterの告知URLなど" required />
+                      <input name="source_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="公式Twitterの告知URLなど" required />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">画像URL</label>
-                      <input name="image_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" placeholder="イベント画像のURL" />
+                      <input name="image_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="イベント画像のURL" />
                     </div>
-                    <Button type="submit" disabled={loading} className="w-full bg-[#ff385c] hover:bg-[#e00b41] text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
+                    <Button type="submit" disabled={loading} className="w-full text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all" style={{ backgroundColor: themeColor }}>
                       {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : '登録する'}
                     </Button>
                   </form>
