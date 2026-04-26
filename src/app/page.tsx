@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import Script from 'next/script';
-import { Calendar, Clock, MapPin, Plus, ShieldCheck, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, X, Check, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, MapPin, Plus, ShieldCheck, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, X, Check, ChevronRight, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -41,6 +41,7 @@ export default function App() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [view, setView] = useState<View>('month');
   const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // セッション認証ヘルパー
   function authHeaders(): Record<string, string> {
@@ -422,23 +423,23 @@ export default function App() {
         days.push(
           <div
             key={day.toString()}
-            className={`min-h-[120px] p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-red-50' : ''}`}
+            className={`min-h-[80px] md:min-h-[120px] p-1 md:p-2 border-r border-b border-gray-50 transition-colors hover:bg-gray-50 relative ${!isSameMonth(day, monthStart) ? 'bg-gray-50 opacity-50' : ''} ${isSameDay(day, new Date()) ? 'bg-red-50' : ''}`}
           >
-            <span className={`text-xs font-black absolute top-3 right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'bg-[#ff385c] text-white w-7 h-7 rounded-full shadow-lg' : 'text-gray-400'}`}>
+            <span className={`text-[10px] md:text-xs font-black absolute top-1 md:top-3 right-1 md:right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'bg-[#ff385c] text-white w-5 h-5 md:w-7 md:h-7 rounded-full shadow-lg' : 'text-gray-400'}`}>
               {format(day, 'd')}
             </span>
-            <div className="space-y-1 mt-6">
+            <div className="space-y-1 mt-5 md:mt-6">
               {dayEvents.slice(0, 3).map((e, idx) => (
                 <div
                   key={idx}
                   onClick={() => setSelectedEvent(e)}
-                  className="text-[11px] bg-white border border-gray-100 shadow-sm rounded-md px-2 py-1 truncate cursor-pointer hover:border-[#ff385c] hover:shadow-md transition-all font-medium text-[#222222]"
+                  className="text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md px-1 md:px-2 py-0.5 md:py-1 truncate cursor-pointer hover:border-[#ff385c] hover:shadow-md transition-all font-medium text-[#222222]"
                 >
                   {e.title}
                 </div>
               ))}
               {dayEvents.length > 3 && (
-                <p className="text-[10px] text-gray-400 pl-1">他 {dayEvents.length - 3} 件...</p>
+                <p className="text-[8px] md:text-[10px] text-gray-400 pl-1">他 {dayEvents.length - 3} 件...</p>
               )}
             </div>
           </div>
@@ -468,10 +469,18 @@ export default function App() {
 
   return (
     <>
-      <div className="flex h-screen w-full bg-[#f2f2f2] transition-all" suppressHydrationWarning>
+      <div className="flex h-screen w-full bg-[#f2f2f2] transition-all relative overflow-hidden" suppressHydrationWarning>
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/40 z-40 md:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
 
       {/* Left Sidebar - Following Calendars */}
-      <aside className="w-[260px] bg-white border-r border-gray-100 h-full flex flex-col flex-shrink-0">
+      <aside className={`w-[260px] bg-white border-r border-gray-100 h-full flex flex-col flex-shrink-0 absolute md:relative z-50 md:z-auto transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
 
         {/* App Logo + User */}
         <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
@@ -607,15 +616,25 @@ export default function App() {
       <div className="flex-1 flex h-full overflow-hidden">
 
         {/* Calendar Area */}
-        <div className="flex-1 flex flex-col bg-white md:rounded-l-[32px] overflow-hidden shadow-2xl">
-          <header className="h-20 border-b flex items-center justify-between px-8 bg-white backdrop-blur-md sticky top-0 z-10 shrink-0">
-            <div>
-              <h1 className="text-xl font-bold tracking-tight text-[#222222]">Oshi-Link</h1>
-              <p className="text-[12px] font-medium text-gray-500 uppercase tracking-widest">
-                {allGroups.find(g => g.id === activeGroupId)?.name || (activeGroupId === '0' ? '全ての予定' : '')}
-              </p>
-            </div>
+        <div className="flex-1 flex flex-col bg-white md:rounded-l-[32px] overflow-hidden shadow-2xl relative z-0">
+          <header className="h-16 md:h-20 border-b flex items-center justify-between px-4 md:px-8 bg-white/95 backdrop-blur-md sticky top-0 z-10 shrink-0">
             <div className="flex items-center gap-3">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="md:hidden text-gray-500 hover:bg-gray-100 rounded-xl"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <Menu className="w-5 h-5" />
+              </Button>
+              <div>
+                <h1 className="text-lg md:text-xl font-bold tracking-tight text-[#222222]">Oshi-Link</h1>
+                <p className="text-[10px] md:text-[12px] font-medium text-gray-500 uppercase tracking-widest truncate max-w-[120px] md:max-w-[none]">
+                  {allGroups.find(g => g.id === activeGroupId)?.name || (activeGroupId === '0' ? '全ての予定' : '')}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 md:gap-3">
               <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
                 <DialogTrigger render={
                   <Button className="bg-[#ff385c] hover:bg-[#e00b41] text-white rounded-xl h-10 px-6 font-bold shadow-md active:scale-95 transition-all">
