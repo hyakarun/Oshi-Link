@@ -512,14 +512,14 @@ export default function App() {
                             <div
                               key={idx}
                               onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                              className="absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-xl overflow-hidden hover:scale-[1.05] transition-all cursor-pointer z-20"
+                              className="absolute inset-x-2 top-2 bottom-2 bg-white flex shadow-lg rounded-full overflow-hidden hover:scale-[1.05] transition-all cursor-pointer z-20 border border-gray-100"
                             >
                               <div 
-                                className="w-1.5 shrink-0 self-stretch" 
+                                className="w-3 shrink-0 self-stretch" 
                                 style={{ backgroundColor: getGroupColor(e.group_id) }} 
                               />
-                              <div className="flex-1 p-3 min-w-0">
-                                <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">{e.title}</h5>
+                              <div className="flex-1 px-4 flex items-center min-w-0">
+                                <h5 className="text-[11px] font-black text-[#222222] truncate">{e.title}</h5>
                               </div>
                             </div>
                           );
@@ -569,13 +569,13 @@ export default function App() {
                 <div
                   key={idx}
                   onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className="flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded-md overflow-hidden cursor-pointer hover:shadow-md transition-all font-medium text-[#222222]"
+                  className="flex items-stretch text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-full overflow-hidden cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6"
                 >
                   <div 
-                    className="w-1 shrink-0 self-stretch" 
+                    className="w-2 md:w-3 shrink-0" 
                     style={{ backgroundColor: getGroupColor(e.group_id) }} 
                   />
-                  <div className="px-1 md:px-2 py-0.5 md:py-1 truncate flex-1">
+                  <div className="px-1.5 md:px-2 flex items-center truncate flex-1 leading-none">
                     {e.title}
                   </div>
                 </div>
