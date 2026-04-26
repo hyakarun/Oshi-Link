@@ -1,0 +1,44 @@
+import React from 'react';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+
+type CreateGroupModalProps = {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  handleCreateGroup: (e: React.FormEvent<HTMLFormElement>) => void;
+  loading: boolean;
+};
+
+export function CreateGroupModal({
+  isOpen,
+  onOpenChange,
+  handleCreateGroup,
+  loading
+}: CreateGroupModalProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[480px] bg-white border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
+        <div className="bg-gray-50 p-8 border-b border-gray-100">
+          <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight">共有カレンダーを作成</DialogTitle>
+          <DialogDescription className="text-gray-500 font-medium mt-1">
+            新しい推しグループのカレンダーを作成し、みんなで予定を共有しましょう。
+          </DialogDescription>
+        </div>
+        <form onSubmit={handleCreateGroup} className="p-8 space-y-5 bg-white">
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">グループ名 <span className="text-red-500">*</span></label>
+            <input name="name" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" placeholder="例: Virtual Idols Unit X" required />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">説明</label>
+            <textarea name="description" className="w-full h-24 bg-gray-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-[#ff385c] outline-none resize-none font-medium text-[#222222]" placeholder="どんなグループか簡単に説明を..." />
+          </div>
+          <Button type="submit" disabled={loading} className="w-full bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
+            {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : 'カレンダーを公開する'}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

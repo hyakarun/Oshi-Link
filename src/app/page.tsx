@@ -6,74 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
-import {
-  format,
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-  addDays,
-  addMonths,
-  subMonths,
-  isSameDay,
-  isSameMonth,
-  parseISO,
-} from 'date-fns';
-
-type Group = {
-  id: string;
-  name: string;
-  description?: string;
-  avatar_url?: string;
-  event_count?: number;
-  follower_count?: number;
-  is_following?: boolean;
-};
-type Event = {
-  id: string;
-  group_id: string;
-  title: string;
-  date: string;
-  end_time?: string;
-  location?: string;
-  description?: string;
-  image_url?: string;
-  source_url?: string;
-  verified?: boolean;
-  disputed?: boolean;
-};
-type User = { id: string; name: string; email: string };
-type View = 'month' | 'week' | 'day';
-
-const FALLBACK_IMG = 'https:\u002f\u002fimages.unsplash.com\u002fphoto-1540039155732-d67414bc5c4a?w=800&q=80';
-
-const GROUP_COLORS = [
-  'from-[#ff385c] to-[#e00b41]',
-  'from-purple-500 to-purple-700',
-  'from-blue-500 to-blue-700',
-  'from-emerald-500 to-emerald-700',
-  'from-orange-500 to-orange-700',
-  'from-pink-500 to-pink-700',
-  'from-cyan-500 to-cyan-700',
-];
-
-function groupColor(id: string): string {
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
-  return GROUP_COLORS[Math.abs(hash) % GROUP_COLORS.length];
-}
-
-function GroupAvatar({ group, size = 'md' }: { group: Group; size?: 'sm' | 'md' | 'lg' }) {
-  const sizeClass = size === 'sm' ? 'w-8 h-8 text-xs' : size === 'lg' ? 'w-14 h-14 text-lg' : 'w-10 h-10 text-sm';
-  if (group.avatar_url) {
-    return <img src={group.avatar_url} alt={group.name} className={`${sizeClass} rounded-xl object-cover`} />;
-  }
-  return (
-    <div className={`${sizeClass} rounded-xl bg-gradient-to-br ${groupColor(group.id)} flex items-center justify-center text-white font-black shrink-0`}>
-      {group.name[0]}
-    </div>
-  );
-}
+import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, addMonths, subMonths, isSameDay, isSameMonth, parseISO } from 'date-fns';
+import { Group, Event, User, View } from '@/lib/types';
+import { FALLBACK_IMG, GROUP_COLORS, groupColor, GroupAvatar } from '@/components/ui/shared';
+import { ProfileModal } from '@/components/modals/ProfileModal';
+import { CreateGroupModal } from '@/components/modals/CreateGroupModal';
+import { LinkWarningModal } from '@/components/modals/LinkWarningModal';
+import { DiscoverModal } from '@/components/modals/DiscoverModal';
+import { EventDetailModal } from '@/components/modals/EventDetailModal';
 
 export default function App() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
@@ -752,315 +692,58 @@ export default function App() {
       </div>
 
       {/* Discover Calendars Modal */}
-      <Dialog open={isDiscoverOpen} onOpenChange={setIsDiscoverOpen}>
-        <DialogContent className="max-w-2xl p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl">
-          <div className="p-8 border-b border-gray-100">
-            <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight mb-1">カレンダーを探す</DialogTitle>
-            <DialogDescription className="text-gray-500 text-sm">
-              推しのグループカレンダーをフォローして、予定を見逃さないようにしよう
-            </DialogDescription>
-            <div className="mt-4 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="グループ名で検索..."
-                value={discoverSearch}
-                onChange={e => setDiscoverSearch(e.target.value)}
-                className="w-full h-12 bg-gray-50 rounded-xl pl-10 pr-4 outline-none border-none focus:ring-2 focus:ring-[#ff385c] font-medium text-[#222222]"
-              />
-            </div>
-          </div>
-
-          <div className="overflow-y-auto max-h-[480px]">
-            {discoverFiltered.length === 0 ? (
-              <div className="p-12 text-center">
-                <p className="text-gray-400 font-bold">見つかりませんでした</p>
-                <button
-                  onClick={() => { setIsDiscoverOpen(false); setIsGroupModalOpen(true); }}
-                  className="mt-4 text-[#ff385c] font-bold text-sm hover:underline"
-                >
-                  新しくカレンダーを作成する →
-                </button>
-              </div>
-            ) : (
-              <div className="p-4 space-y-2">
-                {discoverFiltered.map(g => (
-                  <div
-                    key={g.id}
-                    className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${g.is_following ? 'bg-[#fff0f3] border-[#ff385c] border-opacity-20' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
-                  >
-                    <GroupAvatar group={g} size="md" />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h3 className="font-black text-[#222222] truncate">{g.name}</h3>
-                        {g.is_following && (
-                          <Badge className="bg-[#ff385c] text-white border-none text-[9px] px-2 py-0">フォロー中</Badge>
-                        )}
-                      </div>
-                      {g.description && (
-                        <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{g.description}</p>
-                      )}
-                      <div className="flex items-center gap-3 mt-1.5">
-                        <span className="text-[10px] text-gray-400 font-bold flex items-center gap-1">
-                          <Users className="w-3 h-3" /> {g.follower_count || 0}人
-                        </span>
-                        <span className="text-[10px] text-gray-400 font-bold flex items-center gap-1">
-                          <Calendar className="w-3 h-3" /> {g.event_count || 0}件の予定
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      {g.is_following && (
-                        <button
-                          onClick={() => handleSubscribe(g.id)}
-                          className="p-2 rounded-xl hover:bg-gray-100 transition-all"
-                          title="iCalに追加"
-                        >
-                          <Bell className="w-4 h-4 text-gray-400" />
-                        </button>
-                      )}
-                      <Button
-                        onClick={() => handleFollowToggle(g)}
-                        disabled={followLoading === g.id}
-                        className={`h-9 px-4 rounded-xl font-bold text-sm transition-all ${
-                          g.is_following
-                            ? 'bg-white border-2 border-gray-200 text-gray-500 hover:border-red-200 hover:text-red-500'
-                            : 'bg-[#ff385c] text-white hover:bg-[#e00b41] shadow-md'
-                        }`}
-                      >
-                        {followLoading === g.id ? (
-                          <Loader2 className="animate-spin h-4 w-4" />
-                        ) : g.is_following ? (
-                          <span className="flex items-center gap-1"><Check className="w-3.5 h-3.5" /> フォロー中</span>
-                        ) : (
-                          <span className="flex items-center gap-1"><Plus className="w-3.5 h-3.5" /> フォロー</span>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="p-6 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
-            <p className="text-sm text-gray-500">{discoverFiltered.length}件のカレンダー</p>
-            <Button
-              onClick={() => { setIsDiscoverOpen(false); setIsGroupModalOpen(true); }}
-              variant="outline"
-              className="rounded-xl h-9 px-4 text-sm font-bold border-gray-200"
-            >
-              <Plus className="w-4 h-4 mr-1" /> 新規作成
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DiscoverModal
+        isOpen={isDiscoverOpen}
+        onOpenChange={setIsDiscoverOpen}
+        discoverSearch={discoverSearch}
+        setDiscoverSearch={setDiscoverSearch}
+        allGroups={allGroups}
+        followLoading={followLoading}
+        handleFollowToggle={handleFollowToggle}
+        handleSubscribe={handleSubscribe}
+        openCreateGroup={() => { setIsDiscoverOpen(false); setIsGroupModalOpen(true); }}
+      />
 
       {/* Event Detail Modal */}
-      <Dialog open={!!selectedEvent} onOpenChange={(open) => {
-        if (!open) { setSelectedEvent(null); setIsEditing(false); }
-      }}>
-        <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
-          {selectedEvent && (
-            <div className="flex flex-col bg-white">
-              <div className="relative aspect-video overflow-hidden">
-                <img src={selectedEvent.image_url || FALLBACK_IMG} alt={selectedEvent.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-40" />
-                <Button variant="ghost" size="icon" className="absolute top-4 right-4 bg-white rounded-full hover:bg-white shadow-lg" onClick={() => setSelectedEvent(null)}>
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              <div className="p-8 space-y-6">
-                {!isEditing ? (
-                  <>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <Badge className="bg-white text-[#ff385c] border border-[#ff385c] font-bold uppercase tracking-widest text-[10px] px-3">
-                          {allGroups.find(g => g.id === selectedEvent.group_id)?.name || 'EVENT'}
-                        </Badge>
-                        {selectedEvent.verified ? (
-                          <Badge className="bg-blue-50 text-blue-600 border-none font-bold text-[10px] px-3 flex items-center gap-1">
-                            <ShieldCheck className="w-3 h-3" /> 認証済み
-                          </Badge>
-                        ) : (
-                          <Badge className="bg-orange-50 text-orange-600 border-none font-bold text-[10px] px-3">要検証</Badge>
-                        )}
-                      </div>
-                      <DialogTitle className="text-3xl font-black text-[#222222] tracking-tight leading-tight">{selectedEvent.title}</DialogTitle>
-                      <div className="flex items-center gap-4 text-gray-500 flex-wrap">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm font-bold">{format(parseISO(selectedEvent.date), 'yyyy年MM月dd日 HH:mm')}</span>
-                        </div>
-                        {selectedEvent.location && (
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm font-bold">{selectedEvent.location}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    {selectedEvent.description && (
-                      <p className="text-gray-600 text-sm leading-relaxed">{selectedEvent.description}</p>
-                    )}
-                    {selectedEvent.source_url && (
-                      <div className="pt-2">
-                        <button
-                          onClick={() => setExternalUrlWarning(selectedEvent.source_url!)}
-                          className="flex items-center gap-2 px-4 py-2 bg-gray-50 hover:bg-gray-100 text-[#ff385c] text-xs font-bold rounded-xl transition-all"
-                        >
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                          公式情報・リンクを開く
-                        </button>
-                      </div>
-                    )}
-                    <div className="space-y-3 border-t border-gray-100 pt-6">
-                      <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">コミュニティ検証</h3>
-                      <div className="grid grid-cols-2 gap-3">
-                        <Button
-                          onClick={() => handleVerify('confirmed')}
-                          disabled={loading}
-                          className={`rounded-2xl h-12 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${selectedEvent.verified ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-blue-600 border-2 border-blue-100 hover:bg-blue-50'}`}
-                        >
-                          <ShieldCheck className="w-4 h-4" /> 正確です
-                        </Button>
-                        <Button
-                          onClick={() => handleVerify('disputed')}
-                          disabled={loading}
-                          className="rounded-2xl h-12 bg-white border-2 border-gray-200 text-gray-400 hover:text-orange-600 hover:border-orange-200 transition-all active:scale-95 font-black flex items-center justify-center gap-2"
-                        >
-                          <AlertCircle className="w-4 h-4" /> 要修正
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <Button onClick={() => setIsEditing(true)} className="flex-1 bg-[#222222] hover:bg-black text-white h-12 rounded-2xl font-black shadow-xl active:scale-95 transition-all">
-                        内容を修正
-                      </Button>
-                      <Button onClick={() => handleSubscribe(selectedEvent.group_id)} variant="outline" className="flex-1 border-gray-200 h-12 rounded-2xl font-black hover:bg-gray-50 transition-all">
-                        iCalに追加
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <form onSubmit={handleUpdateEvent} className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
-                    <DialogTitle className="text-2xl font-black">予定を修正</DialogTitle>
-                    <div className="space-y-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名</label>
-                        <input name="title" defaultValue={selectedEvent.title} className="w-full h-12 bg-gray-50 rounded-xl px-4 font-bold outline-none border-none focus:ring-2 focus:ring-[#ff385c]" required />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">詳細</label>
-                        <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#ff385c] resize-none" />
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <Button type="submit" className="flex-1 bg-[#ff385c] text-white h-12 rounded-2xl font-black">保存する</Button>
-                      <Button type="button" onClick={() => setIsEditing(false)} variant="ghost" className="flex-1 h-12 rounded-2xl font-black text-gray-500">キャンセル</Button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <EventDetailModal
+        isOpen={!!selectedEvent}
+        onOpenChange={(open) => {
+          if (!open) { setSelectedEvent(null); setIsEditing(false); }
+        }}
+        selectedEvent={selectedEvent}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        loading={loading}
+        setExternalUrlWarning={setExternalUrlWarning}
+        handleVerify={handleVerify}
+        handleUpdateEvent={handleUpdateEvent}
+        handleSubscribe={handleSubscribe}
+      />
 
-      {/* External Link Warning Modal */}
-      <Dialog open={!!externalUrlWarning} onOpenChange={(open) => !open && setExternalUrlWarning(null)}>
-        <DialogContent className="max-w-md p-8 border-none rounded-[32px] bg-white shadow-2xl">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-2">
-              <AlertCircle className="w-8 h-8 text-orange-500" />
-            </div>
-            <DialogTitle className="text-2xl font-black text-[#222222]">外部サイトへ移動します</DialogTitle>
-            <p className="text-sm font-medium text-gray-500 bg-gray-50 p-4 rounded-xl break-all w-full text-left max-h-[100px] overflow-y-auto">
-              {externalUrlWarning}
-            </p>
-            <DialogDescription className="text-sm text-gray-500">
-              Oshi-Linkから離れ、コミュニティによって登録された外部サイトに移動しようとしています。<br/><br/>
-              <span className="text-orange-600 font-bold">フィッシング詐欺や悪質なウイルスが含まれる可能性があるリンクには十分にご注意ください。怪しい場合は絶対に開かないでください。</span>
-            </DialogDescription>
-            <div className="flex gap-3 w-full mt-4">
-              <Button onClick={() => setExternalUrlWarning(null)} className="flex-1 bg-gray-100 text-gray-600 h-12 rounded-2xl font-black hover:bg-gray-200 shadow-sm active:scale-95 transition-all">キャンセル</Button>
-              <a 
-                href={externalUrlWarning || '#'} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="flex-1 bg-orange-500 text-white h-12 rounded-2xl font-black flex items-center justify-center hover:bg-orange-600 shadow-md active:scale-95 transition-all" 
-                onClick={() => setExternalUrlWarning(null)}
-              >
-                自己責任で開く
-              </a>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Link Warning Modal */}
+      <LinkWarningModal 
+        url={externalUrlWarning} 
+        onClose={() => setExternalUrlWarning(null)} 
+      />
 
       {/* Profile Modal */}
-      {user && (
-        <Dialog open={isProfileModalOpen} onOpenChange={setIsProfileModalOpen}>
-          <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl">
-            <div className="p-8 space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-[#ff385c] to-[#e00b41] rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg">
-                  {user.name[0]}
-                </div>
-                <div>
-                  <DialogTitle className="text-xl font-black text-[#222222]">{user.name}</DialogTitle>
-                  <p className="text-sm text-gray-400">{user.email}</p>
-                </div>
-              </div>
-              <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">フォロー中のカレンダー</p>
-                <p className="text-2xl font-black text-[#222222]">{followedGroups.length} 件</p>
-              </div>
-              <form onSubmit={handleProfileUpdate} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">表示名</label>
-                  <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" required />
-                </div>
-                <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
-                  {loading ? '保存中...' : '名前を更新'}
-                </button>
-              </form>
-              <button
-                onClick={handleLogout}
-                className="w-full py-3 text-sm font-bold text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-              >
-                ログアウト
-              </button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
+      <ProfileModal 
+        isOpen={isProfileModalOpen}
+        onOpenChange={setIsProfileModalOpen}
+        user={user}
+        followedGroups={followedGroups}
+        handleProfileUpdate={handleProfileUpdate}
+        handleLogout={handleLogout}
+        loading={loading}
+      />
 
       {/* Create Group Modal */}
-      <Dialog open={isGroupModalOpen} onOpenChange={setIsGroupModalOpen}>
-        <DialogContent className="sm:max-w-[480px] bg-white border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
-          <div className="bg-gray-50 p-8 border-b border-gray-100">
-            <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight">共有カレンダーを作成</DialogTitle>
-            <DialogDescription className="text-gray-500 font-medium mt-1">
-              新しい推しグループのカレンダーを作成し、みんなで予定を共有しましょう。
-            </DialogDescription>
-          </div>
-          <form onSubmit={handleCreateGroup} className="p-8 space-y-5 bg-white">
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">グループ名 <span className="text-red-500">*</span></label>
-              <input name="name" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" placeholder="例: Virtual Idols Unit X" required />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">説明</label>
-              <textarea name="description" className="w-full h-24 bg-gray-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-[#ff385c] outline-none resize-none font-medium text-[#222222]" placeholder="どんなグループか簡単に説明を..." />
-            </div>
-            <Button type="submit" disabled={loading} className="w-full bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
-              {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : 'カレンダーを公開する'}
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <CreateGroupModal
+        isOpen={isGroupModalOpen}
+        onOpenChange={setIsGroupModalOpen}
+        handleCreateGroup={handleCreateGroup}
+        loading={loading}
+      />
 
     </div>
     </>
