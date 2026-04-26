@@ -46,7 +46,8 @@ export default function App() {
   const [view, setView] = useState<View>('month');
   const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string } | null>(null);
+  const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
+  const [draggingRange, setDraggingRange] = useState<{ date: string; start: number; end: number } | null>(null);
 
   // Initialize activeGroupId from localStorage if available
   useEffect(() => {
@@ -394,14 +395,37 @@ export default function App() {
               <div 
                 key={h} 
                 className="h-20 border-b border-gray-50 relative cursor-pointer hover:bg-gray-50/50 transition-colors"
-                onClick={() => {
-                  setDefaultEventData({ 
-                    date: format(currentMonth, 'yyyy-MM-dd'),
-                    startTime: `${String(h).padStart(2, '0')}:00` 
-                  });
-                  setIsAddModalOpen(true);
+                onMouseDown={() => {
+                  setDraggingRange({ date: format(currentMonth, 'yyyy-MM-dd'), start: h, end: h });
+                }}
+                onMouseEnter={() => {
+                  if (draggingRange) setDraggingRange({ ...draggingRange, end: h });
+                }}
+                onMouseUp={() => {
+                  if (draggingRange) {
+                    const start = Math.min(draggingRange.start, draggingRange.end);
+                    const end = Math.max(draggingRange.start, draggingRange.end) + 1;
+                    setDefaultEventData({ 
+                      date: draggingRange.date,
+                      startTime: `${String(start).padStart(2, '0')}:00`,
+                      endTime: `${String(end).padStart(2, '0')}:00`
+                    });
+                    setDraggingRange(null);
+                    setIsAddModalOpen(true);
+                  }
                 }}
               >
+                {/* Drag Feedback Overlay */}
+                {draggingRange && draggingRange.date === format(currentMonth, 'yyyy-MM-dd') && (
+                  (() => {
+                    const dragStart = Math.min(draggingRange.start, draggingRange.end);
+                    const dragEnd = Math.max(draggingRange.start, draggingRange.end);
+                    if (h >= dragStart && h <= dragEnd) {
+                      return <div className="absolute inset-0 opacity-30 z-10" style={{ backgroundColor: themeColor }} />;
+                    }
+                    return null;
+                  })()
+                )}
                 {dayEvents.map((e, idx) => {
                   const startHour = 10 + (idx * 2);
                   if (h === startHour) return (
@@ -449,14 +473,37 @@ export default function App() {
                       <div 
                         key={h} 
                         className="h-32 border-b border-gray-50 relative cursor-pointer hover:bg-gray-50/50 transition-colors"
-                        onClick={() => {
-                          setDefaultEventData({ 
-                            date: format(d, 'yyyy-MM-dd'), 
-                            startTime: `${String(h).padStart(2, '0')}:00` 
-                          });
-                          setIsAddModalOpen(true);
+                        onMouseDown={() => {
+                          setDraggingRange({ date: format(d, 'yyyy-MM-dd'), start: h, end: h });
+                        }}
+                        onMouseEnter={() => {
+                          if (draggingRange) setDraggingRange({ ...draggingRange, end: h });
+                        }}
+                        onMouseUp={() => {
+                          if (draggingRange) {
+                            const start = Math.min(draggingRange.start, draggingRange.end);
+                            const end = Math.max(draggingRange.start, draggingRange.end) + 1;
+                            setDefaultEventData({ 
+                              date: draggingRange.date,
+                              startTime: `${String(start).padStart(2, '0')}:00`,
+                              endTime: `${String(end).padStart(2, '0')}:00`
+                            });
+                            setDraggingRange(null);
+                            setIsAddModalOpen(true);
+                          }
                         }}
                       >
+                        {/* Drag Feedback Overlay */}
+                        {draggingRange && draggingRange.date === format(d, 'yyyy-MM-dd') && (
+                          (() => {
+                            const dragStart = Math.min(draggingRange.start, draggingRange.end);
+                            const dragEnd = Math.max(draggingRange.start, draggingRange.end);
+                            if (h >= dragStart && h <= dragEnd) {
+                              return <div className="absolute inset-0 opacity-30 z-10" style={{ backgroundColor: themeColor }} />;
+                            }
+                            return null;
+                          })()
+                        )}
                         {dayEvents.map((e, idx) => {
                           const startHour = 10 + (idx * 3);
                           if (h === startHour) return (
@@ -786,7 +833,12 @@ export default function App() {
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">終了時刻</label>
-                        <input name="endTime" type="time" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" />
+                        <input 
+                          name="endTime" 
+                          type="time" 
+                          defaultValue={defaultEventData?.endTime || ''}
+                          className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                        />
                       </div>
                     </div>
                     <div className="space-y-1.5">
