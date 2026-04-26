@@ -59,8 +59,8 @@ export function EventDetailModal({
             {!isEditing ? (
               <>
                 <div className="mb-8">
-                  <h2 className="text-3xl font-black text-[#222222] tracking-tight leading-tight mb-4">
-                    {selectedEvent.is_tentative && <span className="text-[#ff385c] mr-2">[(仮)]</span>}
+                  <h2 className="text-3xl font-black text-[#222222] tracking-tight leading-tight mb-4 flex items-center gap-3">
+                    {selectedEvent.is_tentative && <AlertCircle className="w-8 h-8 text-yellow-500 shrink-0" />}
                     {selectedEvent.title}
                   </h2>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
