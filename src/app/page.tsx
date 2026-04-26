@@ -258,9 +258,16 @@ export default function App() {
         body: JSON.stringify({ event_id: selectedEvent.id, user_id: user.id, status }) 
       });
       if (res.ok) {
-        const data = await res.json() as { deleted?: boolean };
+        const data = await res.json() as { deleted?: boolean; confirms?: number; disputes?: number; is_tentative?: number };
         if (data.deleted) {
           setSelectedEvent(null);
+        } else {
+          setSelectedEvent(prev => prev ? {
+            ...prev,
+            confirms_count: data.confirms ?? prev.confirms_count,
+            disputes_count: data.disputes ?? prev.disputes_count,
+            is_tentative: data.is_tentative !== undefined ? data.is_tentative === 1 : prev.is_tentative
+          } : null);
         }
         await loadEvents();
       }
