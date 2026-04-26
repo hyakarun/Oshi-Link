@@ -24,8 +24,16 @@ export function GroupAvatar({ group, size = 'md' }: { group: Group; size?: 'sm' 
   if (group.avatar_url) {
     return <img src={group.avatar_url} alt={group.name} className={`${sizeClass} rounded-xl object-cover`} />;
   }
+
+  const customStyle = group.custom_theme_color 
+    ? { backgroundColor: group.custom_theme_color, backgroundImage: 'none' } 
+    : {};
+
   return (
-    <div className={`${sizeClass} rounded-xl bg-gradient-to-br ${groupColor(group.id)} flex items-center justify-center text-white font-black shrink-0`}>
+    <div 
+      className={`${sizeClass} rounded-xl bg-gradient-to-br ${group.custom_theme_color ? '' : groupColor(group.id)} flex items-center justify-center text-white font-black shrink-0`}
+      style={customStyle}
+    >
       {group.name[0]}
     </div>
   );
