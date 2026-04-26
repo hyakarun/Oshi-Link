@@ -534,8 +534,8 @@ export default function App() {
                               style={{ borderLeftColor: getGroupColor(e.group_id) }}
                             >
                               <div className="flex-1 p-3 flex items-center min-w-0">
-                                <h5 className="text-[11px] font-black text-[#222222] line-clamp-2">
-                                  {e.is_tentative && <span className="text-red-500 mr-1">[(仮)]</span>}
+                                <h5 className="text-[11px] font-black text-[#222222] line-clamp-2 flex items-center gap-1">
+                                  {e.is_tentative && <AlertCircle className="w-3 h-3 text-yellow-500 shrink-0" />}
                                   {e.title}
                                 </h5>
                               </div>
@@ -590,7 +590,7 @@ export default function App() {
                   className={`flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
                   style={{ borderLeftColor: getGroupColor(e.group_id) }}
                 >
-                  {e.is_tentative && <span className="text-red-500 mr-1 font-black">[(仮)]</span>}
+                  {e.is_tentative && <AlertCircle className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-500 mr-1 shrink-0" />}
                   {e.title}
                 </div>
               ))}
