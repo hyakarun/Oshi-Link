@@ -36,7 +36,7 @@ export function DiscoverModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl">
+      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl">
         <div className="p-8 border-b border-gray-100">
           <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight mb-1">カレンダーを探す</DialogTitle>
           <DialogDescription className="text-gray-500 text-sm">
