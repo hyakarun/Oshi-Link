@@ -829,12 +829,12 @@ export default function App() {
                     <Plus className="mr-2 h-4 w-4" /> 予定を追加
                   </Button>
                 } />
-                <DialogContent className="sm:max-w-[500px] bg-white border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
-                  <div className="bg-gray-50 p-8 border-b border-gray-100">
-                    <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight">予定を登録</DialogTitle>
-                    <DialogDescription className="text-gray-500 font-medium mt-1">推しの出演情報などをコミュニティで共有しましょう。</DialogDescription>
+                <DialogContent className="w-[95vw] sm:max-w-[500px] bg-white border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
+                  <div className="bg-gray-50 p-6 md:p-8 border-b border-gray-100 flex-shrink-0">
+                    <DialogTitle className="text-xl md:text-2xl font-black text-[#222222] tracking-tight">予定を登録</DialogTitle>
+                    <DialogDescription className="text-gray-500 font-medium mt-1 text-xs md:text-sm">推しの出演情報などをコミュニティで共有しましょう。</DialogDescription>
                   </div>
-                  <form onSubmit={handleAddEvent} className="p-8 space-y-4 bg-white">
+                  <form onSubmit={handleAddEvent} className="p-6 md:p-8 space-y-4 bg-white overflow-y-auto max-h-[70vh]">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">イベント名 <span className="text-red-500">*</span></label>
                       <input name="title" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="LIVE TOUR 2026" required />
