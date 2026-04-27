@@ -36,26 +36,21 @@ export function EventDetailModal({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
-        <div className="flex flex-col bg-white">
-          <div className="relative aspect-video overflow-hidden">
-            <img src={selectedEvent.image_url || FALLBACK_IMG} alt={selectedEvent.title} className="w-full h-full object-cover transition-transform hover:scale-105 duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-8 flex items-center gap-3">
-              {selectedEvent.is_tentative ? (
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-yellow-400/90 backdrop-blur-md rounded-full text-black shadow-lg">
-                  <AlertCircle className="w-4 h-4" />
-                  <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 低（仮）</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-green-500/90 backdrop-blur-md rounded-full text-white shadow-lg">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 高（確定）</span>
-                </div>
-              )}
-            </div>
+        <div className="p-8">
+          <div className="mb-6 flex items-center">
+            {selectedEvent.is_tentative ? (
+              <div className="flex items-center gap-2 px-4 py-1.5 bg-yellow-50 text-yellow-700 rounded-full border border-yellow-200">
+                <AlertCircle className="w-4 h-4" />
+                <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 低（仮）</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-200">
+                <ShieldCheck className="w-4 h-4" />
+                <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 高（確定）</span>
+              </div>
+            )}
           </div>
 
-          <div className="p-8">
             {!isEditing ? (
               <>
                 <div className="mb-8">
@@ -155,7 +150,6 @@ export function EventDetailModal({
               </form>
             )}
           </div>
-        </div>
       </DialogContent>
     </Dialog>
   );
