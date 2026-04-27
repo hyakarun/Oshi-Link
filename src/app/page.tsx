@@ -108,7 +108,7 @@ export default function App() {
       const uid = userId || user?.id || '';
       let url = uid ? `/api/groups?user_id=${uid}` : '/api/groups';
       url += (url.includes('?') ? '&' : '?') + 't=' + Date.now();
-      const res = await fetch(url, { cache: 'no-store' });
+      const res = await fetch(url, { cache: 'no-store', headers: authHeaders() });
       const data = await res.json() as { groups?: Group[] };
       const groups = data.groups || data as unknown as Group[] || [];
       setAllGroups(groups);
@@ -118,7 +118,7 @@ export default function App() {
 
   const loadEvents = useCallback(async () => {
     try {
-      const res = await fetch('/api/events?t=' + Date.now(), { cache: 'no-store' });
+      const res = await fetch('/api/events?t=' + Date.now(), { cache: 'no-store', headers: authHeaders() });
       const data = await res.json() as { events?: Event[] };
       // /api/events サーバーは配列を直接返す
       const eventList = data.events || data as unknown as Event[] || [];
@@ -141,8 +141,8 @@ export default function App() {
     try {
       await fetch('\u002fapi\u002fgroups\u002ffollow', {
         method: 'POST',
-        headers: { 'Content-Type': 'application\u002fjson' },
-        body: JSON.stringify({ user_id: user.id, group_id: group.id }),
+        headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' },
+        body: JSON.stringify({ group_id: group.id }),
       });
       await loadGroups(user.id);
     } catch {}
@@ -171,7 +171,7 @@ export default function App() {
       user_id: user.id,
     };
     try {
-      await fetch('\u002fapi\u002fevents', { method: 'POST', headers: { 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
+      await fetch('\u002fapi\u002fevents', { method: 'POST', headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
       await loadEvents();
       setIsAddModalOpen(false);
       (e.target as HTMLFormElement).reset();
@@ -186,7 +186,7 @@ export default function App() {
     const fd = new FormData(e.currentTarget);
     const body = { id: selectedEvent.id, title: fd.get('title'), description: fd.get('description') };
     try {
-      await fetch('\u002fapi\u002fevents', { method: 'PUT', headers: { 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
+      await fetch('\u002fapi\u002fevents', { method: 'PUT', headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
       await loadEvents();
       setIsEditing(false);
       setSelectedEvent(null);
@@ -240,7 +240,7 @@ export default function App() {
     const fd = new FormData(e.currentTarget);
     const body = { name: fd.get('name'), description: fd.get('description'), created_by: user.id };
     try {
-      await fetch('\u002fapi\u002fgroups', { method: 'POST', headers: { 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
+      await fetch('\u002fapi\u002fgroups', { method: 'POST', headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
       await loadGroups(user.id);
       setIsGroupModalOpen(false);
       (e.target as HTMLFormElement).reset();
@@ -291,7 +291,7 @@ export default function App() {
     try {
       await fetch('/api/groups/follow', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
       await loadGroups(user.id);
