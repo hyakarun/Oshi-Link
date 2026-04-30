@@ -15,6 +15,7 @@ import { EventDetailModal } from '@/components/modals/EventDetailModal';
 import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
 import { CreditsModal } from '@/components/modals/CreditsModal';
 import { AdBanner } from '@/components/ui/AdBanner';
+import { LocationInput } from '@/components/ui/LocationInput';
 import { groupColorSolid } from '@/components/ui/shared';
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
   const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
   const [draggingRange, setDraggingRange] = useState<{ date: string; start: number; end: number } | null>(null);
   const [eventCategory, setEventCategory] = useState('出演');
+  const [selectedLocation, setSelectedLocation] = useState<{ name: string; address: string; latitude: number; longitude: number } | null>(null);
   const [isEventListOpen, setIsEventListOpen] = useState(false);
 
   // Initialize activeGroupId from localStorage if available
@@ -166,6 +168,9 @@ export default function App() {
       end_time: endStr,
       category: eventCategory,
       location: fd.get('location'),
+      address: selectedLocation?.address || null,
+      latitude: selectedLocation?.latitude ?? null,
+      longitude: selectedLocation?.longitude ?? null,
       description: fd.get('description'),
       source_url: fd.get('source_url'),
       user_id: user.id,
@@ -174,6 +179,7 @@ export default function App() {
       await fetch('\u002fapi\u002fevents', { method: 'POST', headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
       await loadEvents();
       setIsAddModalOpen(false);
+      setSelectedLocation(null);
       (e.target as HTMLFormElement).reset();
     } catch { alert('登録に失敗しました'); }
     setLoading(false);
@@ -895,11 +901,24 @@ export default function App() {
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">
                         {eventCategory === '動画配信' ? '配信URL' : '場所'}
                       </label>
-                      <input 
-                        name="location" 
-                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
-                        placeholder={eventCategory === '動画配信' ? 'YouTubeのURLなど' : '会場名'} 
-                      />
+                      {eventCategory === '動画配信' ? (
+                        <input 
+                          name="location" 
+                          className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                          placeholder="YouTubeのURLなど" 
+                        />
+                      ) : (
+                        <>
+                          <input type="hidden" name="location" value={selectedLocation?.name || ''} />
+                          <input type="hidden" name="address" value={selectedLocation?.address || ''} />
+                          <input type="hidden" name="latitude" value={selectedLocation?.latitude ?? ''} />
+                          <input type="hidden" name="longitude" value={selectedLocation?.longitude ?? ''} />
+                          <LocationInput
+                            onSelect={(r) => setSelectedLocation(r)}
+                            placeholder="会場名を入力（例：武道館）"
+                          />
+                        </>
+                      )}
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">説明・備考</label>

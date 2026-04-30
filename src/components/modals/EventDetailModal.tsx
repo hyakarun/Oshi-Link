@@ -42,12 +42,20 @@ export function EventDetailModal({
   const [hotelsLoading, setHotelsLoading] = useState(false);
 
   useEffect(() => {
-    if (!selectedEvent?.location) {
+    if (!selectedEvent?.location && !selectedEvent?.latitude) {
       setHotels([]);
       return;
     }
     setHotelsLoading(true);
-    fetch(`/api/hotels?keyword=${encodeURIComponent(selectedEvent.location)}`)
+
+    let url = '';
+    if (selectedEvent.latitude && selectedEvent.longitude) {
+      url = `/api/hotels?lat=${selectedEvent.latitude}&lng=${selectedEvent.longitude}`;
+    } else if (selectedEvent.location) {
+      url = `/api/hotels?keyword=${encodeURIComponent(selectedEvent.location)}`;
+    }
+
+    fetch(url)
       .then(r => r.json())
       .then((data: any) => {
         const list: HotelInfo[] = (data?.hotels || []).map((item: any) => {
