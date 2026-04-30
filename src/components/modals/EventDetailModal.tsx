@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel } from 'lucide-react';
+import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel, Star, Loader2 } from 'lucide-react';
 import { Event } from '@/lib/types';
+
+type HotelInfo = {
+  hotelName: string;
+  hotelInformationUrl: string;
+  hotelImageUrl: string;
+  hotelMinCharge: number;
+  reviewAverage: number | null;
+};
 
 type EventDetailModalProps = {
   isOpen: boolean;
@@ -30,6 +38,35 @@ export function EventDetailModal({
   handleUpdateEvent,
   handleSubscribe
 }: EventDetailModalProps) {
+  const [hotels, setHotels] = useState<HotelInfo[]>([]);
+  const [hotelsLoading, setHotelsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!selectedEvent?.location) {
+      setHotels([]);
+      return;
+    }
+    setHotelsLoading(true);
+    fetch(`/api/hotels?keyword=${encodeURIComponent(selectedEvent.location)}`)
+      .then(r => r.json())
+      .then((data: any) => {
+        const list: HotelInfo[] = (data?.hotels || []).map((item: any) => {
+          const info = item.hotel?.[0]?.hotelBasicInfo;
+          if (!info) return null;
+          return {
+            hotelName: info.hotelName,
+            hotelInformationUrl: info.hotelInformationUrl,
+            hotelImageUrl: info.hotelImageUrl,
+            hotelMinCharge: info.hotelMinCharge,
+            reviewAverage: info.reviewAverage ?? null,
+          };
+        }).filter(Boolean);
+        setHotels(list);
+      })
+      .catch(() => setHotels([]))
+      .finally(() => setHotelsLoading(false));
+  }, [selectedEvent?.location]);
+
   if (!selectedEvent) return null;
 
   return (
@@ -90,17 +127,57 @@ export function EventDetailModal({
                 )}
 
                 {selectedEvent.location && (
-                  <div className="mb-8 p-5 rounded-2xl border-2 border-dashed border-red-100 bg-red-50/30 flex flex-col items-center gap-3">
-                    <p className="text-[10px] font-black text-red-400 uppercase tracking-widest">遠征・宿泊の準備</p>
-                    <a
-                      href={`https://hb.afl.rakuten.co.jp/hgc/535601d9.adf03288.535601da.eabb1e44/?pc=${encodeURIComponent(`https://search.travel.rakuten.co.jp/ds/vacant/searchKeyword?f_query=${selectedEvent.location}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#bf0000] hover:bg-[#a00000] text-white text-[13px] font-black rounded-xl transition-all shadow-md active:scale-95"
-                    >
-                      <Hotel className="w-4 h-4" />
-                      会場周辺の宿を楽天トラベルで探す
-                    </a>
+                  <div className="mb-8">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Hotel className="w-4 h-4 text-[#bf0000]" />
+                      <p className="text-[11px] font-black text-gray-500 uppercase tracking-widest">会場周辺の宿（楽天トラベル）</p>
+                    </div>
+                    {hotelsLoading ? (
+                      <div className="flex items-center justify-center py-6 bg-gray-50 rounded-2xl">
+                        <Loader2 className="w-5 h-5 animate-spin text-gray-300 mr-2" />
+                        <span className="text-xs text-gray-400 font-bold">ホテルを検索中...</span>
+                      </div>
+                    ) : hotels.length > 0 ? (
+                      <div className="space-y-2">
+                        {hotels.map((hotel, i) => (
+                          <a
+                            key={i}
+                            href={hotel.hotelInformationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-3 p-3 bg-gray-50 hover:bg-red-50 border border-gray-100 hover:border-red-100 rounded-2xl transition-all group"
+                          >
+                            {hotel.hotelImageUrl && (
+                              <img
+                                src={hotel.hotelImageUrl}
+                                alt={hotel.hotelName}
+                                className="w-16 h-14 object-cover rounded-xl shrink-0"
+                              />
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[12px] font-black text-[#222222] truncate leading-tight">{hotel.hotelName}</p>
+                              {hotel.reviewAverage && (
+                                <div className="flex items-center gap-1 mt-0.5">
+                                  <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                                  <span className="text-[10px] font-bold text-gray-500">{hotel.reviewAverage}</span>
+                                </div>
+                              )}
+                              {hotel.hotelMinCharge && (
+                                <p className="text-[11px] font-black text-[#bf0000] mt-1">
+                                  ¥{hotel.hotelMinCharge.toLocaleString()}〜/泊
+                                </p>
+                              )}
+                            </div>
+                            <span className="text-[10px] font-black text-[#bf0000] opacity-0 group-hover:opacity-100 transition-opacity shrink-0">予約 →</span>
+                          </a>
+                        ))}
+                        <p className="text-[9px] text-gray-300 text-right font-medium mt-1">Powered by 楽天トラベル</p>
+                      </div>
+                    ) : (
+                      <div className="text-center py-4 bg-gray-50 rounded-2xl">
+                        <p className="text-[11px] text-gray-400 font-bold">周辺のホテルが見つかりませんでした</p>
+                      </div>
+                    )}
                   </div>
                 )}
 
