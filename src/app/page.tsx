@@ -804,7 +804,7 @@ export default function App() {
       <div className="flex-1 flex h-full overflow-hidden">
 
         {/* Calendar Area */}
-        <div className="flex-1 flex flex-col bg-white md:rounded-l-[32px] overflow-hidden shadow-2xl relative z-0">
+        <div className="flex-1 flex flex-col bg-white overflow-hidden shadow-2xl relative z-0">
           <header className="h-16 md:h-20 border-b flex items-center justify-between px-4 md:px-8 bg-white/95 backdrop-blur-md sticky top-0 z-10 shrink-0">
             <div className="flex items-center gap-3">
               <Button 
