@@ -603,7 +603,7 @@ export default function App() {
       rows.push(<div className="grid grid-cols-7" key={day.toString()}>{days}</div>);
       days = [];
     }
-    return <div className="border-t border-l border-gray-100 rounded-xl overflow-hidden shadow-xl animate-in fade-in duration-500">{rows}</div>;
+    return <div className="border-t border-gray-100 rounded-xl overflow-hidden shadow-xl animate-in fade-in duration-500">{rows}</div>;
   };
 
   if (!mounted || isAuthChecking) {
@@ -928,7 +928,7 @@ export default function App() {
 
         {/* Right Sidebar - Event List */}
         <div
-          className={`flex-shrink-0 bg-white border-l border-gray-100 h-full flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${
+          className={`flex-shrink-0 bg-white h-full flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${
             isEventListOpen ? 'w-[300px]' : 'w-0'
           }`}
         >
