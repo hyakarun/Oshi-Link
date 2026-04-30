@@ -2,7 +2,7 @@ import React from 'react';
 import { format, parseISO } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel } from 'lucide-react';
 import { Event } from '@/lib/types';
 
 type EventDetailModalProps = {
@@ -78,7 +78,7 @@ export function EventDetailModal({
                 )}
 
                 {selectedEvent.source_url && (
-                  <div className="mb-8 pt-2">
+                  <div className="mb-4 pt-2">
                     <button
                       onClick={() => setExternalUrlWarning(selectedEvent.source_url!)}
                       className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#ff385c] hover:bg-[#e03150] text-white text-sm font-black rounded-2xl transition-all shadow-lg active:scale-95"
@@ -86,6 +86,21 @@ export function EventDetailModal({
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                       公式ソース・関連リンクを開く
                     </button>
+                  </div>
+                )}
+
+                {selectedEvent.location && (
+                  <div className="mb-8 p-5 rounded-2xl border-2 border-dashed border-red-100 bg-red-50/30 flex flex-col items-center gap-3">
+                    <p className="text-[10px] font-black text-red-400 uppercase tracking-widest">遠征・宿泊の準備</p>
+                    <a
+                      href={`https://hb.afl.rakuten.co.jp/hgc/535601d9.adf03288.535601da.eabb1e44/?pc=${encodeURIComponent(`https://search.travel.rakuten.co.jp/ds/vacant/searchKeyword?f_query=${selectedEvent.location}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#bf0000] hover:bg-[#a00000] text-white text-[13px] font-black rounded-xl transition-all shadow-md active:scale-95"
+                    >
+                      <Hotel className="w-4 h-4" />
+                      会場周辺の宿を楽天トラベルで探す
+                    </a>
                   </div>
                 )}
 
