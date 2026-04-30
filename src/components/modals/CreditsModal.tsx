@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldCheck, Info, ExternalLink, Heart } from 'lucide-react';
+import { ShieldCheck, Info, ExternalLink } from 'lucide-react';
 
 type CreditsModalProps = {
   isOpen: boolean;

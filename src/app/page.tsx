@@ -1,14 +1,12 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import Script from 'next/script';
-import { Calendar, Clock, MapPin, Plus, ShieldCheck, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, X, Check, ChevronRight, Menu } from 'lucide-react';
+import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, addMonths, subMonths, isSameDay, isSameMonth, parseISO } from 'date-fns';
 import { Group, Event, User, View } from '@/lib/types';
-import { FALLBACK_IMG, GROUP_COLORS, groupColor, GroupAvatar } from '@/components/ui/shared';
+import { GroupAvatar } from '@/components/ui/shared';
 import { ProfileModal } from '@/components/modals/ProfileModal';
 import { CreateGroupModal } from '@/components/modals/CreateGroupModal';
 import { LinkWarningModal } from '@/components/modals/LinkWarningModal';
@@ -324,7 +322,6 @@ export default function App() {
   const themeColor = activeGroupData?.custom_theme_color || (activeGroupId !== '0' ? groupColorSolid(activeGroupId) : '#ff385c');
   const bgImage = activeGroupData?.custom_bg_image || null;
 
-  const sidebarGroups = followedGroups.length > 0 ? followedGroups : allGroups.slice(0, 5);
 
   const renderHeader = () => {
     let title = '';

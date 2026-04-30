@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Calendar, MapPin, ShieldCheck, AlertCircle } from 'lucide-react';
 import { Event } from '@/lib/types';
-import { FALLBACK_IMG } from '@/components/ui/shared';
 
 type EventDetailModalProps = {
   isOpen: boolean;
