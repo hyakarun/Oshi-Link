@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, Menu } from 'lucide-react';
+import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, Menu, List, X, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
@@ -49,6 +49,7 @@ export default function App() {
   const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
   const [draggingRange, setDraggingRange] = useState<{ date: string; start: number; end: number } | null>(null);
   const [eventCategory, setEventCategory] = useState('出演');
+  const [isEventListOpen, setIsEventListOpen] = useState(false);
 
   // Initialize activeGroupId from localStorage if available
   useEffect(() => {
@@ -804,6 +805,18 @@ export default function App() {
               </div>
             </div>
             <div className="flex items-center gap-2 md:gap-3">
+              {/* Event List Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsEventListOpen(v => !v)}
+                className={`rounded-xl h-10 w-10 transition-all ${
+                  isEventListOpen ? 'bg-gray-100 text-[#222222]' : 'text-gray-400 hover:bg-gray-100'
+                }`}
+                title="予定一覧"
+              >
+                <List className="w-5 h-5" />
+              </Button>
 
 
               <Dialog open={isAddModalOpen} onOpenChange={(open) => { setIsAddModalOpen(open); if (!open) setDefaultEventData(null); }}>
@@ -913,6 +926,71 @@ export default function App() {
           </main>
         </div>
 
+        {/* Right Sidebar - Event List */}
+        <div
+          className={`flex-shrink-0 bg-white border-l border-gray-100 h-full flex flex-col overflow-hidden transition-all duration-300 ease-in-out ${
+            isEventListOpen ? 'w-[300px]' : 'w-0'
+          }`}
+        >
+          {isEventListOpen && (
+            <>
+              {/* Header */}
+              <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+                <div>
+                  <p className="text-[13px] font-black text-[#222222] tracking-tight">予定一覧</p>
+                  <p className="text-[10px] text-gray-400 font-medium mt-0.5">{filteredEvents.length}件</p>
+                </div>
+                <button
+                  onClick={() => setIsEventListOpen(false)}
+                  className="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-200 transition-all"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* Event List */}
+              <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1.5">
+                {filteredEvents.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-32 text-gray-300">
+                    <Calendar className="w-8 h-8 mb-2" />
+                    <p className="text-xs font-bold">予定がありません</p>
+                  </div>
+                ) : (
+                  [...filteredEvents]
+                    .sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime())
+                    .map(ev => {
+                      const color = getGroupColor(ev.group_id);
+                      const group = allGroups.find(g => g.id === ev.group_id);
+                      return (
+                        <button
+                          key={ev.id}
+                          onClick={() => setSelectedEvent(ev)}
+                          className="w-full text-left p-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50 transition-all group"
+                          style={{ borderLeftWidth: 3, borderLeftColor: color }}
+                        >
+                          <div className="flex items-start gap-2">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 mb-0.5">
+                                {ev.is_tentative && <AlertCircle className="w-3 h-3 text-yellow-500 shrink-0" />}
+                                <p className="text-[12px] font-black text-[#222222] truncate leading-tight">{ev.title}</p>
+                              </div>
+                              <div className="flex items-center gap-1 text-gray-400">
+                                <Clock className="w-2.5 h-2.5 shrink-0" />
+                                <p className="text-[10px] font-medium">{format(parseISO(ev.date), 'MM/dd HH:mm')}</p>
+                              </div>
+                              {group && (
+                                <p className="text-[9px] font-bold mt-0.5 truncate" style={{ color }}>{group.name}</p>
+                              )}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })
+                )}
+              </div>
+            </>
+          )}
+        </div>
 
       </div>
 
