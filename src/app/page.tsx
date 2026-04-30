@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, Menu, List, X, MapPin, Clock } from 'lucide-react';
+import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, ChevronLeft, Menu, List, X, MapPin, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
@@ -625,6 +625,23 @@ export default function App() {
     <>
       <div className="flex h-screen w-full bg-[#f2f2f2] transition-all relative overflow-hidden" suppressHydrationWarning>
 
+      {/* Right Sidebar Toggle Button (Arrow) */}
+      <button
+        onClick={() => setIsEventListOpen(!isEventListOpen)}
+        className={`fixed z-50 top-1/2 -translate-y-1/2 transition-all duration-300 bg-white border border-gray-100 shadow-lg flex items-center justify-center hover:bg-gray-50 group ${
+          isEventListOpen 
+            ? 'right-[300px] w-6 h-20 rounded-l-xl border-r-0' 
+            : 'right-0 w-5 h-16 rounded-l-lg border-r-0'
+        } text-gray-300 hover:text-[#ff385c]`}
+        title={isEventListOpen ? "閉じる" : "予定一覧を開く"}
+      >
+        {isEventListOpen ? (
+          <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+        ) : (
+          <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+        )}
+      </button>
+
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
         <div 
@@ -804,21 +821,9 @@ export default function App() {
                 </p>
               </div>
             </div>
+
+
             <div className="flex items-center gap-2 md:gap-3">
-              {/* Event List Toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsEventListOpen(v => !v)}
-                className={`rounded-xl h-10 w-10 transition-all ${
-                  isEventListOpen ? 'bg-gray-100 text-[#222222]' : 'text-gray-400 hover:bg-gray-100'
-                }`}
-                title="予定一覧"
-              >
-                <List className="w-5 h-5" />
-              </Button>
-
-
               <Dialog open={isAddModalOpen} onOpenChange={(open) => { setIsAddModalOpen(open); if (!open) setDefaultEventData(null); }}>
                 <DialogTrigger render={
                   <Button 
