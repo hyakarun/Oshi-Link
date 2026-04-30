@@ -965,8 +965,8 @@ export default function App() {
                         <button
                           key={ev.id}
                           onClick={() => setSelectedEvent(ev)}
-                          className="w-full text-left p-3 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50 transition-all group"
-                          style={{ borderLeftWidth: 3, borderLeftColor: color }}
+                          className="w-full text-left py-2.5 px-3 rounded border border-gray-100 shadow-sm hover:shadow-md bg-white hover:bg-gray-50 transition-all border-l-[5px]"
+                          style={{ borderLeftColor: color }}
                         >
                           <div className="flex items-start gap-2">
                             <div className="flex-1 min-w-0">
