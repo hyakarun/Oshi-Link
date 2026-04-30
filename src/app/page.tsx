@@ -14,6 +14,7 @@ import { DiscoverModal } from '@/components/modals/DiscoverModal';
 import { EventDetailModal } from '@/components/modals/EventDetailModal';
 import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
 import { CreditsModal } from '@/components/modals/CreditsModal';
+import { AdBanner } from '@/components/ui/AdBanner';
 import { groupColorSolid } from '@/components/ui/shared';
 
 export default function App() {
@@ -785,6 +786,9 @@ export default function App() {
             </button>
           </div>
 
+          {/* Sidebar Ad */}
+          <AdBanner className="mt-6 mb-2" />
+
           {/* Footer credits link */}
           <div className="mt-auto pt-4 px-5">
             <button
@@ -992,6 +996,10 @@ export default function App() {
                       );
                     })
                 )}
+              </div>
+              {/* Sidebar Ad */}
+              <div className="p-3 border-t border-gray-50">
+                <AdBanner />
               </div>
             </>
           )}
