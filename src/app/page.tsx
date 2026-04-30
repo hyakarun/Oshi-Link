@@ -717,10 +717,6 @@ export default function App() {
           ) : (
             <div className="space-y-0.5">
               {followedGroups.map(g => {
-                const groupEvents = events.filter(e => e.group_id === g.id);
-                const nextEvent = groupEvents
-                  .sort((a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime())
-                  .find(e => parseISO(e.date) >= new Date());
                 const isActive = activeGroupId === g.id;
                 return (
                   <div
@@ -758,12 +754,6 @@ export default function App() {
                         </button>
                       </div>
                     </div>
-                    {nextEvent && (
-                      <div className="mt-1.5 ml-10 pl-2 border-l-2 border-opacity-30" style={{ borderColor: g.custom_theme_color || '#ff385c' }}>
-                        <p className="text-[9px] text-gray-500 font-bold truncate">{nextEvent.title}</p>
-                        <p className="text-[9px] text-gray-400">{format(parseISO(nextEvent.date), 'MM月dd日 HH:mm')}</p>
-                      </div>
-                    )}
                   </div>
                 );
               })}

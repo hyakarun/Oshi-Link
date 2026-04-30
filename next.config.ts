@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 
 const cspHeader = `
   default-src 'self';
@@ -16,47 +17,20 @@ const cspHeader = `
 `;
 
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains; preload',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
-          },
-          {
-            key: 'X-Permitted-Cross-Domain-Policies',
-            value: 'none',
-          }
-        ],
-      },
-    ];
+  // @ts-ignore
+  turbopack: {
+    root: '.',
   },
 };
 
-export default nextConfig;
+export default async function config() {
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      const { setupDevPlatform } = await import('@cloudflare/next-on-pages/next-dev');
+      await setupDevPlatform();
+    } catch (e) {
+      console.error('Failed to setup Cloudflare dev platform:', e);
+    }
+  }
+  return nextConfig;
+}
