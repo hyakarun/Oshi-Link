@@ -900,45 +900,49 @@ export default function App() {
                     <DialogTitle className="text-xl font-black text-[#222222] tracking-tight">予定を登録</DialogTitle>
                     <DialogDescription className="text-gray-500 font-medium mt-1 text-[11px]">推しの出演情報などをコミュニティで共有しましょう。</DialogDescription>
                   </div>
-                  <form onSubmit={handleAddEvent} className="p-5 md:p-6 space-y-3 md:space-y-4 bg-white overflow-y-auto flex-1 pb-24">
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">イベント名 <span className="text-red-500">*</span></label>
-                      <input name="title" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="LIVE TOUR 2026" required />
+                  <form onSubmit={handleAddEvent} className="p-4 md:p-6 space-y-2 md:space-y-4 bg-white overflow-y-auto overflow-x-hidden flex-1 pb-10">
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">イベント名 <span className="text-red-500">*</span></label>
+                      <input name="title" className="w-full h-10 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm" placeholder="LIVE TOUR 2026" required />
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">年月日 <span className="text-red-500">*</span></label>
-                      <input 
-                        name="date" 
-                        type="date" 
-                        max="9999-12-31" 
-                        defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                        className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
-                        required 
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">開始時刻</label>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">年月日 <span className="text-red-500">*</span></label>
                         <input 
-                          name="startTime" 
-                          type="time" 
-                          defaultValue={defaultEventData?.startTime || '10:00'}
-                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                          name="date" 
+                          type="date" 
+                          max="9999-12-31" 
+                          defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
+                          className="w-full h-10 bg-gray-50 border-none rounded-xl px-3 focus:ring-2 outline-none font-bold text-[#222222] text-sm" 
+                          required 
                         />
                       </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">終了時刻</label>
-                        <input 
-                          name="endTime" 
-                          type="time" 
-                          defaultValue={defaultEventData?.endTime || ''}
-                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
-                        />
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">開始</label>
+                          <input 
+                            name="startTime" 
+                            type="time" 
+                            defaultValue={defaultEventData?.startTime || '10:00'}
+                            className="w-full h-10 bg-gray-50 border-none rounded-xl px-2 focus:ring-2 outline-none font-bold text-[#222222] text-sm" 
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">終了</label>
+                          <input 
+                            name="endTime" 
+                            type="time" 
+                            defaultValue={defaultEventData?.endTime || ''}
+                            className="w-full h-10 bg-gray-50 border-none rounded-xl px-2 focus:ring-2 outline-none font-bold text-[#222222] text-sm" 
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">カテゴリー <span className="text-red-500">*</span></label>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">カテゴリー <span className="text-red-500">*</span></label>
                         <select 
                           value={eventCategory} 
                           onChange={(e) => {
@@ -950,7 +954,7 @@ export default function App() {
                             else if (cat === '記念日系') setEventSubCategory('誕生日');
                             else if (cat === '発売系') setEventSubCategory('グッズ');
                           }}
-                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-3 md:px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm"
+                          className="w-full h-10 bg-gray-50 border-none rounded-xl px-2 focus:ring-2 outline-none font-bold text-[#222222] text-xs"
                         >
                           <option value="オンライン系">オンライン系</option>
                           <option value="オフライン系">オフライン系</option>
@@ -959,12 +963,12 @@ export default function App() {
                           <option value="記念日系">記念日系</option>
                         </select>
                       </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">小カテゴリー</label>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">小カテゴリー</label>
                         <select 
                           value={eventSubCategory} 
                           onChange={(e) => setEventSubCategory(e.target.value)}
-                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-3 md:px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm"
+                          className="w-full h-10 bg-gray-50 border-none rounded-xl px-2 focus:ring-2 outline-none font-bold text-[#222222] text-xs"
                         >
                           {eventCategory === 'オフライン系' && (
                             <>
@@ -1000,14 +1004,15 @@ export default function App() {
                         </select>
                       </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">
-                        {eventCategory === '動画配信' ? '配信URL' : '場所'}
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">
+                        {eventCategory === 'オンライン系' ? '配信URL' : '場所'}
                       </label>
-                      {eventCategory === '動画配信' ? (
+                      {eventCategory === 'オンライン系' ? (
                         <input 
                           name="location" 
-                          className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                          className="w-full h-10 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm" 
                           placeholder="YouTubeのURLなど" 
                         />
                       ) : (
@@ -1023,15 +1028,18 @@ export default function App() {
                         </>
                       )}
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">説明・備考</label>
-                      <textarea name="description" className="w-full h-20 bg-gray-50 border-none rounded-xl p-4 focus:ring-2 focus:ring-[#ff385c] outline-none resize-none font-medium text-[#222222]" placeholder="チケット情報など..." />
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">ソースURL <span className="text-red-500">*</span></label>
+                      <input name="source_url" className="w-full h-10 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm" placeholder="公式の告知URLなど" required />
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">ソースURL <span className="text-red-500">*</span></label>
-                      <input name="source_url" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="公式の告知URLなど" required />
+
+                    <div className="space-y-1">
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider">説明・備考</label>
+                      <textarea name="description" className="w-full h-14 bg-gray-50 border-none rounded-xl p-3 focus:ring-2 focus:ring-[#ff385c] outline-none resize-none font-medium text-[#222222] text-xs" placeholder="チケット情報など..." />
                     </div>
-                    <Button type="submit" disabled={loading} className="w-full text-white h-12 md:h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all" style={{ backgroundColor: themeColor }}>
+
+                    <Button type="submit" disabled={loading} className="w-full text-white h-11 md:h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all mt-2" style={{ backgroundColor: themeColor }}>
                       {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : '登録する'}
                     </Button>
                   </form>
