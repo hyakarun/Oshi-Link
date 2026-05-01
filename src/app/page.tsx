@@ -601,22 +601,25 @@ export default function App() {
               {format(day, 'd')}
             </span>
             <div className="space-y-1 mt-7 md:mt-8 relative z-10">
-              {dayEvents.slice(0, 3).map((e, idx) => (
-                <div
-                  key={idx}
-                  onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className={`flex items-center text-[9px] md:text-[11px] border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
-                  style={{ 
-                    borderLeftColor: getGroupColor(e.group_id),
-                    backgroundColor: getCategoryColor(e.category)
-                  }}
-                >
-                  {e.is_tentative && <AlertCircle className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-500 mr-1 shrink-0" />}
-                  {e.title}
-                </div>
-              ))}
-              {dayEvents.length > 3 && (
-                <p className="text-[8px] md:text-[10px] text-gray-400 pl-1">他 {dayEvents.length - 3} 件...</p>
+              {dayEvents.slice(0, 5).map((e, idx) => {
+                const startTime = e.date.includes('T') ? e.date.split('T')[1].substring(0, 5) : '';
+                return (
+                  <div
+                    key={idx}
+                    onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
+                    className={`flex items-center text-[8px] md:text-[10px] border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-4.5 md:h-5.5 px-1 md:px-1.5 border-l-[3px] md:border-l-[5px] ${e.is_tentative ? 'opacity-85' : ''}`}
+                    style={{ 
+                      borderLeftColor: getGroupColor(e.group_id),
+                      backgroundColor: getCategoryColor(e.category)
+                    }}
+                  >
+                    {startTime !== '00:00' && <span className="mr-1 opacity-60 font-black tabular-nums scale-90 md:scale-100">{startTime}</span>}
+                    <span className="truncate">{e.title}</span>
+                  </div>
+                );
+              })}
+              {dayEvents.length > 5 && (
+                <p className="text-[7px] md:text-[9px] text-gray-400 pl-1 font-bold">他 {dayEvents.length - 5} 件...</p>
               )}
             </div>
           </div>
@@ -860,12 +863,12 @@ export default function App() {
                     <Plus className="mr-2 h-4 w-4" /> 予定を追加
                   </Button>
                 } />
-                <DialogContent className="w-full sm:max-w-[500px] bg-white border-none rounded-t-[32px] sm:rounded-[32px] shadow-2xl p-0 overflow-hidden top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500">
+                <DialogContent className="w-full sm:max-w-[500px] bg-white border-none rounded-t-[32px] sm:rounded-[32px] shadow-2xl p-0 overflow-hidden top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
                   <div className="bg-gray-50 p-6 border-b border-gray-100 flex-shrink-0">
                     <DialogTitle className="text-xl font-black text-[#222222] tracking-tight">予定を登録</DialogTitle>
                     <DialogDescription className="text-gray-500 font-medium mt-1 text-[11px]">推しの出演情報などをコミュニティで共有しましょう。</DialogDescription>
                   </div>
-                  <form onSubmit={handleAddEvent} className="p-5 md:p-6 space-y-3 md:space-y-4 bg-white overflow-y-auto max-h-[80vh] pb-10">
+                  <form onSubmit={handleAddEvent} className="p-5 md:p-6 space-y-3 md:space-y-4 bg-white overflow-y-auto flex-1 pb-24">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">イベント名 <span className="text-red-500">*</span></label>
                       <input name="title" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="LIVE TOUR 2026" required />
