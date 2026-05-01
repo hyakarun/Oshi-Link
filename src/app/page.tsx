@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, ChevronLeft, Menu, List, X, MapPin, Clock } from 'lucide-react';
+import { Calendar, Plus, AlertCircle, UserCircle, Loader2, Star, Users, Search, Bell, ChevronRight, ChevronLeft, Menu, List, X, MapPin, Clock, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useRouter } from 'next/navigation';
@@ -150,6 +150,31 @@ export default function App() {
       await loadGroups(user.id);
     } catch {}
     setFollowLoading(null);
+  }
+
+  async function handleUnfollow(groupId: string) {
+    if (!user) return;
+    if (!window.confirm('このカレンダーを一覧から削除しますか？')) return;
+    
+    setLoading(true);
+    try {
+      const res = await fetch('/api/groups/follow', {
+        method: 'DELETE',
+        headers: authHeaders(),
+        body: JSON.stringify({ user_id: user.id, group_id: groupId }),
+      });
+      if (res.ok) {
+        await loadGroups(user.id);
+        if (activeGroupId === groupId) {
+          setActiveGroupId('0');
+        }
+      } else {
+        alert('削除に失敗しました');
+      }
+    } catch (e) {
+      alert('通信エラーが発生しました');
+    }
+    setLoading(false);
   }
 
   async function handleAddEvent(e: React.FormEvent<HTMLFormElement>) {
@@ -778,7 +803,7 @@ export default function App() {
                           {g.event_count || 0}件 · {g.follower_count || 0}人
                         </p>
                       </div>
-                      <div className="flex items-center shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center shrink-0 opacity-0 group-hover:opacity-100 transition-opacity gap-0.5">
                         <button
                           onClick={(ev) => { ev.stopPropagation(); setEditingGroupId(g.id); setPersonalizationOpen(true); }}
                           className="p-1 rounded-lg hover:bg-gray-100"
@@ -792,6 +817,13 @@ export default function App() {
                           title="iCalに追加"
                         >
                           <Bell className="w-3 h-3 text-gray-400" />
+                        </button>
+                        <button
+                          onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
+                          className="p-1 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-500 transition-colors"
+                          title="カレンダーを削除"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
