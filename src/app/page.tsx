@@ -51,6 +51,7 @@ export default function App() {
   const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
   const [draggingRange, setDraggingRange] = useState<{ date: string; start: number; end: number } | null>(null);
   const [eventCategory, setEventCategory] = useState('オフライン系');
+  const [eventSubCategory, setEventSubCategory] = useState('ライブ・コンサート');
   const [selectedLocation, setSelectedLocation] = useState<{ name: string; address: string; latitude: number; longitude: number } | null>(null);
   const [isEventListOpen, setIsEventListOpen] = useState(false);
 
@@ -167,6 +168,7 @@ export default function App() {
       date: dateStr,
       end_time: endStr,
       category: eventCategory,
+      sub_category: eventSubCategory,
       location: fd.get('location'),
       address: selectedLocation?.address || null,
       latitude: selectedLocation?.latitude ?? null,
@@ -571,6 +573,17 @@ export default function App() {
       for (let i = 0; i < 7; i++) {
         const cloneDay = day;
         const dayEvents = filteredEvents.filter(e => isSameDay(parseISO(e.date), cloneDay));
+        const getCategoryColor = (category?: string) => {
+          switch (category) {
+            case 'オフライン系': return '#FFF0F3'; // 淡いピンク
+            case 'オンライン系': return '#E3F2FD'; // 淡いブルー
+            case '放送系': return '#E8F5E9'; // 淡いグリーン
+            case '記念日系': return '#FFF8E1'; // 淡いイエロー
+            case '発売系': return '#F3E5F5'; // 淡いパープル
+            default: return 'white';
+          }
+        };
+
         days.push(
           <div
             key={day.toString()}
@@ -592,8 +605,11 @@ export default function App() {
                 <div
                   key={idx}
                   onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className={`flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
-                  style={{ borderLeftColor: getGroupColor(e.group_id) }}
+                  className={`flex items-center text-[9px] md:text-[11px] border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
+                  style={{ 
+                    borderLeftColor: getGroupColor(e.group_id),
+                    backgroundColor: getCategoryColor(e.category)
+                  }}
                 >
                   {e.is_tentative && <AlertCircle className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-500 mr-1 shrink-0" />}
                   {e.title}
@@ -889,14 +905,63 @@ export default function App() {
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">カテゴリー <span className="text-red-500">*</span></label>
                       <select 
                         value={eventCategory} 
-                        onChange={(e) => setEventCategory(e.target.value)}
+                        onChange={(e) => {
+                          const cat = e.target.value;
+                          setEventCategory(cat);
+                          // 大カテゴリに合わせて小カテゴリのデフォルトを設定
+                          if (cat === 'オフライン系') setEventSubCategory('ライブ・コンサート');
+                          else if (cat === 'オンライン系') setEventSubCategory('動画配信');
+                          else if (cat === '放送系') setEventSubCategory('テレビ');
+                          else if (cat === '記念日系') setEventSubCategory('誕生日');
+                          else if (cat === '発売系') setEventSubCategory('グッズ');
+                        }}
                         className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]"
                       >
                         <option value="オンライン系">オンライン系</option>
                         <option value="オフライン系">オフライン系</option>
                         <option value="発売系">発売系</option>
-                        <option value="TV放送系">TV放送系</option>
+                        <option value="放送系">放送系</option>
                         <option value="記念日系">記念日系</option>
+                      </select>
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">小カテゴリー</label>
+                      <select 
+                        value={eventSubCategory} 
+                        onChange={(e) => setEventSubCategory(e.target.value)}
+                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]"
+                      >
+                        {eventCategory === 'オフライン系' && (
+                          <>
+                            <option value="ライブ・コンサート">ライブ・コンサート</option>
+                            <option value="握手会">握手会</option>
+                            <option value="試合">試合</option>
+                            <option value="ファンミーティング">ファンミーティング</option>
+                          </>
+                        )}
+                        {eventCategory === 'オンライン系' && (
+                          <>
+                            <option value="動画配信">動画配信</option>
+                            <option value="LIVE配信">LIVE配信</option>
+                          </>
+                        )}
+                        {eventCategory === '放送系' && (
+                          <>
+                            <option value="テレビ">テレビ</option>
+                            <option value="ラジオ">ラジオ</option>
+                          </>
+                        )}
+                        {eventCategory === '記念日系' && (
+                          <>
+                            <option value="誕生日">誕生日</option>
+                            <option value="周年">周年</option>
+                          </>
+                        )}
+                        {eventCategory === '発売系' && (
+                          <>
+                            <option value="グッズ">グッズ</option>
+                          </>
+                        )}
                       </select>
                     </div>
                     <div className="space-y-1.5">

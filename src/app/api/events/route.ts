@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json() as any;
-    const { group_id, title, date, end_time, description, category, location, address, latitude, longitude, source_url } = body;
+    const { group_id, title, date, end_time, description, category, sub_category, location, address, latitude, longitude, source_url } = body;
     const added_by = user.id;
 
     // Validate required fields and lengths
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     const eventId = crypto.randomUUID();
 
     await db.prepare(
-      'INSERT INTO events (id, group_id, title, date, end_time, description, category, location, address, latitude, longitude, source_url, added_by, is_tentative) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
+      'INSERT INTO events (id, group_id, title, date, end_time, description, category, sub_category, location, address, latitude, longitude, source_url, added_by, is_tentative) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
     ).bind(
       eventId, 
       group_id, 
@@ -74,7 +74,8 @@ export async function POST(request: NextRequest) {
       date,
       end_time || null, 
       description || null, 
-      category || '出演',
+      category || 'オフライン系',
+      sub_category || null,
       location || null,
       address || null,
       latitude ?? null,
