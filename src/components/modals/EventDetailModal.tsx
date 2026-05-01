@@ -45,25 +45,12 @@ export function EventDetailModal({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
         <div className="p-8">
-          <div className="mb-6 flex items-center">
-            {selectedEvent.is_tentative ? (
-              <div className="flex items-center gap-2 px-4 py-1.5 bg-yellow-50 text-yellow-700 rounded-full border border-yellow-200">
-                <AlertCircle className="w-4 h-4" />
-                <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 低（仮）</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-200">
-                <ShieldCheck className="w-4 h-4" />
-                <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 高（確定）</span>
-              </div>
-            )}
-          </div>
+
 
             {!isEditing ? (
               <>
                 <div className="mb-8">
                   <h2 className="text-3xl font-black text-[#222222] tracking-tight leading-tight mb-4 flex items-center gap-3">
-                    {selectedEvent.is_tentative && <AlertCircle className="w-8 h-8 text-yellow-500 shrink-0" />}
                     {selectedEvent.title}
                   </h2>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
