@@ -32,19 +32,6 @@ export function AdBanner({ slot, format = 'auto', className = '' }: AdBannerProp
     }
   }, [slot]);
   
-  return (
-    <div className={`w-full overflow-hidden flex flex-col items-center justify-center ${className}`}>
-      <div ref={adRef} className="w-full bg-gray-50 border border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center p-4 min-h-[120px] group hover:bg-gray-100 transition-colors">
-        {!slot && (
-          <>
-            <p className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-1">Sponsored</p>
-            <div className="text-[9px] text-gray-400 font-medium text-center leading-tight">
-              i-mobile 広告枠<br/>
-              (管理画面のadspot IDを設定してください)
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  );
+  // 審査中・未設定のため一時的に非表示
+  return null;
 }
