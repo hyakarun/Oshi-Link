@@ -43,7 +43,7 @@ export function EventDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100 relative top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+      <DialogContent showCloseButton={false} className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100 top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
         <button 
           onClick={() => onOpenChange(false)}
           className="absolute top-6 right-6 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-white hover:text-gray-800 transition-all z-20 active:scale-90"
