@@ -607,7 +607,7 @@ export default function App() {
                   <div
                     key={idx}
                     onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                    className={`flex items-center text-[8px] md:text-[10px] border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-4.5 md:h-5.5 px-1 md:px-1.5 border-l-[3px] md:border-l-[5px] ${e.is_tentative ? 'opacity-85' : ''}`}
+                    className={`flex items-center text-[8px] md:text-[10px] border border-gray-100 shadow-sm rounded-none truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-4.5 md:h-5.5 px-1 md:px-1.5 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
                     style={{ 
                       borderLeftColor: getGroupColor(e.group_id),
                       backgroundColor: getCategoryColor(e.category)
@@ -1064,7 +1064,7 @@ export default function App() {
                         <button
                           key={ev.id}
                           onClick={() => setSelectedEvent(ev)}
-                          className="w-full text-left py-2.5 px-3 rounded border border-gray-100 shadow-sm hover:shadow-md bg-white hover:bg-gray-50 transition-all border-l-[5px]"
+                          className="w-full text-left py-2.5 px-3 rounded-none border border-gray-100 shadow-sm hover:shadow-md bg-white hover:bg-gray-50 transition-all border-l-[5px]"
                           style={{ borderLeftColor: color }}
                         >
                           <div className="flex items-start gap-2">
