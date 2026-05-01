@@ -865,7 +865,7 @@ export default function App() {
                     <DialogTitle className="text-xl font-black text-[#222222] tracking-tight">予定を登録</DialogTitle>
                     <DialogDescription className="text-gray-500 font-medium mt-1 text-[11px]">推しの出演情報などをコミュニティで共有しましょう。</DialogDescription>
                   </div>
-                  <form onSubmit={handleAddEvent} className="p-6 space-y-5 bg-white overflow-y-auto max-h-[85vh] pb-12">
+                  <form onSubmit={handleAddEvent} className="p-5 md:p-6 space-y-3 md:space-y-4 bg-white overflow-y-auto max-h-[80vh] pb-10">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">イベント名 <span className="text-red-500">*</span></label>
                       <input name="title" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="LIVE TOUR 2026" required />
@@ -877,7 +877,7 @@ export default function App() {
                         type="date" 
                         max="9999-12-31" 
                         defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                        className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
                         required 
                       />
                     </div>
@@ -888,7 +888,7 @@ export default function App() {
                           name="startTime" 
                           type="time" 
                           defaultValue={defaultEventData?.startTime || '10:00'}
-                          className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -897,72 +897,73 @@ export default function App() {
                           name="endTime" 
                           type="time" 
                           defaultValue={defaultEventData?.endTime || ''}
-                          className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
+                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" 
                         />
                       </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">カテゴリー <span className="text-red-500">*</span></label>
-                      <select 
-                        value={eventCategory} 
-                        onChange={(e) => {
-                          const cat = e.target.value;
-                          setEventCategory(cat);
-                          // 大カテゴリに合わせて小カテゴリのデフォルトを設定
-                          if (cat === 'オフライン系') setEventSubCategory('ライブ・コンサート');
-                          else if (cat === 'オンライン系') setEventSubCategory('動画配信');
-                          else if (cat === '放送系') setEventSubCategory('テレビ');
-                          else if (cat === '記念日系') setEventSubCategory('誕生日');
-                          else if (cat === '発売系') setEventSubCategory('グッズ');
-                        }}
-                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]"
-                      >
-                        <option value="オンライン系">オンライン系</option>
-                        <option value="オフライン系">オフライン系</option>
-                        <option value="発売系">発売系</option>
-                        <option value="放送系">放送系</option>
-                        <option value="記念日系">記念日系</option>
-                      </select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">小カテゴリー</label>
-                      <select 
-                        value={eventSubCategory} 
-                        onChange={(e) => setEventSubCategory(e.target.value)}
-                        className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]"
-                      >
-                        {eventCategory === 'オフライン系' && (
-                          <>
-                            <option value="ライブ・コンサート">ライブ・コンサート</option>
-                            <option value="握手会">握手会</option>
-                            <option value="試合">試合</option>
-                            <option value="ファンミーティング">ファンミーティング</option>
-                          </>
-                        )}
-                        {eventCategory === 'オンライン系' && (
-                          <>
-                            <option value="動画配信">動画配信</option>
-                            <option value="LIVE配信">LIVE配信</option>
-                          </>
-                        )}
-                        {eventCategory === '放送系' && (
-                          <>
-                            <option value="テレビ">テレビ</option>
-                            <option value="ラジオ">ラジオ</option>
-                          </>
-                        )}
-                        {eventCategory === '記念日系' && (
-                          <>
-                            <option value="誕生日">誕生日</option>
-                            <option value="周年">周年</option>
-                          </>
-                        )}
-                        {eventCategory === '発売系' && (
-                          <>
-                            <option value="グッズ">グッズ</option>
-                          </>
-                        )}
-                      </select>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">カテゴリー <span className="text-red-500">*</span></label>
+                        <select 
+                          value={eventCategory} 
+                          onChange={(e) => {
+                            const cat = e.target.value;
+                            setEventCategory(cat);
+                            if (cat === 'オフライン系') setEventSubCategory('ライブ・コンサート');
+                            else if (cat === 'オンライン系') setEventSubCategory('動画配信');
+                            else if (cat === '放送系') setEventSubCategory('テレビ');
+                            else if (cat === '記念日系') setEventSubCategory('誕生日');
+                            else if (cat === '発売系') setEventSubCategory('グッズ');
+                          }}
+                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-3 md:px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm"
+                        >
+                          <option value="オンライン系">オンライン系</option>
+                          <option value="オフライン系">オフライン系</option>
+                          <option value="発売系">発売系</option>
+                          <option value="放送系">放送系</option>
+                          <option value="記念日系">記念日系</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">小カテゴリー</label>
+                        <select 
+                          value={eventSubCategory} 
+                          onChange={(e) => setEventSubCategory(e.target.value)}
+                          className="w-full h-11 bg-gray-50 border-none rounded-xl px-3 md:px-4 focus:ring-2 outline-none font-bold text-[#222222] text-sm"
+                        >
+                          {eventCategory === 'オフライン系' && (
+                            <>
+                              <option value="ライブ・コンサート">ライブ</option>
+                              <option value="握手会">握手会</option>
+                              <option value="試合">試合</option>
+                              <option value="ファンミーティング">ファンミ</option>
+                            </>
+                          )}
+                          {eventCategory === 'オンライン系' && (
+                            <>
+                              <option value="動画配信">動画配信</option>
+                              <option value="LIVE配信">LIVE配信</option>
+                            </>
+                          )}
+                          {eventCategory === '放送系' && (
+                            <>
+                              <option value="テレビ">テレビ</option>
+                              <option value="ラジオ">ラジオ</option>
+                            </>
+                          )}
+                          {eventCategory === '記念日系' && (
+                            <>
+                              <option value="誕生日">誕生日</option>
+                              <option value="周年">周年</option>
+                            </>
+                          )}
+                          {eventCategory === '発売系' && (
+                            <>
+                              <option value="グッズ">グッズ</option>
+                            </>
+                          )}
+                        </select>
+                      </div>
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">
@@ -993,9 +994,9 @@ export default function App() {
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">ソースURL <span className="text-red-500">*</span></label>
-                      <input name="source_url" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="公式Twitterの告知URLなど" required />
+                      <input name="source_url" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]" placeholder="公式の告知URLなど" required />
                     </div>
-                    <Button type="submit" disabled={loading} className="w-full text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all" style={{ backgroundColor: themeColor }}>
+                    <Button type="submit" disabled={loading} className="w-full text-white h-12 md:h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all" style={{ backgroundColor: themeColor }}>
                       {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : '登録する'}
                     </Button>
                   </form>
