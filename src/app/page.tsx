@@ -611,6 +611,7 @@ export default function App() {
                     backgroundColor: getCategoryColor(e.category)
                   }}
                 >
+                  {e.is_tentative && <AlertCircle className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-500 mr-1 shrink-0" />}
                   {e.title}
                 </div>
               ))}
