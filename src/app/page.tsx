@@ -582,17 +582,17 @@ export default function App() {
             }}
           >
             <span 
-              className={`text-[10px] md:text-xs font-black absolute top-1 md:top-3 right-1 md:right-3 flex items-center justify-center ${isSameDay(day, new Date()) ? 'text-white w-5 h-5 md:w-7 md:h-7 rounded-full shadow-lg' : 'text-gray-400'}`}
+              className={`text-[10px] md:text-xs font-black absolute top-1 right-1 md:top-2 md:right-2 flex items-center justify-center z-0 ${isSameDay(day, new Date()) ? 'text-white w-5 h-5 md:w-6 md:h-6 rounded-full shadow-md' : 'text-gray-400'}`}
               style={isSameDay(day, new Date()) ? { backgroundColor: themeColor } : {}}
             >
               {format(day, 'd')}
             </span>
-            <div className="space-y-1 mt-5 md:mt-6">
+            <div className="space-y-1 mt-7 md:mt-8 relative z-10">
               {dayEvents.slice(0, 3).map((e, idx) => (
                 <div
                   key={idx}
                   onClick={(ev) => { ev.stopPropagation(); setSelectedEvent(e); }}
-                  className={`flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-medium text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
+                  className={`flex items-center text-[9px] md:text-[11px] bg-white border border-gray-100 shadow-sm rounded-sm md:rounded truncate cursor-pointer hover:shadow-md transition-all font-bold text-[#222222] h-5 md:h-6 px-1.5 md:px-2 border-l-[4px] md:border-l-[6px] ${e.is_tentative ? 'opacity-85' : ''}`}
                   style={{ borderLeftColor: getGroupColor(e.group_id) }}
                 >
                   {e.is_tentative && <AlertCircle className="w-2.5 h-2.5 md:w-3 md:h-3 text-yellow-500 mr-1 shrink-0" />}
