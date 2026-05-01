@@ -40,12 +40,15 @@ export async function GET(request: NextRequest) {
 
   try {
     const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=5&accept-language=ja&countrycodes=jp`,
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=10&accept-language=ja&countrycodes=jp`,
       { headers: { 'User-Agent': 'OshiLink/1.0 (https://oshi-link.pages.dev)' } }
     );
     const data: any[] = await res.json();
 
-    const results = data.map(item => {
+    // importanceスコアが高い（＝有名・大きい施設）順に並べて上位5件を返す
+    const sorted = [...data].sort((a, b) => (b.importance ?? 0) - (a.importance ?? 0));
+
+    const results = sorted.slice(0, 5).map(item => {
       const shortName = item.name || item.display_name.split(',')[0];
       const jaAddress = item.address ? formatJapaneseAddress(item.address, shortName) : item.display_name;
       return {
