@@ -50,7 +50,7 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
   const [draggingRange, setDraggingRange] = useState<{ date: string; start: number; end: number } | null>(null);
-  const [eventCategory, setEventCategory] = useState('出演');
+  const [eventCategory, setEventCategory] = useState('オフライン系');
   const [selectedLocation, setSelectedLocation] = useState<{ name: string; address: string; latitude: number; longitude: number } | null>(null);
   const [isEventListOpen, setIsEventListOpen] = useState(false);
 
@@ -892,9 +892,11 @@ export default function App() {
                         onChange={(e) => setEventCategory(e.target.value)}
                         className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 outline-none font-bold text-[#222222]"
                       >
-                        <option value="コンサート">コンサート</option>
-                        <option value="出演">出演</option>
-                        <option value="動画配信">動画配信</option>
+                        <option value="オンライン系">オンライン系</option>
+                        <option value="オフライン系">オフライン系</option>
+                        <option value="発売系">発売系</option>
+                        <option value="TV放送系">TV放送系</option>
+                        <option value="記念日系">記念日系</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
