@@ -35,7 +35,9 @@ export function EventDetailModal({
   // 楽天トラベルへのアフィリエイトリンクを生成
   const rakutenAffiliateId = '535601d9.adf03288.535601da.eabb1e44';
   const getRakutenHotelSearchUrl = (location: string) => {
-    const dest = `https://travel.rakuten.co.jp/keyword/${encodeURIComponent(location)}/`;
+    // ロケーション名のみ抽出（住所全体が入っている場合は最初の部分だけ使用）
+    const keyword = location.split(',')[0].split('、')[0].trim();
+    const dest = `https://travel.rakuten.co.jp/keyword/${encodeURIComponent(keyword)}/`;
     return `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffiliateId}/?pc=${encodeURIComponent(dest)}`;
   };
 
