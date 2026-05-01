@@ -17,6 +17,7 @@ export type Event = {
   date: string;
   end_time?: string;
   location?: string;
+  category?: string;
   address?: string;
   latitude?: number;
   longitude?: number;

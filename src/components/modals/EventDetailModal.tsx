@@ -98,7 +98,7 @@ export function EventDetailModal({
                   </div>
                 )}
 
-                {(selectedEvent.location || selectedEvent.latitude) && (
+                {selectedEvent.category !== '動画配信' && (selectedEvent.location || selectedEvent.latitude) && (
                   <div className="mb-6">
                     <a
                       href={getRakutenHotelSearchUrl(selectedEvent.location || '')}
