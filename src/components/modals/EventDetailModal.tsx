@@ -118,7 +118,7 @@ export function EventDetailModal({
                     <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">情報の正確さを投票</h3>
                     <div className="flex gap-4">
                       <span className="text-[10px] font-bold text-green-600">正確: {selectedEvent.confirms_count || 0}</span>
-                      <span className="text-[10px] font-bold text-orange-600">不正確: {selectedEvent.disputes_count || 0} / 5件で自動削除</span>
+                      <span className="text-[10px] font-bold text-orange-600">不正確: {selectedEvent.disputes_count || 0}</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -139,9 +139,6 @@ export function EventDetailModal({
                       <AlertCircle className="w-5 h-5" /> 不正確（{selectedEvent.disputes_count || 0}）
                     </Button>
                   </div>
-                  <p className="text-[10px] text-gray-400 text-center font-medium mt-2">
-                    ※不正確な投票が5件集まると、この予定は自動的に削除されます。
-                  </p>
                 </div>
 
                 <div className="flex gap-4 mt-8">
