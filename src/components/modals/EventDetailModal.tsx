@@ -2,7 +2,7 @@ import React from 'react';
 import { format, parseISO } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel } from 'lucide-react';
+import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel, X } from 'lucide-react';
 import { Event } from '@/lib/types';
 
 type EventDetailModalProps = {
@@ -43,7 +43,13 @@ export function EventDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100">
+      <DialogContent showCloseButton={false} className="sm:max-w-[640px] p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl ring-1 ring-gray-100 relative">
+        <button 
+          onClick={() => onOpenChange(false)}
+          className="absolute top-6 right-6 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-500 hover:bg-white hover:text-gray-800 transition-all z-20 active:scale-90"
+        >
+          <X className="w-5 h-5" />
+        </button>
         <div className="p-8">
           <div className="mb-6 flex items-center">
             {selectedEvent.is_tentative ? (
