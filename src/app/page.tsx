@@ -67,12 +67,12 @@ export default function App() {
   }, [activeGroupId, mounted]);
 
   // セッション認証ヘルパー
-  function authHeaders(): Record<string, string> {
+  const authHeaders = useCallback((): Record<string, string> => {
     const token = sessionToken || (typeof window !== 'undefined' ? localStorage.getItem('oshi_session') : null);
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     if (token) headers['Authorization'] = `Bearer ${token}`;
     return headers;
-  }
+  }, [sessionToken]);
 
   // 初期ロード: ローカルセッションを確認
   useEffect(() => {
@@ -117,7 +117,7 @@ export default function App() {
       setAllGroups(groups);
       setFollowedGroups(groups.filter(g => g.is_following));
     } catch {}
-  }, [user?.id]);
+  }, [user, authHeaders]);
 
   const loadEvents = useCallback(async () => {
     try {
@@ -127,7 +127,7 @@ export default function App() {
       const eventList = data.events || data as unknown as Event[] || [];
       setEvents(eventList);
     } catch {}
-  }, []);
+  }, [authHeaders]);
 
   useEffect(() => {
     // Wait until auth check is done or user is loaded to fetch groups with personalization
