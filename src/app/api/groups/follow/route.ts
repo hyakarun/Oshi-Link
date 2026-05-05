@@ -59,6 +59,24 @@ export async function POST(request: NextRequest) {
       ).bind(user.id, group_id).run();
       return NextResponse.json({ status: 'unfollowed' });
     } else {
+      // フォロー制限チェック
+      const followCountResult = await db.prepare(
+        'SELECT COUNT(*) as count FROM user_group_follows WHERE user_id = ?'
+      ).bind(user.id).first() as { count: number };
+      
+      const followCount = followCountResult.count;
+      const premiumStatus = user.premium_status || 'free';
+
+      let limit = 1; // 無課金・買い切り（広告削除のみ）
+      if (premiumStatus === 'pro') limit = 10; // プロ（サブスクリプション）
+
+      if (followCount >= limit) {
+        return NextResponse.json({ 
+          error: `フォロー上限に達しました（${limit}件）。アップグレードを検討してください。`,
+          limitReached: true 
+        }, { status: 403 });
+      }
+
       // フォロー
       const id = crypto.randomUUID();
       await db.prepare(

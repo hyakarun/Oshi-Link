@@ -33,11 +33,29 @@ export function ProfileModal({
             <div>
               <DialogTitle className="text-xl font-black text-[#222222]">{user.name}</DialogTitle>
               <p className="text-sm text-gray-400">{user.email}</p>
+              <div className="mt-1">
+                {user.premium_status === 'pro' ? (
+                  <span className="px-2 py-0.5 bg-purple-50 text-purple-600 text-[9px] font-black uppercase tracking-widest rounded-full border border-purple-100">Pro Plan</span>
+                ) : user.premium_status === 'onetime' ? (
+                  <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded-full border border-blue-100">Ad-Free</span>
+                ) : (
+                  <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-[9px] font-black uppercase tracking-widest rounded-full">Free Plan</span>
+                )}
+              </div>
             </div>
           </div>
-          <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
-            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">フォロー中のカレンダー</p>
-            <p className="text-2xl font-black text-[#222222]">{followedGroups.length} 件</p>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50 rounded-2xl p-4 space-y-1">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">フォロー中</p>
+              <p className="text-xl font-black text-[#222222]">{followedGroups.length} / {user.premium_status === 'pro' ? 10 : 1} 件</p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-4 space-y-1">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">通知設定</p>
+              <p className="text-sm font-bold text-[#222222]">
+                {user.premium_status === 'pro' ? 'カスタム可能' : '直前のみ'}
+              </p>
+            </div>
           </div>
           <form onSubmit={handleProfileUpdate} className="space-y-4">
             <div className="space-y-1.5">

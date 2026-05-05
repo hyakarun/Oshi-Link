@@ -37,6 +37,7 @@ export type User = {
   name: string; 
   email: string;
   avatar_url?: string;
+  premium_status?: 'free' | 'onetime' | 'pro';
 };
 
 export type View = 'month' | 'week' | 'day';

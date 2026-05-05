@@ -142,13 +142,23 @@ export default function App() {
     if (!user) { setIsProfileModalOpen(true); return; }
     setFollowLoading(group.id);
     try {
-      await fetch('\u002fapi\u002fgroups\u002ffollow', {
+      const res = await fetch('\u002fapi\u002fgroups\u002ffollow', {
         method: 'POST',
         headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' },
         body: JSON.stringify({ group_id: group.id }),
       });
+      if (!res.ok) {
+        const data = await res.json() as any;
+        if (data.limitReached) {
+          alert(data.error);
+          setFollowLoading(null);
+          return;
+        }
+      }
       await loadGroups(user.id);
-    } catch {}
+    } catch {
+      alert('エラーが発生しました');
+    }
     setFollowLoading(null);
   }
 
@@ -334,6 +344,10 @@ export default function App() {
   }
 
   function handleSubscribe(groupId: string) {
+    if (!user || user.premium_status !== 'pro') {
+      alert('外部カレンダー連携（iCal出力）はプロプラン限定機能です。');
+      return;
+    }
     const base = window.location.origin;
     const url = base + '\u002fapi\u002fgroups\u002fexport?id=' + groupId;
     const webcal = url.replace('https:', 'webcal:').replace('http:', 'webcal:');
@@ -711,9 +725,9 @@ export default function App() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-black text-[#222222] tracking-tight">Oshi-Link</p>
-            <p className="text-[10px] text-gray-400 font-medium truncate">
-              {user ? user.name : 'ログインしていません'}
-            </p>
+              <p className="text-[10px] text-gray-400 font-medium truncate">
+                {user ? `${user.name} (${user.premium_status || 'free'})` : 'ログインしていません'}
+              </p>
           </div>
           <button
             onClick={() => setIsProfileModalOpen(true)}
@@ -844,7 +858,7 @@ export default function App() {
           </div>
 
           {/* Sidebar Ad */}
-          <AdBanner className="mt-6 mb-2" />
+          {user?.premium_status === 'free' && <AdBanner className="mt-6 mb-2" />}
 
           {/* Footer credits link */}
           <div className="mt-auto pt-4 px-5">

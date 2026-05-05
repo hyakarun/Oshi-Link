@@ -37,16 +37,19 @@ export async function POST(request: Request) {
       VALUES (?, ?, ?, ?, ?)
     `).bind(verifyId, event_id, user_id, status, comment || null).run();
 
-    // 2. 最新の統計を取得
-    const stats: any = await db.prepare(`
+    // 2. 最新の統計を取得 (ユーザーのステータスに応じた重み付け)
+    // 課金ユーザーは3倍の影響度
+    const statsResult = await db.prepare(`
       SELECT 
-        SUM(CASE WHEN verification_status = 'confirmed' THEN 1 ELSE 0 END) as confirms,
-        SUM(CASE WHEN verification_status = 'disputed' THEN 1 ELSE 0 END) as disputes
-      FROM verifications WHERE event_id = ?
-    `).bind(event_id).first();
+        SUM(CASE WHEN v.verification_status = 'confirmed' THEN (CASE WHEN u.premium_status = 'pro' THEN 3 ELSE 1 END) ELSE 0 END) as confirms,
+        SUM(CASE WHEN v.verification_status = 'disputed' THEN (CASE WHEN u.premium_status = 'pro' THEN 3 ELSE 1 END) ELSE 0 END) as disputes
+      FROM verifications v
+      JOIN users u ON v.user_id = u.id
+      WHERE v.event_id = ?
+    `).bind(event_id).first() as { confirms: number; disputes: number };
 
-    const confirms = Number(stats?.confirms || 0);
-    const disputes = Number(stats?.disputes || 0);
+    const confirms = Number(statsResult?.confirms || 0);
+    const disputes = Number(statsResult?.disputes || 0);
 
     console.log('Stats calculated:', { confirms, disputes });
 
