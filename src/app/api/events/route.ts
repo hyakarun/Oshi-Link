@@ -96,3 +96,82 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error', details: error.message }, { status: 500 });
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const { env } = getRequestContext();
+    const db = (env as any).DB;
+
+    const user = await getSessionUser(db, request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json() as any;
+    const { id, title, description } = body;
+
+    if (!id || !title) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // 権限チェック: 投稿者本人か確認
+    const existing = await db.prepare('SELECT added_by FROM events WHERE id = ?').bind(id).first();
+    if (!existing) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+    if (existing.added_by !== user.id) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
+    }
+
+    if (title.length > 100) {
+      return NextResponse.json({ error: 'タイトルが長すぎます' }, { status: 400 });
+    }
+    if (description && description.length > 2000) {
+      return NextResponse.json({ error: '説明文が長すぎます' }, { status: 400 });
+    }
+
+    await db.prepare(
+      'UPDATE events SET title = ?, description = ? WHERE id = ?'
+    ).bind(title, description || null, id).run();
+
+    return NextResponse.json({ ok: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { env } = getRequestContext();
+    const db = (env as any).DB;
+
+    const user = await getSessionUser(db, request);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'ID required' }, { status: 400 });
+    }
+
+    // 権限チェック: 投稿者本人か確認
+    const existing = await db.prepare('SELECT added_by FROM events WHERE id = ?').bind(id).first();
+    if (!existing) {
+      return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+    }
+    if (existing.added_by !== user.id) {
+      return NextResponse.json({ error: 'Permission denied' }, { status: 403 });
+    }
+
+    // 関連する投票データも削除
+    await db.prepare('DELETE FROM verifications WHERE event_id = ?').bind(id).run();
+    await db.prepare('DELETE FROM events WHERE id = ?').bind(id).run();
+
+    return NextResponse.json({ ok: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}

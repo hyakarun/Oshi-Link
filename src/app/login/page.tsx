@@ -101,7 +101,7 @@ function LoginContent() {
         return;
       }
 
-      const clientId = '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
+      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
       try {
         (window as any).google.accounts.id.initialize({
           client_id: clientId,

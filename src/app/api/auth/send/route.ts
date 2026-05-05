@@ -43,9 +43,13 @@ export async function POST(request: NextRequest) {
   const loginUrl = `${siteUrl}?token=${token}`;
 
   if (!resendKey) {
-    // 開発環境: ログにURLを出力
-    console.log('[DEV] Magic Link:', loginUrl);
-    return NextResponse.json({ ok: true, devUrl: loginUrl });
+    // 開発環境のみURLをレスポンスに含める（本番での誤設定による漏洩防止）
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[DEV] Magic Link:', loginUrl);
+      return NextResponse.json({ ok: true, devUrl: loginUrl });
+    }
+    console.error('RESEND_API_KEY is missing in production');
+    return NextResponse.json({ error: 'メール送信サービスが設定されていません' }, { status: 500 });
   }
 
   const emailRes = await fetch('https:\u002f\u002fapi.resend.com\u002femails', {

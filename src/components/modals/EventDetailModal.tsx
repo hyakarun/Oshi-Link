@@ -33,7 +33,7 @@ export function EventDetailModal({
   if (!selectedEvent) return null;
 
   // 楽天トラベルへのアフィリエイトリンクを生成
-  const rakutenAffiliateId = '535601d9.adf03288.535601da.eabb1e44';
+  const rakutenAffiliateId = process.env.NEXT_PUBLIC_RAKUTEN_AFFILIATE_ID || '535601d9.adf03288.535601da.eabb1e44';
   const getRakutenHotelSearchUrl = (location: string) => {
     // ロケーション名のみ抽出（住所全体が入っている場合は最初の部分だけ使用）
     const keyword = location.split(',')[0].split('、')[0].trim();
