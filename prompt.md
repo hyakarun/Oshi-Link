@@ -1,60 +1,85 @@
-Deploying Oshi-Link MVP
-Google Antigravity Deployment Prompt: Project "Oshi-Link"
-1. Mission Statement
-design.mdに定義された設計指針を完全遵守し、ファン参加型・月額課金制カレンダーサービス「Oshi-Link」のMVPを構築・デプロイせよ。人間によるGUI操作は一切行わず、すべての工程をAIエージェントによる自律実行で完結させること。
+# Project "Oshi-Link" - Comprehensive Implementation Prompt
 
-2. Design & UX Foundation (Source: design.md)
-以下のUI/UXリファレンスを最優先事項として適用せよ：
+## 1. Mission Statement
+ファン参加型・スケジュール共有プラットフォーム「Oshi-Link」を構築せよ。
+高いデザイン性とモバイルでの圧倒的な使い勝手を両立し、Cloudflareのモダンなスタック（D1, Pages, Workers）を最大限に活用した、高速でプレミアムなWebアプリケーションを実現すること。
 
-Navigation: Discordスタイルのサイドバー（推しグループ切り替え用）。
+---
 
-Calendar Display: サイドバーで切り替えた時んファーストビューはカレンダーで全ての予定を一覧表示する。カレンダーはFull calendarを使用する。
+## 2. Technical Stack & Architecture
+- **Framework**: Next.js (App Router) - 全てのAPIとページを Edge Runtime で動作させる。
+- **Styling**: Tailwind CSS (Vanilla CSS) - カスタムカラーパレットとモダンなタイポグラフィ（Inter/Outfit）。
+- **Database**: Cloudflare D1 (SQLite) - ユーザー、グループ（カレンダー）、イベント、フォロー関係の管理。
+- **Authentication**: 
+    - Google OAuth 2.0
+    - Magic Link (Resend API) - パスワードレス認証。
+- **External APIs**:
+    - OpenStreetMap Nominatim (場所検索)
+    - Rakuten Travel Affiliate API (遠征支援リンク)
 
-Event Display: カレンダーの項目をクリックした際は、Airbnbスタイルのクリーンな情報カードと、直感的な日付、内容等の編集UX。モーダルは透明ではなく、雰囲気に合わせたみやすい色で統一。
+---
 
-AddEvent: イベント追加のモーダルウィンドウで、イベント名、日付、開始時間、終了時間、詳細、ソースURLを入力できるようにする。イベント名、日付、開始時間、終了時間、ソースURLは必須項目とする。モーダルの色は透明だとみづらいので自然な色をつける。
+## 3. UI/UX Design System (Airbnb & Discord Style)
 
-Trust System: X(Twitter)コミュニティノートに倣った、有志によるソースURL検証UI。
+### A. Dashboard Layout
+- **Left Sidebar**: Discordスタイルのカレンダー（グループ）リスト。
+    - フォロー中のグループを一覧表示。
+    - 各項目には「個人設定（パレット）」「通知設定（ベル）」「削除（ゴミ箱）」ボタンを配置。
+    - モバイルではサイドバーはドロワー形式。
+- **Main Content**: 月間カレンダー表示。
+    - **Event Items**: 
+        - タイトルの前に開始時間（HH:mm）を表示。
+        - 形状は「パキッとした四角（`rounded-none`）」で統一し、左側に太めのグループカラーボーダーを配置。
+        - カテゴリごとに淡い背景色を設定。
+- **Right Sidebar**: 予定一覧。
+    - 選択中のグループの全予定を時系列でリスト表示。
 
-UI Library: shadcn/ui をベースとし、Lucide Reactでアイコンを統一。
+### B. Mobile Optimization (Critical)
+- **Dialogs/Modals**: 
+    - スマートフォンでは「下部からせり出すボトムシート形式（`bottom-0`）」、PCでは中央表示に切り替える。
+    - ダイアログ右上にフローティング形式の「×」ボタンを配置。
+- **Add Event Modal**:
+    - 「年月日」「開始」「終了」を1行にまとめ、ファーストビューで全ての入力項目が見えるように極限まで圧縮。
+    - 横スクロールを厳格に禁止（`overflow-x-hidden`）。
 
-3. Infrastructure Strategy (Cloudflare Stack)
-インフラ構築はすべてWrangler CLIまたはAPI経由で実行せよ：
+---
 
-Hosting: Cloudflare Pages (Next.js App Router)
+## 4. Core Features & Logic
 
-Database: Cloudflare D1 (分散型SQLiteによる超高速レスポンス)
+### A. Event Categories
+- 5つの大カテゴリとそれぞれに対応する小カテゴリを実装。
+    - **オフライン系**: ライブ、握手会、試合、ファンミ
+    - **オンライン系**: 動画配信、LIVE配信
+    - **放送系**: テレビ、ラジオ
+    - **記念日系**: 誕生日、周年
+    - **発売系**: グッズ
+- カテゴリごとに独自の淡いカラーコードを割り当てる。
 
-Storage: Cloudflare R2 (イベント画像およびアイコン用)
+### B. Trust & Reliability System
+- ユーザー投稿型の予定に対し、内部アルゴリズムに基づき「情報の信頼度（高/低）」バッジを表示。
+- 仮の予定には「！」アイコンと `opacity-85` の視覚効果を適用。
+- ゲーミング（荒らし）防止のため、自動削除の具体的な閾値はユーザーには非表示とする。
 
-Compute: Cloudflare Workers (Stripe Webhook処理およびFANBOX連携用)
+### C. Travel Support (Monetization)
+- イベント詳細画面で、開催場所に基づいた「近隣の宿泊施設を探す（楽天トラベル）」リンクを自動生成。
+- アフィリエイトIDを組み込んだURLエンコード処理。
 
-4. Autonomous Task Lists (Sequence of Actions)
-Requirement Analysis: 提供された design.md を解析し、必要なD1スキーマ（users, groups, events, verifications, subscriptions）を定義せよ。
+---
 
-Environment Provisioning: Cloudflare上にプロジェクトを作成し、D1データベースとR2バケットを自動プロビジョニングせよ。
+## 5. Sequence of Implementation Tasks
+1. **D1 Schema Setup**: `users`, `groups`, `events`, `follows` テーブルの定義。
+2. **Auth Flow**: Magic Link と Google Auth のハイブリッド実装。
+3. **Core Calendar**: カレンダーのレンダリングと、PC/モバイルでの情報密度（開始時間表示等）の最適化。
+4. **Group Management**: カレンダーの追加・削除・色カスタマイズ機能。
+5. **Mobile Polishing**: 全てのモーダルをボトムシート化し、入力フォームをスマホ向けに極限まで圧縮。
+6. **Deploy**: Cloudflare Pages へデプロイし、`oshi-link-official.pages.dev` で公開。
 
-Core Development:
+---
 
-カレンダーの基本ロジック（複数グループの統合表示）の実装。
+## 6. Design Aesthetic Rules
+- **Rich Aesthetics**: グラデーション、グラスモルフィズム、繊細な影（`shadow-2xl`）を多用する。
+- **Micro-animations**: ボタンの `active:scale-95` や、ダイアログの `duration-500` の滑らかな遷移。
+- **No Placeholders**: 画像が必要な場合はAIで生成するか、実用的なアセットを使用する。
 
-ファンによる予定追加・編集機能と、ソースURLバリデーションの実装。
 
-Stripe Checkoutを利用した月額課金フローの構築。
-
-External Integration: * FANBOX/Patreon APIと連携し、支援者情報をプレミアム権限へ同期するCron Workerを実装せよ。
-
-Google/iOSカレンダーへの同期（iCal形式/Webcal）機能をプレミアム会員向けに実装せよ。
-
-Quality Assurance & Deploy: 全てのコンポーネントがMobile Responsiveであることを確認し、production ブランチへ自動デプロイを完了させよ。
-
-5. Output Requirements
-デプロイ完了後、以下の情報を報告せよ：
-
-Deployment URL: 公開されたアプリのURL。
-
-Infrastructure Summary: 作成されたD1、R2、Workersの構成リスト。
-
-Environment Variables: Stripeおよび外部連携に設定が必要なキーのリスト（秘匿情報はプレースホルダーにすること）。
-
-Admin Access: 管理者権限を付与するための初期セットアップ手順。
+課金要素について
