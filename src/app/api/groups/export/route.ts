@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getSessionUser } from '@/app/api/auth/me/route';
 
 export const runtime = 'edge';
 
 function formatICSDate(dateStr: string, timeStr?: string | null) {
   if (!timeStr) {
-    // All-day: 20260501
     return dateStr.replace(/-/g, '');
   }
-  // Timed: 20260501T100000Z
   const time = timeStr.replace(/:/g, '') + '00';
   return dateStr.replace(/-/g, '') + 'T' + time + 'Z';
 }
@@ -20,6 +19,15 @@ export async function GET(request: Request) {
 
     const { env } = getRequestContext();
     const db = (env as any).DB;
+
+    // proユーザーのみ許可
+    const user = await getSessionUser(db, request as any);
+    if (!user || (user as any).premium_status !== 'pro') {
+      return NextResponse.json(
+        { error: 'この機能は月額プランのみご利用いただけます。' },
+        { status: 403 }
+      );
+    }
 
     let query = 'SELECT e.*, g.name as group_name FROM events e JOIN groups g ON e.group_id = g.id';
     const params: any[] = [];
@@ -39,7 +47,7 @@ export async function GET(request: Request) {
       'METHOD:PUBLISH',
       'X-WR-CALNAME:Oshi-Link (' + (groupId && groupId !== '0' ? 'Subscription' : 'All Events') + ')',
       'X-WR-TIMEZONE:Asia/Tokyo',
-      'REFRESH-INTERVAL;VALUE=DURATION:PT1H', // 指示：1時間おきに更新を試みる
+      'REFRESH-INTERVAL;VALUE=DURATION:PT1H',
     ];
 
     events.results.forEach((e: any) => {
@@ -48,7 +56,7 @@ export async function GET(request: Request) {
       ics.push(`DTSTAMP:${formatICSDate(new Date().toISOString().split('T')[0], '00:00')}`);
       
       if (e.end_time) {
-        ics.push(`DTSTART:${formatICSDate(e.date, e.date.includes('T') ? e.date.split('T')[1] : '10:00')}`); // 簡易的な開始時間。DBにstart_timeがない場合は仮。
+        ics.push(`DTSTART:${formatICSDate(e.date, e.date.includes('T') ? e.date.split('T')[1] : '10:00')}`);
         ics.push(`DTEND:${formatICSDate(e.date, e.end_time)}`);
       } else {
         ics.push(`DTSTART;VALUE=DATE:${formatICSDate(e.date)}`);
@@ -68,6 +76,7 @@ export async function GET(request: Request) {
       headers: {
         'Content-Type': 'text/calendar; charset=utf-8',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Content-Disposition': 'attachment; filename="oshi-link.ics"',
       }
     });
   } catch (error: any) {

@@ -840,10 +840,14 @@ export default function App() {
                         </button>
                         <button
                           onClick={(ev) => { ev.stopPropagation(); handleSubscribe(g.id); }}
-                          className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100"
-                          title="iCalに追加"
+                          className={`p-1.5 md:p-1 rounded-lg transition-colors ${
+                            user?.premium_status === 'pro'
+                              ? 'hover:bg-blue-50 text-blue-400'
+                              : 'hover:bg-gray-100 text-gray-300'
+                          }`}
+                          title={user?.premium_status === 'pro' ? 'カレンダーに追加（iCal）' : 'プロプラン限定：外部カレンダー連携'}
                         >
-                          <Bell className="w-3.5 h-3.5 md:w-3 md:h-3 text-gray-400" />
+                          <Bell className="w-3.5 h-3.5 md:w-3 md:h-3" />
                         </button>
                         <button
                           onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
@@ -871,7 +875,7 @@ export default function App() {
           </div>
 
           {/* Sidebar Ad */}
-          {user?.premium_status === 'free' && <AdBanner className="mt-6 mb-2" />}
+          <AdBanner className="mt-6 mb-2" premiumStatus={user?.premium_status} />
 
           {/* Footer credits link */}
           <div className="mt-auto pt-4 px-5">
@@ -1156,7 +1160,7 @@ export default function App() {
               </div>
               {/* Sidebar Ad */}
               <div className="p-3 border-t border-gray-50">
-                <AdBanner />
+                <AdBanner premiumStatus={user?.premium_status} />
               </div>
             </>
           )}
