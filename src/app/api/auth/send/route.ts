@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   const { env } = getRequestContext();
   const db = (env as unknown as Env).DB;
   const resendKey = (env as unknown as Env).RESEND_API_KEY;
-  const siteUrl = (env as unknown as Env).SITE_URL || 'https://oshi-link.pages.dev';
+  const siteUrl = (env as unknown as Env).SITE_URL || 'https://oshi-link-official.pages.dev';
 
   const { email, name } = await request.json() as { email: string; name?: string };
 

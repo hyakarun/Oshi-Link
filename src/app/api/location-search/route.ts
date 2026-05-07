@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
   try {
     const res = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=10&accept-language=ja&countrycodes=jp`,
-      { headers: { 'User-Agent': 'OshiLink/1.0 (https://oshi-link.pages.dev)' } }
+      { headers: { 'User-Agent': 'OshiLink/1.0 (https://oshi-link-official.pages.dev)' } }
     );
     const data: any[] = await res.json();
 

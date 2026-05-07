@@ -331,3 +331,5 @@ Error: ENOENT: no such file or directory, scandir '/Users/mukulogi/Oshi-Link/.ve
 [wrangler:info] HEAD /favicon.ico 200 OK (19ms)
 [wrangler:info] HEAD /_next/static/non-existent.js 200 OK (6ms)
 [wrangler:info] HEAD /_next/static/non-existent.js 200 OK (21ms)
+⎔ Reloading local server...
+⎔ Local server updated and ready
