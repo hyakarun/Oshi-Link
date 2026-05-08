@@ -29,42 +29,41 @@ export function CalendarHeader({
 }: CalendarHeaderProps) {
   return (
     <header className="h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 shrink-0">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-6 min-w-0">
         <button 
           onClick={() => setIsMobileMenuOpen(true)}
-          className="p-2 md:hidden hover:bg-gray-50 rounded-xl"
+          className="p-2 md:hidden hover:bg-gray-50 rounded-xl shrink-0"
         >
           <Menu className="w-6 h-6 text-[#222222]" />
         </button>
-        <div className="flex items-center gap-2 md:gap-4">
-          <h1 className="text-lg md:text-2xl font-black text-[#222222] tracking-tighter whitespace-nowrap">
-            {format(currentMonth, view === 'month' ? 'yyyy年 M月' : 'M月 d日')}
-          </h1>
+
+        <h1 className="text-lg md:text-2xl font-black text-[#222222] tracking-tighter whitespace-nowrap shrink-0">
+          {format(currentMonth, view === 'month' ? 'yyyy年 M月' : 'M月 d日')}
+        </h1>
+        
+        <div className="flex items-center bg-gray-100 p-1 rounded-xl shrink-0">
+          <button 
+            onClick={onPrev} 
+            className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all"
+            title="前へ"
+          >
+            <ChevronLeft className="w-4 h-4 text-gray-500" />
+          </button>
           
-          <div className="flex items-center bg-gray-100 p-1 rounded-xl">
-            <button 
-              onClick={onPrev} 
-              className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all"
-              title="前へ"
-            >
-              <ChevronLeft className="w-4 h-4 text-gray-500" />
-            </button>
-            
-            <button 
-              onClick={onToday}
-              className="px-3 py-1.5 hover:bg-white hover:shadow-sm text-[#222222] text-[10px] font-black rounded-lg transition-all"
-            >
-              今日
-            </button>
-            
-            <button 
-              onClick={onNext} 
-              className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all"
-              title="次へ"
-            >
-              <ChevronRight className="w-4 h-4 text-gray-500" />
-            </button>
-          </div>
+          <button 
+            onClick={onToday}
+            className="px-3 py-1.5 hover:bg-white hover:shadow-sm text-[#222222] text-[10px] font-black rounded-lg transition-all"
+          >
+            今日
+          </button>
+          
+          <button 
+            onClick={onNext} 
+            className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all"
+            title="次へ"
+          >
+            <ChevronRight className="w-4 h-4 text-gray-500" />
+          </button>
         </div>
       </div>
 
