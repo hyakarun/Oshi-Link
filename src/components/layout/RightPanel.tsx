@@ -1,6 +1,6 @@
 import React from 'react';
 import { format, isAfter, isToday, parseISO, startOfDay } from 'date-fns';
-import { X, Calendar, MapPin, Clock } from 'lucide-react';
+import { ChevronRight, Calendar, MapPin, Clock } from 'lucide-react';
 import { Event } from '@/lib/types';
 
 interface RightPanelProps {
@@ -52,8 +52,9 @@ export function RightPanel({
           <button 
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-xl text-gray-400 transition-all"
+            title="予定一覧を閉じる"
           >
-            <X className="w-4 h-4" />
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
 
