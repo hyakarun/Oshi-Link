@@ -52,10 +52,12 @@ export async function POST(request: NextRequest) {
         .run();
       user = { id: userId, name: profile.name, email: profile.email, google_id: profile.sub, avatar_url: profile.picture };
     } else {
-      // 既存ユーザー情報の更新（Google IDの紐付けやアイコンの更新）
-      await db.prepare('UPDATE users SET google_id = ?, avatar_url = ? WHERE id = ?')
+      // 既存ユーザー情報の更新（Google IDの紐付けやアイコンの更新を強制）
+      await db.prepare('UPDATE users SET google_id = ?, avatar_url = COALESCE(?, avatar_url) WHERE id = ?')
         .bind(profile.sub, profile.picture || null, user.id)
         .run();
+      // userオブジェクトに最新のpictureを反映させる
+      user.avatar_url = profile.picture || user.avatar_url;
     }
 
     // 4. セッション発行 (30日間)
@@ -66,7 +68,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       ok: true,
       sessionToken,
-      user: { id: user.id, name: user.name, email: user.email, avatar_url: profile.picture },
+      user: { id: user.id, name: user.name, email: user.email, avatar_url: user.avatar_url },
     });
 
   } catch (e) {
