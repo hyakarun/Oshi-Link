@@ -13,6 +13,8 @@ interface CalendarHeaderProps {
   onToday: () => void;
   onAddEvent: () => void;
   setIsMobileMenuOpen: (open: boolean) => void;
+  isRightPanelOpen: boolean;
+  setIsRightPanelOpen: (open: boolean) => void;
   themeColor: string;
 }
 
@@ -25,6 +27,8 @@ export function CalendarHeader({
   onToday,
   onAddEvent,
   setIsMobileMenuOpen,
+  isRightPanelOpen,
+  setIsRightPanelOpen,
   themeColor
 }: CalendarHeaderProps) {
   return (
@@ -83,12 +87,15 @@ export function CalendarHeader({
           ))}
         </div>
 
-        <div className="sm:hidden flex bg-gray-100 p-1 rounded-xl">
+        <div className="flex bg-gray-100 p-1 rounded-xl">
           <button 
-            onClick={() => setView(view === 'month' ? 'day' : 'month')}
-            className="p-1.5 bg-white shadow-sm rounded-lg"
+            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
+            className={`p-1.5 rounded-lg transition-all ${
+              isRightPanelOpen ? 'bg-white shadow-sm text-[#222222]' : 'text-gray-400 hover:text-gray-600'
+            }`}
+            title="予定一覧を表示"
           >
-            <List className="w-4 h-4 text-gray-500" />
+            <List className="w-4 h-4" />
           </button>
         </div>
 

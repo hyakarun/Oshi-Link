@@ -6,6 +6,7 @@ import { Group, Event, View } from '@/lib/types';
 
 // Components
 import { Sidebar } from '@/components/layout/Sidebar';
+import { RightPanel } from '@/components/layout/RightPanel';
 import { CalendarHeader } from '@/components/calendar/CalendarHeader';
 import { CalendarView } from '@/components/calendar/CalendarView';
 import { ProfileModal } from '@/components/modals/ProfileModal';
@@ -53,6 +54,7 @@ export default function App() {
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
   const [discoverSearch, setDiscoverSearch] = useState('');
 
   // Selected Data
@@ -251,6 +253,8 @@ export default function App() {
           onToday={handleToday}
           onAddEvent={() => { setDefaultEventData(null); setIsAddModalOpen(true); }}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
+          isRightPanelOpen={isRightPanelOpen}
+          setIsRightPanelOpen={setIsRightPanelOpen}
           themeColor={themeColor}
         />
 
@@ -271,6 +275,14 @@ export default function App() {
 
         <AdBanner premiumStatus={user?.premium_status} />
       </main>
+
+      <RightPanel 
+        isOpen={isRightPanelOpen}
+        onClose={() => setIsRightPanelOpen(false)}
+        events={filteredEvents}
+        getGroupColor={getGroupColor}
+        onEventClick={setSelectedEvent}
+      />
 
       {/* Modals */}
       {user && (
