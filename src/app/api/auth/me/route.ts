@@ -48,17 +48,22 @@ export async function GET(request: NextRequest) {
   }
 
   // 不正確（disputed）と判定され、かつ未確認の予定があるかチェック
-  const disputed = await db.prepare(
-    'SELECT id FROM events WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0'
-  ).bind(user.id).all();
+  let hasNewDispute = false;
+  try {
+    const disputed = await db.prepare(
+      'SELECT id FROM events WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0 LIMIT 1'
+    ).bind(user.id).all();
 
-  const hasNewDispute = disputed.results && disputed.results.length > 0;
+    hasNewDispute = !!(disputed.results && disputed.results.length > 0);
 
-  if (hasNewDispute) {
-    // 今回のログインで警告を出すため、既読（1）に更新
-    await db.prepare(
-      'UPDATE events SET dispute_acknowledged = 1 WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0'
-    ).bind(user.id).run();
+    if (hasNewDispute) {
+      // 今回のログインで警告を出すため、既読（1）に更新
+      await db.prepare(
+        'UPDATE events SET dispute_acknowledged = 1 WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0'
+      ).bind(user.id).run();
+    }
+  } catch (err) {
+    console.error('Dispute warning check failed:', err);
   }
 
   return NextResponse.json({ 
