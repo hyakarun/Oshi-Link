@@ -15,17 +15,37 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const { name, avatar_url } = await request.json() as any;
+    const { name, avatar_url, email_enabled, push_enabled, notification_timing } = await request.json() as any;
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
     }
 
     await db.prepare(`
-      UPDATE users SET name = ?, avatar_url = ? WHERE id = ?
-    `).bind(name, avatar_url || null, user.id).run();
+      UPDATE users SET 
+        name = ?, 
+        avatar_url = ?, 
+        email_enabled = ?, 
+        push_enabled = ?, 
+        notification_timing = ? 
+      WHERE id = ?
+    `).bind(
+      name, 
+      avatar_url || null, 
+      email_enabled ? 1 : 0, 
+      push_enabled ? 1 : 0, 
+      notification_timing || '10m', 
+      user.id
+    ).run();
 
-    return NextResponse.json({ id: user.id, name, avatar_url }, { status: 200 });
+    return NextResponse.json({ 
+      id: user.id, 
+      name, 
+      avatar_url, 
+      email_enabled: !!email_enabled, 
+      push_enabled: !!push_enabled, 
+      notification_timing: notification_timing || '10m' 
+    }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

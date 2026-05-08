@@ -14,10 +14,11 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
   if (!token) return null;
 
   const session = await db.prepare(
-    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url, u.premium_status FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
+    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url, u.premium_status, u.notifications_enabled, u.email_enabled, u.push_enabled, u.notification_timing FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
   ).bind(token).first() as {
     token: string; user_id: string; expires_at: string;
     uid: string; name: string; email: string; avatar_url: string; premium_status: string;
+    notifications_enabled: number; email_enabled: number; push_enabled: number; notification_timing: string;
   } | null;
 
   if (!session) return null;
@@ -28,7 +29,11 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
     name: session.name, 
     email: session.email, 
     avatar_url: session.avatar_url,
-    premium_status: session.premium_status || 'free'
+    premium_status: session.premium_status || 'free',
+    notifications_enabled: !!session.notifications_enabled,
+    email_enabled: !!session.email_enabled,
+    push_enabled: !!session.push_enabled,
+    notification_timing: (session.notification_timing || '10m') as any
   };
 }
 

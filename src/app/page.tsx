@@ -254,25 +254,34 @@ export default function App() {
     router.push('/login');
   }
 
-  // プロフィール更新（ログイン済みユーザーの名前変更のみ）
+  // プロフィール更新（名前・通知設定の変更）
   async function handleProfileUpdate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!user) return;
     setLoading(true);
     const fd = new FormData(e.currentTarget);
-    const body = { id: user.id, name: fd.get('name'), email: user.email };
+    const body = { 
+      id: user.id, 
+      name: fd.get('name'), 
+      email: user.email,
+      email_enabled: fd.get('email_enabled') === 'on',
+      push_enabled: fd.get('push_enabled') === 'on',
+      notification_timing: fd.get('notification_timing')
+    };
     try {
       const res = await fetch('/api/users', {
         method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify(body),
       });
-      const data = await res.json() as { user?: User };
-      if (data.user) {
-        setUser(data.user);
+      const data = await res.json() as User;
+      if (data.id) { // /api/users は現在 user オブジェクトではなく更新後のデータを直接返す
+        setUser(prev => prev ? { ...prev, ...data } : null);
         setIsProfileModalOpen(false);
       }
-    } catch {}
+    } catch {
+      alert('設定の保存に失敗しました');
+    }
     setLoading(false);
   }
 

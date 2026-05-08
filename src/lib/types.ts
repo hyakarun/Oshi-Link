@@ -38,6 +38,10 @@ export type User = {
   email: string;
   avatar_url?: string;
   premium_status?: 'free' | 'onetime' | 'pro';
+  notifications_enabled?: boolean;
+  email_enabled?: boolean;
+  push_enabled?: boolean;
+  notification_timing?: '10m' | '1h' | '1d' | '1w'; // 無料は10m固定
 };
 
 export type View = 'month' | 'week' | 'day';
