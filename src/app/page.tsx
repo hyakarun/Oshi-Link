@@ -277,6 +277,7 @@ export default function App() {
           followedGroups={followedGroups}
           handleProfileUpdate={handleProfileUpdate}
           handleLogout={logout}
+          setIsCreditsOpen={setIsCreditsOpen}
           loading={authLoading}
         />
       )}

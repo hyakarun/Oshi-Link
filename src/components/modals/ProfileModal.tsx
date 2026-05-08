@@ -10,6 +10,7 @@ type ProfileModalProps = {
   followedGroups: Group[];
   handleProfileUpdate: (e: React.FormEvent<HTMLFormElement>) => void;
   handleLogout: () => void;
+  setIsCreditsOpen: (open: boolean) => void;
   loading: boolean;
 };
 
@@ -20,6 +21,7 @@ export function ProfileModal({
   followedGroups,
   handleProfileUpdate,
   handleLogout,
+  setIsCreditsOpen,
   loading
 }: ProfileModalProps) {
   const [selectedTiming, setSelectedTiming] = React.useState<string>('10m');
@@ -108,12 +110,33 @@ export function ProfileModal({
             </button>
           </form>
 
-          <button
-            onClick={handleLogout}
-            className="w-full py-3 text-sm font-bold text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-          >
-            ログアウト
-          </button>
+          <div className="pt-2 space-y-2">
+            <button
+              type="button"
+              onClick={() => {
+                onOpenChange(false); // プロフィールを閉じてからクレジットを開く
+                setIsCreditsOpen(true);
+              }}
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                  <Info className="w-5 h-5 text-gray-400 group-hover:text-[#ff385c]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-black text-[#222222]">クレジットと法務情報</p>
+                  <p className="text-[10px] text-gray-400 font-medium">運営・利用規約・プライバシーポリシー</p>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="w-full py-3 text-sm font-bold text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+            >
+              ログアウト
+            </button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
