@@ -22,6 +22,14 @@ export function ProfileModal({
   handleLogout,
   loading
 }: ProfileModalProps) {
+  const [selectedTiming, setSelectedTiming] = React.useState<string>('10m');
+
+  React.useEffect(() => {
+    if (user?.notification_timing) {
+      setSelectedTiming(user.notification_timing);
+    }
+  }, [user]);
+
   if (!user) return null;
 
   const isPro = user.premium_status === 'pro';
@@ -107,11 +115,16 @@ export function ProfileModal({
                       key={option.value}
                       className={`
                         relative flex items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer
-                        ${(user.notification_timing === option.value || (!user.notification_timing && option.value === '10m')) 
+                        ${selectedTiming === option.value
                           ? 'border-[#ff385c] bg-red-50 text-[#ff385c]' 
                           : 'border-gray-50 bg-gray-50 text-gray-400 hover:border-gray-200'}
                         ${(!isPro && option.value !== '10m') ? 'opacity-40 cursor-not-allowed grayscale' : ''}
                       `}
+                      onClick={() => {
+                        if (isPro || option.value === '10m') {
+                          setSelectedTiming(option.value);
+                        }
+                      }}
                     >
                       <input 
                         type="radio" 
@@ -119,7 +132,8 @@ export function ProfileModal({
                         value={option.value} 
                         className="sr-only"
                         disabled={!isPro && option.value !== '10m'}
-                        defaultChecked={user.notification_timing === option.value || (!user.notification_timing && option.value === '10m')}
+                        checked={selectedTiming === option.value}
+                        onChange={() => {}} // onClickで処理
                       />
                       <span className="text-xs font-black">{option.label}</span>
                     </label>

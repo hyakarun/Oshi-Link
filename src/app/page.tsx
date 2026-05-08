@@ -75,36 +75,45 @@ export default function App() {
   }
 
   // 初期ロード: ローカルセッションを確認
+  const checkAuth = useCallback(async () => {
+    const saved = localStorage.getItem('oshi_session');
+    if (saved) {
+      setSessionToken(saved);
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: { 'Authorization': `Bearer ${saved}` },
+        });
+        if (res.ok) {
+          const data = await res.json() as { user?: User };
+          if (data.user) {
+            setUser(data.user);
+            setIsAuthChecking(false);
+            return;
+          }
+        }
+        localStorage.removeItem('oshi_session');
+        setSessionToken(null);
+      } catch {}
+    }
+    setIsAuthChecking(false);
+    router.push('/login');
+  }, [router]);
+
   useEffect(() => {
     setMounted(true);
+  }, []);
 
-    async function init() {
-      const saved = localStorage.getItem('oshi_session');
-      if (saved) {
-        setSessionToken(saved);
-        try {
-          const res = await fetch('/api/auth/me', {
-            headers: { 'Authorization': `Bearer ${saved}` },
-          });
-          if (res.ok) {
-            const data = await res.json() as { user?: User };
-            if (data.user) {
-              setUser(data.user);
-              setIsAuthChecking(false);
-              return;
-            }
-          }
-          localStorage.removeItem('oshi_session');
-          setSessionToken(null);
-        } catch {}
-      }
-      
-      // 未認証の場合はログイン画面へ
-      setIsAuthChecking(false);
-      router.push('/login');
+  useEffect(() => {
+    if (!mounted) return;
+    checkAuth();
+  }, [mounted, checkAuth]);
+
+  // モーダルを開くたびに最新のユーザー情報（Proプラン等）を取得
+  useEffect(() => {
+    if (isProfileModalOpen && sessionToken) {
+      checkAuth();
     }
-    init();
-  }, [router]);
+  }, [isProfileModalOpen, sessionToken, checkAuth]);
 
   const loadGroups = useCallback(async (userId?: string) => {
     try {
