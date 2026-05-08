@@ -18,6 +18,9 @@ import { CreditsModal } from '@/components/modals/CreditsModal';
 import { AddEventModal } from '@/components/modals/AddEventModal';
 import { AdBanner } from '@/components/ui/AdBanner';
 import { groupColorSolid } from '@/components/ui/shared';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { AlertCircle } from 'lucide-react';
 
 // Hooks
 import { useAuth } from '@/hooks/useAuth';
@@ -27,7 +30,8 @@ export default function App() {
   const router = useRouter();
   const { 
     user, sessionToken, isAuthChecking, mounted, checkAuth, authHeaders,
-    logout, loading: authLoading, handleProfileUpdate
+    logout, loading: authLoading, handleProfileUpdate,
+    disputeWarning, setDisputeWarning
   } = useAuth();
 
   const {
@@ -346,6 +350,28 @@ export default function App() {
         isOpen={isCreditsOpen}
         onOpenChange={setIsCreditsOpen}
       />
+
+      {/* 不正確判定への警告アラート */}
+      <Dialog open={disputeWarning} onOpenChange={setDisputeWarning}>
+        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white border-none shadow-2xl top-1/2 -translate-y-1/2">
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
+              <AlertCircle className="w-8 h-8 text-[#ff385c]" />
+            </div>
+            <DialogTitle className="text-xl font-black text-[#222222]">投稿に関するご注意</DialogTitle>
+            <DialogDescription className="text-sm text-gray-500 font-medium leading-relaxed">
+              あなたが作成した予定が、コミュニティにより「不正確」であると判断されました。<br /><br />
+              虚偽情報の投稿が繰り返されると、新しい予定の作成ができなくなる場合がありますのでご注意ください。
+            </DialogDescription>
+            <Button 
+              onClick={() => setDisputeWarning(false)}
+              className="w-full bg-[#222222] hover:bg-black text-white h-12 rounded-xl font-black transition-all"
+            >
+              了解しました
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -8,6 +8,7 @@ export function useAuth() {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disputeWarning, setDisputeWarning] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -23,9 +24,12 @@ export function useAuth() {
           headers: { 'Authorization': `Bearer ${saved}` },
         });
         if (res.ok) {
-          const data = await res.json() as { user?: User };
+          const data = await res.json() as { user?: User; dispute_warning?: boolean };
           if (data.user) {
             setUser(data.user);
+            if (data.dispute_warning) {
+              setDisputeWarning(true);
+            }
             setIsAuthChecking(false);
             return;
           }
@@ -93,6 +97,8 @@ export function useAuth() {
     authHeaders,
     logout,
     loading,
-    handleProfileUpdate
+    handleProfileUpdate,
+    disputeWarning,
+    setDisputeWarning
   };
 }
