@@ -381,9 +381,12 @@ export default function App() {
     window.location.href = webcal;
   }
 
-  const filteredEvents = events.filter(e =>
-    activeGroupId === '0' || e.group_id === activeGroupId
-  );
+  const filteredEvents = events.filter(e => {
+    if (activeGroupId === '0') {
+      return followedGroups.some(g => g.id === e.group_id);
+    }
+    return e.group_id === activeGroupId;
+  });
 
   const discoverFiltered = allGroups.filter(g =>
     !discoverSearch || g.name.toLowerCase().includes(discoverSearch.toLowerCase()) || (g.description || '').toLowerCase().includes(discoverSearch.toLowerCase())
