@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate required fields and lengths
-    if (!group_id || !title || !date) {
-      return NextResponse.json({ error: 'Missing required fields: group_id, title, date' }, { status: 400 });
+    if (!group_id || !title || !date || !source_url) {
+      return NextResponse.json({ error: 'Missing required fields: group_id, title, date, source_url' }, { status: 400 });
     }
     if (title.length > 100) {
       return NextResponse.json({ error: 'タイトルが長すぎます（最大100文字）' }, { status: 400 });

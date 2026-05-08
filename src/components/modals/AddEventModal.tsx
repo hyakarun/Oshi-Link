@@ -79,7 +79,7 @@ export function AddEventModal({
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名</label>
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名 <span className="text-[#ff385c]">*</span></label>
                 <input 
                   name="title" 
                   placeholder="ライブ、リリースイベントなど" 
@@ -90,7 +90,7 @@ export function AddEventModal({
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付 <span className="text-[#ff385c]">*</span></label>
                   <input 
                     type="date" 
                     name="date" 
@@ -100,12 +100,13 @@ export function AddEventModal({
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#ff385c]">*</span></label>
                   <input 
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
                     className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    required
                   />
                 </div>
               </div>
@@ -170,11 +171,12 @@ export function AddEventModal({
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">参考URL</label>
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">参考URL <span className="text-[#ff385c]">*</span></label>
                 <input 
                   name="source_url" 
                   placeholder="公式サイト、告知ツイートなど" 
                   className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  required
                 />
               </div>
 
