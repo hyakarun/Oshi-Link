@@ -51,8 +51,8 @@ export function Sidebar({
 
       {/* Sidebar Content */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-[280px] bg-white border-r border-gray-100 flex flex-col 
-        transition-all duration-500 ease-out shadow-2xl md:shadow-none
+        fixed md:relative inset-y-0 left-0 z-50 w-[280px] bg-white border-r border-gray-100 flex flex-col 
+        transition-all duration-500 ease-out shadow-2xl md:shadow-none h-screen
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         {/* Header */}
