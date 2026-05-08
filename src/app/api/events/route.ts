@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const reputation = await db.prepare(`
       SELECT COUNT(*) as unreliable_count 
       FROM events 
-      WHERE added_by = ? AND disputes_count > confirms_count
+      WHERE added_by = ? AND disputed = 1
     `).bind(added_by).first() as { unreliable_count: number };
 
     if (reputation && reputation.unreliable_count >= 3) {

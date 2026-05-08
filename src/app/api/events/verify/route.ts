@@ -53,23 +53,21 @@ export async function POST(request: Request) {
 
     console.log('Stats calculated:', { confirms, disputes });
 
-    // 3. 一定数以上の「不正確」投票で自動削除 (FK制約を考慮して子テーブルから先に消す)
-    if (disputes >= 5) {
-      await db.prepare('DELETE FROM verifications WHERE event_id = ?').bind(event_id).run();
-      await db.prepare('DELETE FROM events WHERE id = ?').bind(event_id).run();
-      return NextResponse.json({ success: true, deleted: true });
-    }
+    // 3. 判定ロジックの更新
+    // 正確（Verified）: 100pt以上に達した場合
+    const verified = confirms >= 100 ? 1 : 0;
+    const is_tentative = verified ? 0 : 1; 
 
-    // 4. 合意形成ロジック
-    const is_tentative = (confirms >= 5 && confirms > disputes * 3) ? 0 : 1;
+    // 不正確（Disputed）: 50pt以上に達した場合
+    const disputed = disputes >= 50 ? 1 : 0;
 
     await db.prepare(`
       UPDATE events 
-      SET confirms_count = ?, disputes_count = ?, is_tentative = ? 
+      SET confirms_count = ?, disputes_count = ?, is_tentative = ?, verified = ?, disputed = ?
       WHERE id = ?
-    `).bind(confirms, disputes, is_tentative, event_id).run();
+    `).bind(confirms, disputes, is_tentative, verified, disputed, event_id).run();
 
-    return NextResponse.json({ success: true, confirms, disputes, is_tentative });
+    return NextResponse.json({ success: true, confirms, disputes, is_tentative, verified, disputed });
   } catch (error: any) {
     console.error('Verify API Error Details:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
