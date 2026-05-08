@@ -857,20 +857,6 @@ export default function App() {
                           <img src="https://api.iconify.design/lucide:palette.svg?color=%239ca3af" alt="設定" className="w-3.5 h-3.5 md:w-3 md:h-3" />
                         </button>
                         <button
-                          onClick={(ev) => { ev.stopPropagation(); handleSubscribe(g.id); }}
-                          className={`relative p-1.5 md:p-1 rounded-lg transition-colors ${
-                            user?.premium_status === 'pro'
-                              ? 'hover:bg-blue-50 text-blue-400'
-                              : 'hover:bg-gray-100 text-gray-300'
-                          }`}
-                          title={user?.premium_status === 'pro' ? 'カレンダーに追加（iCal）' : 'プロプラン限定：外部カレンダー連携'}
-                        >
-                          <Bell className="w-3.5 h-3.5 md:w-3 md:h-3" />
-                          {user?.premium_status !== 'pro' && (
-                            <span className="absolute -top-1 -right-1 px-1 py-0.5 bg-purple-600 text-white text-[5px] font-black rounded-full shadow-sm">PRO</span>
-                          )}
-                        </button>
-                        <button
                           onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
                           className="p-1.5 md:p-1 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-500 transition-colors"
                           title="カレンダーを削除"

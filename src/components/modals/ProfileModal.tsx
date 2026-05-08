@@ -96,53 +96,7 @@ export function ProfileModal({
                 {/* プッシュ通知は内部機能として残すがUIからは削除 */}
               </div>
 
-              {/* 通知タイミング */}
-              <div className="space-y-3">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em] flex items-center justify-between">
-                  通知タイミング
-                  {!isPro && (
-                    <span className="text-[9px] text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full lowercase tracking-normal">Proで詳細設定が可能</span>
-                  )}
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { value: '10m', label: '10分前' },
-                    { value: '1h', label: '1時間前' },
-                    { value: '1d', label: '前日' },
-                    { value: '1w', label: '1週間前' }
-                  ].map((option) => (
-                    <label 
-                      key={option.value}
-                      className={`
-                        relative flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer
-                        ${selectedTiming === option.value
-                          ? 'border-[#ff385c] bg-red-50 text-[#ff385c]' 
-                          : 'border-gray-50 bg-gray-50 text-gray-400 hover:border-gray-200'}
-                        ${(!isPro && option.value !== '10m') ? 'opacity-70 grayscale' : ''}
-                      `}
-                      onClick={() => {
-                        if (isPro || option.value === '10m') {
-                          setSelectedTiming(option.value);
-                        }
-                      }}
-                    >
-                      {!isPro && option.value !== '10m' && (
-                        <span className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-purple-600 text-white text-[7px] font-black rounded-full shadow-sm z-10">PRO</span>
-                      )}
-                      <input 
-                        type="radio" 
-                        name="notification_timing" 
-                        value={option.value} 
-                        className="sr-only"
-                        disabled={!isPro && option.value !== '10m'}
-                        checked={selectedTiming === option.value}
-                        onChange={() => {}} 
-                      />
-                      <span className="text-xs font-black">{option.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              {/* リリース当初はタイミング選択を非表示（10分前固定） */}
             </div>
 
             <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
