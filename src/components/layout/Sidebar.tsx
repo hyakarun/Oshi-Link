@@ -143,7 +143,7 @@ export function Sidebar({
                     className={`group w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all cursor-pointer ${
                       isActive ? 'bg-gray-50' : 'hover:bg-gray-50'
                     }`}
-                    style={isActive ? { borderLeft: `3px solid ${getGroupColor(g.id)}`, paddingLeft: '9px' } : {}}
+                    style={isActive ? { backgroundColor: `${getGroupColor(g.id)}12` } : {}}
                   >
                     <GroupAvatar group={g} size="sm" />
                     <div className="flex-1 min-w-0">
