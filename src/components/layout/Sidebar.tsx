@@ -145,32 +145,30 @@ export function Sidebar({
                     }`}
                     style={isActive ? { borderLeft: `3px solid ${getGroupColor(g.id)}`, paddingLeft: '9px' } : {}}
                   >
-                    <div className="flex items-center gap-2.5">
-                      <GroupAvatar group={g} size="sm" />
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-[12px] font-black truncate ${
-                          !isActive ? 'text-[#222222]' : 'text-gray-400'
-                        }`} style={isActive ? { color: getGroupColor(g.id) } : {}}>{g.name}</p>
-                        <p className="text-[10px] text-gray-400">
-                          {g.event_count || 0}件 · {g.follower_count || 0}人
-                        </p>
-                      </div>
-                      <div className="flex items-center shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity gap-1 md:gap-0.5">
-                        <button
-                          onClick={(ev) => { ev.stopPropagation(); setEditingGroupId(g.id); setPersonalizationOpen(true); }}
-                          className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100"
-                          title="個人設定（色・背景）"
-                        >
-                          <img src="https://api.iconify.design/lucide:palette.svg?color=%239ca3af" alt="設定" className="w-3.5 h-3.5 md:w-3 md:h-3" />
-                        </button>
-                        <button
-                          onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
-                          className="p-1.5 md:p-1 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-500 transition-colors"
-                          title="カレンダーを削除"
-                        >
-                          <Trash2 className="w-4 h-4 md:w-3.5 md:h-3.5" />
-                        </button>
-                      </div>
+                    <GroupAvatar group={g} size="sm" />
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-[12px] font-black truncate ${
+                        !isActive ? 'text-[#222222]' : 'text-gray-400'
+                      }`} style={isActive ? { color: getGroupColor(g.id) } : {}}>{g.name}</p>
+                      <p className="text-[10px] text-gray-400">
+                        {g.event_count || 0}件 · {g.follower_count || 0}人
+                      </p>
+                    </div>
+                    <div className="flex items-center shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity gap-1 md:gap-0.5">
+                      <button
+                        onClick={(ev) => { ev.stopPropagation(); setEditingGroupId(g.id); setPersonalizationOpen(true); }}
+                        className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100"
+                        title="個人設定（色・背景）"
+                      >
+                        <img src="https://api.iconify.design/lucide:palette.svg?color=%239ca3af" alt="設定" className="w-3.5 h-3.5 md:w-3 md:h-3" />
+                      </button>
+                      <button
+                        onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
+                        className="p-1.5 md:p-1 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-500 transition-colors"
+                        title="カレンダーを削除"
+                      >
+                        <Trash2 className="w-4 h-4 md:w-3.5 md:h-3.5" />
+                      </button>
                     </div>
                   </div>
                 );
