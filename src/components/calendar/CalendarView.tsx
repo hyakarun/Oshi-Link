@@ -197,12 +197,12 @@ function TimeGrid({
                       <div
                         key={e.id}
                         onClick={ev => { ev.stopPropagation(); onEventClick(e); }}
-                        className="absolute left-1 right-1 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg hover:z-20 transition-all active:scale-[0.98] z-10"
+                        className="absolute left-1 right-1 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg hover:z-20 transition-all active:scale-[0.98] z-10"
                         style={{
                           top: (startMins / 60) * HOUR_HEIGHT + 1,
                           height: Math.max(24, (durationMins / 60) * HOUR_HEIGHT - 2),
-                          backgroundColor: `${color}18`,
-                          borderLeft: `3px solid ${color}`,
+                          backgroundColor: `${color}25`,
+                          border: `1px solid ${color}40`,
                         }}
                       >
                         <div className="p-1.5">
@@ -295,11 +295,10 @@ export function CalendarView({
                 <div
                   key={e.id}
                   onClick={ev => { ev.stopPropagation(); onEventClick(e); }}
-                  className="px-1.5 py-0.5 md:py-1 rounded md:rounded-md text-[8px] md:text-[10px] font-bold truncate border-l-2 shadow-sm hover:brightness-95 active:scale-[0.97] transition-all"
+                  className="px-1.5 py-0.5 md:py-1 rounded md:rounded-lg text-[8px] md:text-[10px] font-bold truncate shadow-sm hover:brightness-95 active:scale-[0.97] transition-all"
                   style={{
-                    backgroundColor: `${getGroupColor(e.group_id)}15`,
+                    backgroundColor: `${getGroupColor(e.group_id)}25`,
                     color: getGroupColor(e.group_id),
-                    borderLeftColor: getGroupColor(e.group_id),
                   }}
                 >
                   {e.title}
