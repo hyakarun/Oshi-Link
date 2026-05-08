@@ -30,6 +30,7 @@ export type Event = {
   is_tentative?: boolean;
   confirms_count?: number;
   disputes_count?: number;
+  creator_name?: string;
 };
 
 export type User = { 

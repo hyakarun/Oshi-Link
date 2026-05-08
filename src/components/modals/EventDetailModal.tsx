@@ -83,6 +83,14 @@ export function EventDetailModal({
                         <span className="text-sm font-bold text-gray-700">{selectedEvent.location}</span>
                       </div>
                     )}
+                    {selectedEvent.creator_name && (
+                      <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                        <div className="w-4 h-4 bg-[#ff385c] rounded-full flex items-center justify-center text-[8px] text-white font-black">
+                          {selectedEvent.creator_name[0]}
+                        </div>
+                        <span className="text-[11px] font-bold text-gray-500">投稿: {selectedEvent.creator_name}さん</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 

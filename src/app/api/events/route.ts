@@ -13,7 +13,7 @@ export async function GET() {
       return NextResponse.json({ error: 'DB not bound' }, { status: 500 });
     }
 
-    const result = await db.prepare('SELECT * FROM events ORDER BY date ASC').all();
+    const result = await db.prepare('SELECT e.*, u.name as creator_name FROM events e LEFT JOIN users u ON e.added_by = u.id ORDER BY e.date ASC').all();
     return NextResponse.json(result.results ?? []);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
