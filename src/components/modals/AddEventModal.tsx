@@ -109,6 +109,15 @@ export function AddEventModal({
                     required
                   />
                 </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">終了時間</label>
+                  <input 
+                    type="time" 
+                    name="endTime" 
+                    defaultValue={defaultEventData?.endTime}
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">

@@ -124,12 +124,14 @@ export default function App() {
     const fd = new FormData(e.currentTarget);
     const dateVal = fd.get('date') as string;
     const startTime = fd.get('startTime') as string;
+    const endTime = fd.get('endTime') as string;
     const dateStr = startTime ? `${dateVal}T${startTime}:00` : `${dateVal}T00:00:00`;
     
     const body = {
       group_id: selectedGroupId,
       title: fd.get('title'),
       date: dateStr,
+      end_time: endTime ? `${dateVal}T${endTime}:00` : null,
       category: eventCategory,
       sub_category: eventSubCategory,
       location: fd.get('location'),
@@ -275,12 +277,16 @@ export default function App() {
             themeColor={themeColor}
             getGroupColor={getGroupColor}
             onEventClick={setSelectedEvent}
-            onDateClick={(d) => {
+            onDateClick={(d, startTime, endTime) => {
               if (followedGroups.length === 0) {
                 setIsDiscoverOpen(true);
                 return;
               }
-              setDefaultEventData({ date: format(d, 'yyyy-MM-dd') });
+              setDefaultEventData({ 
+                date: format(d, 'yyyy-MM-dd'),
+                startTime,
+                endTime
+              });
               setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
               setIsAddModalOpen(true);
             }}
