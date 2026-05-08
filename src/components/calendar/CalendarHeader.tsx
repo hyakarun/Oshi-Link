@@ -87,17 +87,6 @@ export function CalendarHeader({
           ))}
         </div>
 
-        <div className="flex bg-gray-100 p-1 rounded-xl">
-          <button 
-            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
-            className={`p-1.5 rounded-lg transition-all ${
-              isRightPanelOpen ? 'bg-white shadow-sm text-[#222222]' : 'text-gray-400 hover:text-gray-600'
-            }`}
-            title="予定一覧を表示"
-          >
-            <List className="w-4 h-4" />
-          </button>
-        </div>
 
         <Button 
           onClick={onAddEvent}

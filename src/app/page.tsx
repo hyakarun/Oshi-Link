@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { format, addMonths, subMonths, isSameDay, parseISO, addDays } from 'date-fns';
 import { Group, Event, View } from '@/lib/types';
@@ -303,6 +304,17 @@ export default function App() {
         getGroupColor={getGroupColor}
         onEventClick={setSelectedEvent}
       />
+
+      {/* Floating Open Button for RightPanel */}
+      {!isRightPanelOpen && (
+        <button 
+          onClick={() => setIsRightPanelOpen(true)}
+          className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-white border border-r-0 border-gray-100 rounded-l-2xl p-3 shadow-xl hover:pr-5 transition-all group flex items-center justify-center"
+          title="予定一覧を表示"
+        >
+          <ChevronLeft className="w-5 h-5 text-gray-400 group-hover:text-[#ff385c]" />
+        </button>
+      )}
 
       {/* Modals */}
       {user && (
