@@ -88,7 +88,7 @@ export function EventDetailModal({
                         <div className="w-4 h-4 bg-[#ff385c] rounded-full flex items-center justify-center text-[8px] text-white font-black">
                           {selectedEvent.creator_name[0]}
                         </div>
-                        <span className="text-[11px] font-bold text-gray-500">投稿: {selectedEvent.creator_name}さん</span>
+                        <span className="text-[11px] font-bold text-gray-500">投稿: {selectedEvent.creator_name}</span>
                       </div>
                     )}
                   </div>
