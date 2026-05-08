@@ -222,12 +222,21 @@ export default function App() {
       user_id: user.id,
     };
     try {
-      await fetch('\u002fapi\u002fevents', { method: 'POST', headers: { ...authHeaders(), 'Content-Type': 'application\u002fjson' }, body: JSON.stringify(body) });
-      await loadEvents();
-      setIsAddModalOpen(false);
-      setSelectedLocation(null);
-      (e.target as HTMLFormElement).reset();
-    } catch { alert('登録に失敗しました'); }
+      const res = await fetch('/api/events', { 
+        method: 'POST', 
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' }, 
+        body: JSON.stringify(body) 
+      });
+      if (res.ok) {
+        await loadEvents();
+        setIsAddModalOpen(false);
+        setSelectedLocation(null);
+        (e.target as HTMLFormElement).reset();
+      } else {
+        const error = await res.json() as { error: string; details?: string };
+        alert(error.details || error.error || '登録に失敗しました');
+      }
+    } catch { alert('通信エラーが発生しました'); }
     setLoading(false);
   }
 

@@ -35,6 +35,20 @@ export async function POST(request: NextRequest) {
     const { group_id, title, date, end_time, description, category, sub_category, location, address, latitude, longitude, source_url } = body;
     const added_by = user.id;
 
+    // 投稿制限チェック: 不正確な投稿（不正確票 > 正確票）が3件以上あるか確認
+    const reputation = await db.prepare(`
+      SELECT COUNT(*) as unreliable_count 
+      FROM events 
+      WHERE added_by = ? AND disputes_count > confirms_count
+    `).bind(added_by).first() as { unreliable_count: number };
+
+    if (reputation && reputation.unreliable_count >= 3) {
+      return NextResponse.json({ 
+        error: '投稿制限がかかっています', 
+        details: '過去に投稿された情報の信頼性が低いため、新しい予定を作成できません。内容の正確さを確認してから投稿してください。' 
+      }, { status: 403 });
+    }
+
     // Validate required fields and lengths
     if (!group_id || !title || !date) {
       return NextResponse.json({ error: 'Missing required fields: group_id, title, date' }, { status: 400 });
