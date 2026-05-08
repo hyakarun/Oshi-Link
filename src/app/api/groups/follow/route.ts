@@ -121,3 +121,31 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
 }
+
+// DELETE /api/groups/follow  → フォロー解除（カレンダー削除）
+export async function DELETE(request: NextRequest) {
+  const { env } = getRequestContext();
+  const db = (env as any).DB;
+
+  const user = await getSessionUser(db, request);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const body = await request.json() as { group_id: string };
+    const { group_id } = body;
+
+    if (!group_id) {
+      return NextResponse.json({ error: 'group_id required' }, { status: 400 });
+    }
+
+    await db.prepare(
+      'DELETE FROM user_group_follows WHERE user_id = ? AND group_id = ?'
+    ).bind(user.id, group_id).run();
+
+    return NextResponse.json({ status: 'unfollowed' });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
+}
