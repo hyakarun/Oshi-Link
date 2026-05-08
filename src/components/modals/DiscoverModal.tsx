@@ -66,34 +66,34 @@ export function DiscoverModal({
               </button>
             </div>
           ) : (
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
               {discoverFiltered.map(g => (
                 <div
                   key={g.id}
-                  className={`flex items-center gap-4 p-4 rounded-2xl transition-all border ${g.is_following ? 'bg-[#fff0f3] border-[#ff385c] border-opacity-20' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
+                  className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl transition-all border ${g.is_following ? 'bg-[#fff0f3] border-[#ff385c] border-opacity-20' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
                 >
-                  <GroupAvatar group={g} size="md" />
+                  <GroupAvatar group={g} size="md" className="shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-black text-[#222222] truncate text-sm">{g.name}</h3>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <h3 className="font-black text-[#222222] truncate text-xs sm:text-sm max-w-[120px] sm:max-w-none">{g.name}</h3>
                       {g.is_following && (
-                        <Badge className="bg-[#ff385c] text-white border-none text-[8px] px-1.5 py-0 shrink-0">フォロー中</Badge>
+                        <Badge className="bg-[#ff385c] text-white border-none text-[7px] sm:text-[8px] px-1 py-0 shrink-0">フォロー中</Badge>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 mt-1.5">
-                      <span className="text-[9px] text-gray-400 font-bold flex items-center gap-1">
-                        <Users className="w-3 h-3" /> {g.follower_count || 0}人
+                    <div className="flex items-center gap-2 sm:gap-3 mt-1 sm:mt-1.5">
+                      <span className="text-[8px] sm:text-[9px] text-gray-400 font-bold flex items-center gap-1 whitespace-nowrap">
+                        <Users className="w-2.5 h-2.5 sm:w-3 h-3" /> {g.follower_count || 0}人
                       </span>
-                      <span className="text-[9px] text-gray-400 font-bold flex items-center gap-1">
-                        <Calendar className="w-3 h-3" /> {g.event_count || 0}件
+                      <span className="text-[8px] sm:text-[9px] text-gray-400 font-bold flex items-center gap-1 whitespace-nowrap">
+                        <Calendar className="w-2.5 h-2.5 sm:w-3 h-3" /> {g.event_count || 0}件
                       </span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex items-center gap-1 shrink-0 ml-auto">
                     {g.is_following && (
                       <button
                         onClick={() => handleSubscribe(g.id)}
-                        className="p-1 round-xl hover:bg-white/50 transition-all"
+                        className="p-1 rounded-xl hover:bg-white/50 transition-all hidden sm:block"
                         title="iCalに追加"
                       >
                         <Bell className="w-3.5 h-3.5 text-gray-400" />
@@ -102,7 +102,7 @@ export function DiscoverModal({
                     <Button
                       onClick={() => handleFollowToggle(g)}
                       disabled={followLoading === g.id}
-                      className={`h-8 px-3 rounded-xl font-bold text-xs transition-all ${
+                      className={`h-7 sm:h-8 px-2 sm:px-3 rounded-xl font-bold text-[10px] sm:text-xs transition-all ${
                         g.is_following
                           ? 'bg-white border text-gray-400 hover:text-red-500 hover:border-red-500'
                           : 'bg-[#ff385c] text-white hover:bg-[#e00b41]'
