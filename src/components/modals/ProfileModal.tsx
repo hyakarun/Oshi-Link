@@ -114,11 +114,11 @@ export function ProfileModal({
                     <label 
                       key={option.value}
                       className={`
-                        relative flex items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer
+                        relative flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all cursor-pointer
                         ${selectedTiming === option.value
                           ? 'border-[#ff385c] bg-red-50 text-[#ff385c]' 
                           : 'border-gray-50 bg-gray-50 text-gray-400 hover:border-gray-200'}
-                        ${(!isPro && option.value !== '10m') ? 'opacity-40 cursor-not-allowed grayscale' : ''}
+                        ${(!isPro && option.value !== '10m') ? 'opacity-70 grayscale' : ''}
                       `}
                       onClick={() => {
                         if (isPro || option.value === '10m') {
@@ -126,6 +126,9 @@ export function ProfileModal({
                         }
                       }}
                     >
+                      {!isPro && option.value !== '10m' && (
+                        <span className="absolute -top-1 -right-1 px-1.5 py-0.5 bg-purple-600 text-white text-[7px] font-black rounded-full shadow-sm z-10">PRO</span>
+                      )}
                       <input 
                         type="radio" 
                         name="notification_timing" 
@@ -133,7 +136,7 @@ export function ProfileModal({
                         className="sr-only"
                         disabled={!isPro && option.value !== '10m'}
                         checked={selectedTiming === option.value}
-                        onChange={() => {}} // onClickで処理
+                        onChange={() => {}} 
                       />
                       <span className="text-xs font-black">{option.label}</span>
                     </label>

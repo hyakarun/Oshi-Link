@@ -858,7 +858,7 @@ export default function App() {
                         </button>
                         <button
                           onClick={(ev) => { ev.stopPropagation(); handleSubscribe(g.id); }}
-                          className={`p-1.5 md:p-1 rounded-lg transition-colors ${
+                          className={`relative p-1.5 md:p-1 rounded-lg transition-colors ${
                             user?.premium_status === 'pro'
                               ? 'hover:bg-blue-50 text-blue-400'
                               : 'hover:bg-gray-100 text-gray-300'
@@ -866,6 +866,9 @@ export default function App() {
                           title={user?.premium_status === 'pro' ? 'カレンダーに追加（iCal）' : 'プロプラン限定：外部カレンダー連携'}
                         >
                           <Bell className="w-3.5 h-3.5 md:w-3 md:h-3" />
+                          {user?.premium_status !== 'pro' && (
+                            <span className="absolute -top-1 -right-1 px-1 py-0.5 bg-purple-600 text-white text-[5px] font-black rounded-full shadow-sm">PRO</span>
+                          )}
                         </button>
                         <button
                           onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
