@@ -63,6 +63,7 @@ export default function App() {
   const [defaultEventData, setDefaultEventData] = useState<{ date: string; startTime?: string; endTime?: string } | null>(null);
   const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<{ name: string; shortName: string; address: string; latitude: number; longitude: number } | null>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<string>('');
 
 
   // Form States
@@ -126,7 +127,7 @@ export default function App() {
     const dateStr = startTime ? `${dateVal}T${startTime}:00` : `${dateVal}T00:00:00`;
     
     const body = {
-      group_id: activeGroupId === '0' ? (followedGroups[0]?.id || allGroups[0]?.id || '1') : activeGroupId,
+      group_id: selectedGroupId,
       title: fd.get('title'),
       date: dateStr,
       category: eventCategory,
@@ -251,7 +252,15 @@ export default function App() {
           onPrev={handlePrev}
           onNext={handleNext}
           onToday={handleToday}
-          onAddEvent={() => { setDefaultEventData(null); setIsAddModalOpen(true); }}
+          onAddEvent={() => { 
+            if (followedGroups.length === 0) {
+              setIsDiscoverOpen(true);
+              return;
+            }
+            setDefaultEventData(null); 
+            setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
+            setIsAddModalOpen(true); 
+          }}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
           isRightPanelOpen={isRightPanelOpen}
           setIsRightPanelOpen={setIsRightPanelOpen}
@@ -267,7 +276,12 @@ export default function App() {
             getGroupColor={getGroupColor}
             onEventClick={setSelectedEvent}
             onDateClick={(d) => {
+              if (followedGroups.length === 0) {
+                setIsDiscoverOpen(true);
+                return;
+              }
               setDefaultEventData({ date: format(d, 'yyyy-MM-dd') });
+              setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
               setIsAddModalOpen(true);
             }}
           />
@@ -335,6 +349,9 @@ export default function App() {
         setEventSubCategory={setEventSubCategory}
         selectedLocation={selectedLocation}
         setSelectedLocation={setSelectedLocation}
+        groups={followedGroups}
+        selectedGroupId={selectedGroupId}
+        setSelectedGroupId={setSelectedGroupId}
         onSubmit={handleAddEventSubmit}
       />
 

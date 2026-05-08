@@ -61,16 +61,9 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
-            data-slot="dialog-close"
-            render={
-              <Button
-                variant="ghost"
-                className="absolute top-4 right-4 h-9 w-9 rounded-full bg-white border border-gray-100 text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-all shadow-sm active:scale-95 flex items-center justify-center p-0"
-              />
-            }
+            className="absolute top-4 right-4 h-9 w-9 rounded-full bg-white border border-gray-100 text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-all shadow-sm active:scale-95 flex items-center justify-center p-0 z-50"
           >
-            <XIcon
-            />
+            <XIcon className="size-4" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}

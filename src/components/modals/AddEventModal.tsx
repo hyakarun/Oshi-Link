@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, MapPin, X } from 'lucide-react';
+import { AlertCircle, MapPin, ChevronDown } from 'lucide-react';
 import { LocationInput } from '@/components/ui/LocationInput';
 
 type LocationResult = {
@@ -25,6 +25,9 @@ interface AddEventModalProps {
   setEventSubCategory: (sub: string) => void;
   selectedLocation: LocationResult | null;
   setSelectedLocation: (loc: LocationResult | null) => void;
+  groups: { id: string; name: string }[];
+  selectedGroupId: string;
+  setSelectedGroupId: (id: string) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
@@ -40,6 +43,9 @@ export function AddEventModal({
   setEventSubCategory,
   selectedLocation,
   setSelectedLocation,
+  groups,
+  selectedGroupId,
+  setSelectedGroupId,
   onSubmit
 }: AddEventModalProps) {
   return (
@@ -49,10 +55,29 @@ export function AddEventModal({
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="flex items-center justify-between mb-2">
               <DialogTitle className="text-2xl font-black text-[#222222]">新しい予定を追加</DialogTitle>
-              <button type="button" onClick={() => onOpenChange(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400"><X className="w-5 h-5" /></button>
             </div>
 
             <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">追加先カレンダー</label>
+                <div className="relative group/select">
+                  <select 
+                    value={selectedGroupId}
+                    onChange={(e) => setSelectedGroupId(e.target.value)}
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12"
+                    required
+                  >
+                    <option value="" disabled>カレンダーを選択してください</option>
+                    {groups.map(g => (
+                      <option key={g.id} value={g.id}>{g.name}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#ff385c] transition-colors">
+                    <ChevronDown className="w-5 h-5" />
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名</label>
                 <input 
