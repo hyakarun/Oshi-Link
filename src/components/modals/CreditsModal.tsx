@@ -48,18 +48,39 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
 
         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
           {activeTab === 'credits' && (
-            <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <section className="space-y-4">
-                <h3 className="flex items-center gap-2 text-sm font-black text-gray-400 uppercase tracking-widest">
-                  <Info className="w-4 h-4" /> 使用ツール・オープンソース
+                <h3 className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                  <Info className="w-4 h-4" /> Concept & Vision
+                </h3>
+                <div className="p-6 rounded-[24px] bg-gradient-to-br from-[#ff385c]/5 to-[#ff385c]/10 border border-[#ff385c]/10">
+                  <p className="text-[14px] font-black text-[#222222] mb-2">推し活の「今」を、みんなで形にする。</p>
+                  <p className="text-[12px] text-gray-600 leading-relaxed font-medium">
+                    Oshi-Linkは、点在する推しのスケジュールを一つの場所に集約し、コミュニティの力で情報の正確性を担保する共同編集プラットフォームです。
+                    100ptの承認で「確定」、50ptの不正確票で「虚偽」と判定する独自のレピュテーションシステムにより、信頼できるカレンダーを構築します。
+                  </p>
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <h3 className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                  <Info className="w-4 h-4" /> Development Partners
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <CreditItem name="Lucide React" desc="Icon set" url="https://lucide.dev" license="ISC" />
-                  <CreditItem name="Shadcn UI" desc="UI Components" url="https://ui.shadcn.com" license="MIT" />
-                  <CreditItem name="Next.js" desc="Web Framework" url="https://nextjs.org" license="MIT" />
-                  <CreditItem name="Cloudflare" desc="D1 / Pages / Workers" url="https://cloudflare.com" />
-                  <CreditItem name="Tailwind CSS" desc="CSS Framework" url="https://tailwindcss.com" license="MIT" />
-                  <CreditItem name="date-fns" desc="Date utilities" url="https://date-fns.org" license="MIT" />
+                  <CreditItem name="Antigravity" desc="AI Coding Agent (Google Deepmind)" url="https://deepmind.google" />
+                  <CreditItem name="hyakarun" desc="Lead Developer & Designer" url="https://github.com/hyakarun" />
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <h3 className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                  <Info className="w-4 h-4" /> Infrastructure & Libraries
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <CreditItem name="Cloudflare D1" desc="Transactional SQLite DB" url="https://cloudflare.com" />
+                  <CreditItem name="Next.js 16" desc="Full-stack Web Framework" url="https://nextjs.org" />
+                  <CreditItem name="Lucide React" desc="Premium Icon Set" url="https://lucide.dev" />
+                  <CreditItem name="date-fns" desc="Timezone Utilities" url="https://date-fns.org" />
                 </div>
               </section>
             </div>
@@ -68,22 +89,26 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           {activeTab === 'terms' && (
             <div className="prose prose-sm max-w-none space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <TermSection title="第1条（適用）">
-                本規約は、団体「TSUKURO!」（以下「当団体」）が提供するサービス「Oshi-Link」（以下「本サービス」）の利用条件を定めるものです。ユーザーは本サービスを利用することで、本規約に同意したものとみなされます。
+                本規約は、団体「TSUKURO!」（以下「当団体」）が提供するサービス「Oshi-Link」（以下「本サービス」）の利用条件を定めるものです。
               </TermSection>
-              <TermSection title="第2条（禁止事項）">
-                ユーザーは、以下の行為を行ってはなりません。
+              <TermSection title="第2条（情報の信頼性と投稿制限）">
+                本サービスはコミュニティによる共同編集制を採用しています。
                 <ul className="list-disc ml-5 mt-2 space-y-1">
-                  <li>法令または公序良俗に違反する行為</li>
-                  <li>他のユーザーへの誹謗中傷、迷惑行為</li>
-                  <li>本サービスの運営を妨げる行為</li>
-                  <li>虚偽の情報を登録する行為</li>
+                  <li>投稿された予定は、他のユーザーの投票（100pt）によって「確定」となります。</li>
+                  <li>不正確票が50ptに達した投稿は「虚偽情報」としてマークされます。</li>
+                  <li>虚偽情報と判定された投稿が3件以上に達したユーザーは、自動的に新規投稿機能が制限されます。</li>
                 </ul>
               </TermSection>
-              <TermSection title="第3条（免責事項）">
-                本サービスは、提供する情報の正確性や完全性を保証するものではありません。情報の利用はユーザーの責任において行ってください。本サービスに関連して生じた損害について、当団体は一切の責任を負いません。
+              <TermSection title="第3条（禁止事項）">
+                ユーザーは、以下の行為を行ってはなりません。
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li>意図的に誤った情報を投稿し、他のユーザーを混乱させる行為</li>
+                  <li>同一ユーザーによる複数アカウントを用いた不正な投票操作</li>
+                  <li>他のユーザーへの誹謗中傷、嫌がらせ、またはプライバシーを侵害する行為</li>
+                </ul>
               </TermSection>
-              <TermSection title="第4条（サービスの中断・停止）">
-                当団体は、システムの保守、事故、その他必要と判断した場合には、予告なく本サービスの提供を中断または停止できるものとします。
+              <TermSection title="第4条（免責事項）">
+                本サービスは、提供する情報の正確性を保証するものではありません。情報の利用はユーザー自身の責任において行ってください。
               </TermSection>
             </div>
           )}
