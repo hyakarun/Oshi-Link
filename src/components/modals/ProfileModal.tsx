@@ -85,24 +85,7 @@ export function ProfileModal({
                   />
                 </label>
 
-                {/* プッシュ通知 */}
-                <label className="flex items-center justify-between p-4 bg-gray-50/50 rounded-2xl opacity-60">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-lg shadow-sm">
-                      <Smartphone className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-gray-400">プッシュ通知</p>
-                      <p className="text-[10px] text-gray-400 font-medium">スマホに直接通知（近日公開）</p>
-                    </div>
-                  </div>
-                  <input 
-                    type="checkbox" 
-                    name="push_enabled" 
-                    disabled 
-                    className="w-5 h-5 accent-gray-200 rounded-md"
-                  />
-                </label>
+                {/* プッシュ通知は内部機能として残すがUIからは削除 */}
               </div>
 
               {/* 通知タイミング */}
