@@ -811,13 +811,6 @@ export default function App() {
         {/* Section label */}
         <div className="px-5 pt-4 pb-1 flex items-center justify-between">
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.15em]">追っているカレンダー</p>
-          <button
-            onClick={() => setIsDiscoverOpen(true)}
-            className="text-[10px] font-bold hover:underline flex items-center gap-0.5"
-            style={{ color: themeColor }}
-          >
-            <Search className="w-2.5 h-2.5" /> 探す
-          </button>
         </div>
 
         {/* Followed groups list */}
@@ -828,7 +821,7 @@ export default function App() {
                 <Users className="w-6 h-6 text-gray-300" />
               </div>
               <p className="text-xs font-bold text-gray-400 mb-1">フォロー中なし</p>
-              <p className="text-[10px] text-gray-300 mb-3 leading-relaxed">推しグループのカレンダーをフォローしよう</p>
+              <p className="text-[10px] text-gray-300 mb-3 leading-relaxed whitespace-nowrap">推しグループのカレンダーをフォローしよう</p>
             </div>
           ) : (
             <div className="space-y-0.5">
