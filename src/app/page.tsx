@@ -829,13 +829,6 @@ export default function App() {
               </div>
               <p className="text-xs font-bold text-gray-400 mb-1">フォロー中なし</p>
               <p className="text-[10px] text-gray-300 mb-3 leading-relaxed">推しグループのカレンダーをフォローしよう</p>
-              <Button
-                onClick={() => setIsDiscoverOpen(true)}
-                className="text-white rounded-xl h-8 px-3 text-xs font-bold"
-                style={{ backgroundColor: themeColor }}
-              >
-                カレンダーを探す
-              </Button>
             </div>
           ) : (
             <div className="space-y-0.5">
