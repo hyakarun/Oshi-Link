@@ -57,7 +57,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                   <p className="text-[14px] font-black text-[#222222] mb-2">推し活の「今」を、みんなで形にする。</p>
                   <p className="text-[12px] text-gray-600 leading-relaxed font-medium">
                     Oshi-Linkは、点在する推しのスケジュールを一つの場所に集約し、コミュニティの力で情報の正確性を担保する共同編集プラットフォームです。
-                    100ptの承認で「確定」、50ptの不正確票で「虚偽」と判定する独自のレピュテーションシステムにより、信頼できるカレンダーを構築します。
+                    一定の承認を得ることで「確定」、一定の不正確票で「虚偽」と判定する独自のレピュテーションシステムにより、信頼できるカレンダーを構築します。
                   </p>
                 </div>
               </section>
@@ -94,9 +94,9 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
               <TermSection title="第2条（情報の信頼性と投稿制限）">
                 本サービスはコミュニティによる共同編集制を採用しています。
                 <ul className="list-disc ml-5 mt-2 space-y-1">
-                  <li>投稿された予定は、他のユーザーの投票（100pt）によって「確定」となります。</li>
-                  <li>不正確票が50ptに達した投稿は「虚偽情報」としてマークされます。</li>
-                  <li>虚偽情報と判定された投稿が3件以上に達したユーザーは、自動的に新規投稿機能が制限されます。</li>
+                  <li>投稿された予定は、他のユーザーからの一定の承認によって「確定」となります。</li>
+                  <li>不正確票が一定数に達した投稿は「虚偽情報」としてマークされます。</li>
+                  <li>虚偽情報と判定された投稿が一定数に達したユーザーは、自動的に新規投稿機能が制限される場合があります。</li>
                 </ul>
               </TermSection>
               <TermSection title="第3条（禁止事項）">
