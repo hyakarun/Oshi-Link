@@ -7,8 +7,7 @@ export async function GET() {
   const noteId = 'tsukuro_team'; 
   const magazineId = 'm264f34cbee5f'; 
   
-  // マガジン単位のRSSフィードURL（末尾にスラッシュが必要な場合がある）
-  const rssUrl = `https://note.com/${noteId}/m/${magazineId}/rss/`;
+  const rssUrl = `https://note.com/${noteId}/m/${magazineId}/rss`;
 
   try {
     const response = await fetch(rssUrl, {
