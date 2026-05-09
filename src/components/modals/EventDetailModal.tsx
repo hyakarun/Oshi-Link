@@ -24,6 +24,7 @@ type EventDetailModalProps = {
   handleVerify: (status: 'confirmed' | 'disputed') => void;
   handleUpdateEvent: (e: React.FormEvent<HTMLFormElement>) => void;
   handleSubscribe: (groupId: string) => void;
+  authHeaders: () => Record<string, string>;
 };
 
 export function EventDetailModal({
@@ -36,7 +37,8 @@ export function EventDetailModal({
   setExternalUrlWarning,
   handleVerify,
   handleUpdateEvent,
-  handleSubscribe
+  handleSubscribe,
+  authHeaders
 }: EventDetailModalProps) {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [currentVotes, setCurrentVotes] = useState(0);
@@ -47,7 +49,9 @@ export function EventDetailModal({
     if (!selectedEvent) return;
     setIsFetchingProposals(true);
     try {
-      const res = await fetch(`/api/events/proposals?event_id=${selectedEvent.id}`);
+      const res = await fetch(`/api/events/proposals?event_id=${selectedEvent.id}`, {
+        headers: authHeaders()
+      });
       if (res.ok) {
         const data = await res.json() as any;
         setProposals(data.proposals);
@@ -71,7 +75,7 @@ export function EventDetailModal({
     try {
       const res = await fetch('/api/events/proposals/vote', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ event_id: selectedEvent.id, proposal_id: proposalId })
       });
       if (res.ok) {
@@ -101,7 +105,7 @@ export function EventDetailModal({
     try {
       const res = await fetch('/api/events/proposals', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
       if (res.ok) {

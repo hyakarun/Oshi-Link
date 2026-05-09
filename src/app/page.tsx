@@ -354,6 +354,7 @@ export default function App() {
         handleVerify={handleVerify}
         handleUpdateEvent={handleUpdateEvent}
         handleSubscribe={handleiCalExport}
+        authHeaders={authHeaders}
       />
 
       <AddEventModal 
