@@ -177,11 +177,37 @@ export function AddEventModal({
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">場所・会場</label>
-                <LocationInput 
-                  onSelect={setSelectedLocation}
-                />
-                <input type="hidden" name="location" value={selectedLocation?.name || ''} />
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                  {(() => {
+                    if (eventCategory === 'オンライン系') {
+                      switch (eventSubCategory) {
+                        case 'YouTube生配信': return '配信チャンネル・URL';
+                        case 'テレビ出演':
+                        case 'ラジオ出演': return '放送局・番組名';
+                        case '雑誌発売': return '掲載誌・出版社';
+                        case 'グッズ発売': return '販売サイト・店舗名';
+                        default: return '関連サイト・URL';
+                      }
+                    }
+                    if (eventSubCategory === '聖地・ロケ地') return 'スポット名・場所';
+                    return '場所・会場';
+                  })()}
+                </label>
+                {eventCategory === 'オンライン系' ? (
+                  <input 
+                    name="location" 
+                    placeholder="チャンネル名、番組名、URLなど..." 
+                    className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222] transition-all"
+                  />
+                ) : (
+                  <>
+                    <LocationInput 
+                      onSelect={setSelectedLocation}
+                      placeholder={eventSubCategory === '聖地・ロケ地' ? 'スポット名を入力...' : '会場名を入力...'}
+                    />
+                    <input type="hidden" name="location" value={selectedLocation?.name || ''} />
+                  </>
+                )}
               </div>
 
               <div className="space-y-2">
