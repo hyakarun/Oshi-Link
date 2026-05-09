@@ -124,17 +124,9 @@ export function AddEventModal({
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">場所・会場</label>
-                <LocationInput 
-                  onSelect={setSelectedLocation}
-                />
-                <input type="hidden" name="location" value={selectedLocation?.name || ''} />
-              </div>
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">カテゴリー</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">カテゴリ</label>
                   <div className="relative group/select w-full overflow-hidden">
                     <select 
                       value={eventCategory}
@@ -150,7 +142,7 @@ export function AddEventModal({
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">種類</label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">サブカテゴリ</label>
                   <div className="relative group/select w-full overflow-hidden">
                     <select 
                       value={eventSubCategory}
@@ -182,6 +174,14 @@ export function AddEventModal({
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">場所・会場</label>
+                <LocationInput 
+                  onSelect={setSelectedLocation}
+                />
+                <input type="hidden" name="location" value={selectedLocation?.name || ''} />
               </div>
 
               <div className="space-y-2">
