@@ -225,42 +225,44 @@ function LoginContent() {
               </p>
 
               {/* サービス説明セクション */}
-              <div className="grid grid-cols-1 gap-3 pt-2">
-                {[
-                  { 
-                    icon: <Users className="w-5 h-5" />, 
-                    title: "コミュニティ管理", 
-                    desc: "ファン同士で情報を更新。最新の予定がいつでも分かります。" 
-                  },
-                  { 
-                    icon: <Bell className="w-5 h-5" />, 
-                    title: "通知でリマインド", 
-                    desc: "イベント開始前に通知。配信やチケット予約を逃しません。" 
-                  },
-                  { 
-                    icon: <Calendar className="w-5 h-5" />, 
-                    title: "情報の正確性", 
-                    desc: "不正確な情報はみんなで指摘。精度の高い情報を維持します。" 
-                  },
-                ].map((f, i) => (
-                  <div 
-                    key={i} 
-                    className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50 animate-in fade-in slide-in-from-bottom-2 duration-700 fill-mode-both"
-                    style={{ animationDelay: `${(i + 1) * 150}ms` }}
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
-                      {f.icon}
+              <div className="space-y-3 pt-2">
+                <p className="text-[10px] font-black text-[#ff385c] uppercase tracking-widest text-center">Service Features</p>
+                <div className="grid grid-cols-1 gap-3">
+                  {[
+                    { 
+                      icon: <Users className="w-5 h-5" />, 
+                      title: "コミュニティ管理", 
+                      desc: "ファン同士で情報を更新。最新の予定がいつでも分かります。" 
+                    },
+                    { 
+                      icon: <Bell className="w-5 h-5" />, 
+                      title: "通知でリマインド", 
+                      desc: "イベント開始前に通知。配信やチケット予約を逃しません。" 
+                    },
+                    { 
+                      icon: <Calendar className="w-5 h-5" />, 
+                      title: "情報の正確性", 
+                      desc: "不正確な情報はみんなで指摘。精度の高い情報を維持します。" 
+                    },
+                  ].map((f, i) => (
+                    <div 
+                      key={i} 
+                      className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
+                        {f.icon}
+                      </div>
+                      <div className="text-left">
+                        <h3 className="text-xs font-black text-[#222222]">{f.title}</h3>
+                        <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">{f.desc}</p>
+                      </div>
                     </div>
-                    <div className="text-left">
-                      <h3 className="text-xs font-black text-[#222222]">{f.title}</h3>
-                      <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               <div className="pt-2">
-                <p className="text-[11px] text-gray-400 font-bold">
+                <p className="text-[11px] text-gray-400 font-bold text-center">
                   Googleアカウントで 1秒で登録・ログイン。<br />
                   面倒なパスワード設定は不要です。
                 </p>
