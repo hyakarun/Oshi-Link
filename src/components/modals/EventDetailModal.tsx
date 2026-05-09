@@ -149,12 +149,9 @@ export function EventDetailModal({
                   </div>
                 </div>
 
-                <div className="flex gap-4 mt-8">
-                  <Button onClick={() => setIsEditing(true)} className="flex-1 bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black shadow-xl active:scale-95 transition-all">
+                <div className="mt-8">
+                  <Button onClick={() => setIsEditing(true)} className="w-full bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black shadow-xl active:scale-95 transition-all">
                     情報を修正する
-                  </Button>
-                  <Button onClick={() => handleSubscribe(selectedEvent.group_id)} variant="outline" className="flex-1 border-gray-200 h-14 rounded-2xl font-black hover:bg-gray-50 transition-all text-gray-600">
-                    外部連携 (iCal)
                   </Button>
                 </div>
               </>
