@@ -100,14 +100,14 @@ export function AddEventModal({
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2 min-w-0 overflow-hidden">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#ff385c]">*</span></label>
                   <input 
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
                     style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                     required
                   />
@@ -118,7 +118,7 @@ export function AddEventModal({
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
                     style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                   />
                 </div>
