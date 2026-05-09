@@ -4,7 +4,7 @@ import { getSessionUser } from '@/app/api/auth/me/route';
 
 export const runtime = 'edge';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const { env } = getRequestContext();
     const db = (env as any).DB;
@@ -13,7 +13,18 @@ export async function GET() {
       return NextResponse.json({ error: 'DB not bound' }, { status: 500 });
     }
 
-    const result = await db.prepare('SELECT e.*, u.name as creator_name FROM events e LEFT JOIN users u ON e.added_by = u.id ORDER BY e.date ASC').all();
+    const user = await getSessionUser(db, request);
+    const userId = user?.id || null;
+
+    let query = `
+      SELECT e.*, u.name as creator_name,
+      (SELECT v.verification_status FROM verifications v WHERE v.event_id = e.id AND v.user_id = ?) as user_vote
+      FROM events e 
+      LEFT JOIN users u ON e.added_by = u.id 
+      ORDER BY e.date ASC
+    `;
+
+    const result = await db.prepare(query).bind(userId).all();
     return NextResponse.json(result.results ?? []);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

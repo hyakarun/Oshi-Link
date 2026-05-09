@@ -31,6 +31,7 @@ export type Event = {
   confirms_count?: number;
   disputes_count?: number;
   creator_name?: string;
+  user_vote?: 'confirmed' | 'disputed' | null;
 };
 
 export type User = { 

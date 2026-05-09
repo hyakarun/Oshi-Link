@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       WHERE id = ?
     `).bind(confirms, disputes, is_tentative, verified, disputed, event_id).run();
 
-    return NextResponse.json({ success: true, confirms, disputes, is_tentative, verified, disputed });
+    return NextResponse.json({ success: true, confirms, disputes, is_tentative, verified, disputed, user_vote: status });
   } catch (error: any) {
     console.error('Verify API Error Details:', error);
     return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });

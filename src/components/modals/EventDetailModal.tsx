@@ -132,17 +132,25 @@ export function EventDetailModal({
                       onClick={() => handleVerify('confirmed')}
                       disabled={loading}
                       variant="outline"
-                      className="rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all bg-white border-2 border-green-100 text-green-600 hover:bg-green-50 hover:border-green-200"
+                      className={`rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${
+                        selectedEvent.user_vote === 'confirmed'
+                          ? 'bg-green-50 border-green-500 text-green-700 shadow-inner'
+                          : 'bg-white border-green-100 text-green-600 hover:bg-green-50 hover:border-green-200'
+                      } border-2`}
                     >
-                      <ShieldCheck className="w-5 h-5" /> 正確
+                      <ShieldCheck className={`w-5 h-5 ${selectedEvent.user_vote === 'confirmed' ? 'fill-green-200' : ''}`} /> 正確
                     </Button>
                     <Button
                       onClick={() => handleVerify('disputed')}
                       disabled={loading}
                       variant="outline"
-                      className="rounded-2xl h-14 bg-white border-2 border-orange-100 text-orange-600 hover:bg-orange-50 hover:border-orange-200 transition-all active:scale-95 font-black flex items-center justify-center gap-2"
+                      className={`rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${
+                        selectedEvent.user_vote === 'disputed'
+                          ? 'bg-orange-50 border-orange-500 text-orange-700 shadow-inner'
+                          : 'bg-white border-orange-100 text-orange-600 hover:bg-orange-50 hover:border-orange-200'
+                      } border-2`}
                     >
-                      <AlertCircle className="w-5 h-5" /> 不正確
+                      <AlertCircle className={`w-5 h-5 ${selectedEvent.user_vote === 'disputed' ? 'fill-orange-200' : ''}`} /> 不正確
                     </Button>
                   </div>
                 </div>

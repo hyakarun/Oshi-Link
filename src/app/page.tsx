@@ -197,14 +197,15 @@ export default function App() {
       });
       if (res.ok) {
         await loadEvents();
-        const data = await res.json() as { confirms: number; disputes: number; is_tentative: number; verified: number; disputed: number };
+        const data = await res.json() as { confirms: number; disputes: number; is_tentative: number; verified: number; disputed: number; user_vote: 'confirmed' | 'disputed' };
         setSelectedEvent(prev => prev ? { 
           ...prev, 
           confirms_count: data.confirms, 
           disputes_count: data.disputes, 
           is_tentative: !!data.is_tentative,
           verified: !!data.verified,
-          disputed: !!data.disputed
+          disputed: !!data.disputed,
+          user_vote: data.user_vote
         } : null);
       }
     } catch {}
