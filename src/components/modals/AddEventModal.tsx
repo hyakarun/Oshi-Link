@@ -50,8 +50,8 @@ export function AddEventModal({
 }: AddEventModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full sm:max-w-[540px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
-        <div className="p-8 overflow-y-auto">
+      <DialogContent className="w-[95vw] sm:max-w-[540px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+        <div className="p-6 sm:p-8 overflow-y-auto overflow-x-hidden">
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="flex items-center justify-between mb-2">
               <DialogTitle className="text-2xl font-black text-[#222222]">新しい予定を追加</DialogTitle>
@@ -64,7 +64,7 @@ export function AddEventModal({
                   <select 
                     value={selectedGroupId}
                     onChange={(e) => setSelectedGroupId(e.target.value)}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     required
                   >
                     <option value="" disabled>カレンダーを選択してください</option>
@@ -83,7 +83,7 @@ export function AddEventModal({
                 <input 
                   name="title" 
                   placeholder="ライブ、リリースイベントなど" 
-                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
                   required 
                 />
               </div>
@@ -94,7 +94,7 @@ export function AddEventModal({
                   type="date" 
                   name="date" 
                   defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 font-bold transition-all outline-none box-border"
+                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none box-border"
                   required 
                 />
               </div>
@@ -106,7 +106,7 @@ export function AddEventModal({
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 font-bold transition-all outline-none box-border"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
                     required
                   />
                 </div>
@@ -116,7 +116,7 @@ export function AddEventModal({
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 font-bold transition-all outline-none box-border"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
                   />
                 </div>
               </div>
@@ -136,7 +136,7 @@ export function AddEventModal({
                     <select 
                       value={eventCategory}
                       onChange={(e) => setEventCategory(e.target.value)}
-                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12"
+                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     >
                       <option value="オフライン系">オフライン系</option>
                       <option value="オンライン系">オンライン系</option>
@@ -152,7 +152,7 @@ export function AddEventModal({
                     <select 
                       value={eventSubCategory}
                       onChange={(e) => setEventSubCategory(e.target.value)}
-                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12"
+                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     >
                       {eventCategory === 'オフライン系' ? (
                         <>
