@@ -71,7 +71,7 @@ export default function App() {
   useEffect(() => {
     async function checkNews() {
       try {
-        const res = await fetch('/api/news');
+        const res = await fetch(`/api/news?t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json() as { items: { pubDate: string }[] };
           if (data.items && data.items.length > 0) {

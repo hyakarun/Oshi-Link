@@ -29,7 +29,7 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
   const fetchNews = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/news');
+      const res = await fetch(`/api/news?t=${Date.now()}`);
       if (res.ok) {
         const data = await res.json() as { items: any[] };
         setNews(data.items);
