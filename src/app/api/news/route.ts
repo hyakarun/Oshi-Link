@@ -40,10 +40,12 @@ export async function GET() {
 
       const rawTitle = getTagContent('title', content) || '';
       
-      // 「Oshi-Link:」が含まれる記事だけを抽出
-      if (rawTitle.includes('Oshi-Link:')) {
-        // 表示用に「Oshi-Link:」を削除してクリーンにする
-        const title = rawTitle.replace('Oshi-Link:', '').trim();
+      // 全角・半角コロン、大文字小文字を問わず「Oshi-Link:」を探す
+      const matchPattern = rawTitle.match(/Oshi-Link[:：]\s*(.*)/i);
+      
+      if (matchPattern) {
+        // マッチした後の部分を表示用タイトルにする
+        const title = matchPattern[1].trim() || rawTitle;
         const link = getTagContent('link', content);
         const pubDate = getTagContent('pubDate', content);
         const description = getTagContent('description', content);
