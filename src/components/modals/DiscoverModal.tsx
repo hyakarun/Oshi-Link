@@ -90,15 +90,6 @@ export function DiscoverModal({
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0 ml-auto">
-                    {g.is_following && (
-                      <button
-                        onClick={() => handleSubscribe(g.id)}
-                        className="p-1 rounded-xl hover:bg-white/50 transition-all hidden sm:block"
-                        title="iCalに追加"
-                      >
-                        <Bell className="w-3.5 h-3.5 text-gray-400" />
-                      </button>
-                    )}
                     <Button
                       onClick={() => handleFollowToggle(g)}
                       disabled={followLoading === g.id}
