@@ -125,8 +125,6 @@ export function EventDetailModal({
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">情報の正確さを投票</h3>
                     <div className="flex gap-4">
-                      <span className="text-[10px] font-bold text-green-600">正確: {selectedEvent.confirms_count || 0}</span>
-                      <span className="text-[10px] font-bold text-orange-600">不正確: {selectedEvent.disputes_count || 0}</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -136,7 +134,7 @@ export function EventDetailModal({
                       variant="outline"
                       className="rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all bg-white border-2 border-green-100 text-green-600 hover:bg-green-50 hover:border-green-200"
                     >
-                      <ShieldCheck className="w-5 h-5" /> 正確（{selectedEvent.confirms_count || 0}）
+                      <ShieldCheck className="w-5 h-5" /> 正確
                     </Button>
                     <Button
                       onClick={() => handleVerify('disputed')}
@@ -144,7 +142,7 @@ export function EventDetailModal({
                       variant="outline"
                       className="rounded-2xl h-14 bg-white border-2 border-orange-100 text-orange-600 hover:bg-orange-50 hover:border-orange-200 transition-all active:scale-95 font-black flex items-center justify-center gap-2"
                     >
-                      <AlertCircle className="w-5 h-5" /> 不正確（{selectedEvent.disputes_count || 0}）
+                      <AlertCircle className="w-5 h-5" /> 不正確
                     </Button>
                   </div>
                 </div>

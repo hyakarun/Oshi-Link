@@ -72,7 +72,7 @@ export function DiscoverModal({
                   key={g.id}
                   className={`flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl transition-all border ${g.is_following ? 'bg-[#fff0f3] border-[#ff385c] border-opacity-20' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
                 >
-                  <GroupAvatar group={g} size="md" className="shrink-0" />
+                  <GroupAvatar group={g} size="md" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <h3 className="font-black text-[#222222] truncate text-xs sm:text-sm max-w-[120px] sm:max-w-none">{g.name}</h3>

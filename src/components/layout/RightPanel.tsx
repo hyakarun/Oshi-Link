@@ -37,9 +37,9 @@ export function RightPanel({
       )}
 
       <aside className={`
-        fixed md:relative inset-y-0 right-0 z-50 w-80 bg-white border-l border-gray-100 flex flex-col 
+        fixed md:relative inset-y-0 right-0 z-50 w-full sm:w-80 bg-white border-l border-gray-100 flex flex-col 
         transition-all duration-500 ease-out shadow-2xl md:shadow-none h-screen
-        ${isOpen ? 'translate-x-0' : 'translate-x-full hidden md:translate-x-full md:hidden'}
+        ${isOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-full md:hidden'}
       `}>
         {/* Header */}
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between shrink-0">
