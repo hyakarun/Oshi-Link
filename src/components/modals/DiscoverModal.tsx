@@ -36,8 +36,8 @@ export function DiscoverModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl">
-        <div className="p-8 border-b border-gray-100">
+      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="p-8 border-b border-gray-100 shrink-0">
           <DialogTitle className="text-2xl font-black text-[#222222] tracking-tight mb-1">カレンダーを探す</DialogTitle>
           <DialogDescription className="text-gray-500 text-sm">
             推しのグループカレンダーをフォローして、予定を見逃さないようにしよう
@@ -54,7 +54,7 @@ export function DiscoverModal({
           </div>
         </div>
 
-        <div className="overflow-y-auto max-h-[480px]">
+        <div className="overflow-y-auto flex-1">
           {discoverFiltered.length === 0 ? (
             <div className="p-12 text-center">
               <p className="text-gray-400 font-bold">見つかりませんでした</p>
