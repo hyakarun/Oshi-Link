@@ -31,7 +31,7 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
     try {
       const res = await fetch('/api/news');
       if (res.ok) {
-        const data = await res.json();
+        const data = await res.json() as { items: any[] };
         setNews(data.items);
         
         // 最後に見た日付を保存（通知バッジ消去用）

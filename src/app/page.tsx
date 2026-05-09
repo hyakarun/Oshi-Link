@@ -1,6 +1,13 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  AlertCircle, 
+  Users, 
+  Bell, 
+  Calendar, 
+  Search 
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { format, addMonths, subMonths, isSameDay, parseISO, addDays } from 'date-fns';
 import { Group, Event, View } from '@/lib/types';
@@ -23,7 +30,6 @@ import { AdBanner } from '@/components/ui/AdBanner';
 import { groupColorSolid } from '@/components/ui/shared';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { AlertCircle } from 'lucide-react';
 
 // Hooks
 import { useAuth } from '@/hooks/useAuth';

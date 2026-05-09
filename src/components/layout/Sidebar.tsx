@@ -47,7 +47,7 @@ export function Sidebar({
       try {
         const res = await fetch('/api/news');
         if (res.ok) {
-          const data = await res.json();
+          const data = await res.json() as { items: { pubDate: string }[] };
           if (data.items && data.items.length > 0) {
             const lastSeen = localStorage.getItem('oshi_news_last_seen');
             if (lastSeen !== data.items[0].pubDate) {
