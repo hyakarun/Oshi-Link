@@ -54,7 +54,7 @@ export function GroupSettingsModal({
               外部カレンダー連携 (iCal)
             </label>
             <p className="text-[10px] text-gray-500 leading-relaxed font-medium">
-              iPhoneのカレンダーやGoogleカレンダーに予定を同期できます。以下のURLをコピーしてカレンダーアプリの「照会」または「URLから追加」に貼り付けてください。
+              外部カレンダーアプリ（iPhoneのカレンダーやGoogleカレンダー等）で予定を購読できます。以下のURLをコピーして貼り付けてください。
             </p>
             <div className="flex gap-2">
               <input 
