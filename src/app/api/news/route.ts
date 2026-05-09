@@ -4,8 +4,8 @@ export const runtime = 'edge';
 
 export async function GET() {
   // noteのユーザーIDとマガジンID
-  const noteId = 'oshilink'; 
-  const magazineId = 'm1234567890'; // ここにマガジンのID（URLの末尾の英数字）を入れます
+  const noteId = 'tsukuro_team'; 
+  const magazineId = 'm264f34cbee5f'; 
   
   // マガジン単位のRSSフィードURL
   const rssUrl = `https://note.com/${noteId}/m/${magazineId}/rss`;

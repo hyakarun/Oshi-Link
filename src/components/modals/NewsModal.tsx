@@ -101,7 +101,7 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
 
           <div className="pt-2">
             <a
-              href="https://note.com/oshilink/m/m1234567890" // マガジンのURLに変更
+              href="https://note.com/tsukuro_team/m/m264f34cbee5f" 
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center w-full h-12 rounded-xl bg-gray-900 text-white font-black text-sm hover:bg-black transition-all"

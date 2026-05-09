@@ -64,7 +64,27 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
   const [isNewsOpen, setIsNewsOpen] = useState(false);
+  const [hasNewNews, setHasNewNews] = useState(false);
   const [discoverSearch, setDiscoverSearch] = useState('');
+
+  // お知らせの未読チェック
+  useEffect(() => {
+    async function checkNews() {
+      try {
+        const res = await fetch('/api/news');
+        if (res.ok) {
+          const data = await res.json() as { items: { pubDate: string }[] };
+          if (data.items && data.items.length > 0) {
+            const lastSeen = localStorage.getItem('oshi_news_last_seen');
+            if (lastSeen !== data.items[0].pubDate) {
+              setHasNewNews(true);
+            }
+          }
+        }
+      } catch {}
+    }
+    if (mounted) checkNews();
+  }, [mounted]);
 
   // Selected Data
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -256,7 +276,11 @@ export default function App() {
         handleUnfollow={(id) => handleUnfollow(id, activeGroupId, setActiveGroupId)}
         view={view}
         setView={setView}
-        setIsNewsOpen={setIsNewsOpen}
+        setIsNewsOpen={(open) => {
+          setIsNewsOpen(open);
+          if (open) setHasNewNews(false);
+        }}
+        hasNewNews={hasNewNews}
       />
 
       <main className="flex-1 flex flex-col min-w-0 relative h-full">

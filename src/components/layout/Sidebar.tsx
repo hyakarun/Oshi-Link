@@ -20,6 +20,7 @@ interface SidebarProps {
   view: View;
   setView: (view: View) => void;
   setIsNewsOpen: (open: boolean) => void;
+  hasNewNews: boolean;
 }
 
 export function Sidebar({
@@ -38,27 +39,9 @@ export function Sidebar({
   allGroups,
   view,
   setView,
-  setIsNewsOpen
+  setIsNewsOpen,
+  hasNewNews
 }: SidebarProps) {
-  const [hasNewNews, setHasNewNews] = React.useState(false);
-
-  React.useEffect(() => {
-    async function checkNews() {
-      try {
-        const res = await fetch('/api/news');
-        if (res.ok) {
-          const data = await res.json() as { items: { pubDate: string }[] };
-          if (data.items && data.items.length > 0) {
-            const lastSeen = localStorage.getItem('oshi_news_last_seen');
-            if (lastSeen !== data.items[0].pubDate) {
-              setHasNewNews(true);
-            }
-          }
-        }
-      } catch {}
-    }
-    checkNews();
-  }, []);
   function getGroupColor(groupId: string) {
     const g = allGroups.find(item => item.id === groupId);
     return g?.custom_theme_color || groupColorSolid(groupId);
@@ -219,7 +202,7 @@ export function Sidebar({
               <span>運営からのお知らせ</span>
             </div>
             {hasNewNews && (
-              <div className="w-2 h-2 bg-[#ff385c] rounded-full shadow-[0_0_8px_rgba(255,56,92,0.6)] animate-pulse" />
+              <span className="bg-[#ff385c] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full animate-bounce shadow-sm">New!</span>
             )}
           </button>
 
