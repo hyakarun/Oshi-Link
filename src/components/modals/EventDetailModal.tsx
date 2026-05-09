@@ -91,7 +91,11 @@ export function EventDetailModal({
       event_id: selectedEvent.id,
       title: fd.get('title'),
       description: fd.get('description'),
-      source_url: selectedEvent.source_url // 既存のソースを引き継ぐ
+      location: selectedEvent.location,
+      address: selectedEvent.address,
+      latitude: selectedEvent.latitude,
+      longitude: selectedEvent.longitude,
+      source_url: selectedEvent.source_url
     };
 
     try {

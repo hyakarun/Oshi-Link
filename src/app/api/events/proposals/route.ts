@@ -62,9 +62,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json() as any;
+    console.log('Proposal POST Body:', body);
     const { event_id, title, description, location, address, latitude, longitude, source_url } = body;
 
     if (!event_id || !title) {
+      console.log('Missing fields:', { event_id, title });
       return NextResponse.json({ error: 'event_id and title are required' }, { status: 400 });
     }
 
@@ -74,16 +76,33 @@ export async function POST(request: NextRequest) {
     `).bind(event_id).first() as { count: number };
 
     if (countResult && countResult.count >= 3) {
-      return NextResponse.json({ error: '提案は最大3件までです。すでに満席です。' }, { status: 400 });
+      return NextResponse.json({ error: '提案は最大3件までです。すでに満計です。' }, { status: 400 });
     }
 
     const id = crypto.randomUUID();
-    await db.prepare(`
-      INSERT INTO event_proposals (id, event_id, user_id, title, description, location, address, latitude, longitude, source_url)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).bind(id, event_id, user.id, title, description || null, location || null, address || null, latitude ?? null, longitude ?? null, source_url || null).run();
-
-    return NextResponse.json({ success: true, id });
+    try {
+      await db.prepare(`
+        INSERT INTO event_proposals (id, event_id, user_id, title, description, location, address, latitude, longitude, source_url)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        id, 
+        event_id, 
+        user.id, 
+        title, 
+        description || null, 
+        location || null, 
+        address || null, 
+        latitude ?? null, 
+        longitude ?? null, 
+        source_url || null
+      ).run();
+      
+      console.log('Proposal created successfully:', id);
+      return NextResponse.json({ success: true, id });
+    } catch (dbError: any) {
+      console.error('DB Error creating proposal:', dbError);
+      return NextResponse.json({ error: 'データベースエラーが発生しました', details: dbError.message }, { status: 500 });
+    }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
