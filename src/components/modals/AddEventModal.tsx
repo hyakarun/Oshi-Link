@@ -94,7 +94,8 @@ export function AddEventModal({
                   type="date" 
                   name="date" 
                   defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                  className="w-full max-w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border block"
+                  className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                   required 
                 />
               </div>
@@ -106,7 +107,8 @@ export function AddEventModal({
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="w-full max-w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border block"
+                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                     required
                   />
                 </div>
@@ -116,7 +118,8 @@ export function AddEventModal({
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="w-full max-w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border block"
+                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                   />
                 </div>
               </div>
