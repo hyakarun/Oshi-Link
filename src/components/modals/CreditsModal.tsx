@@ -66,7 +66,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                 <h3 className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
                   <Info className="w-4 h-4" /> Development Partners
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-3">
                   <CreditItem name="Antigravity" desc="AI Coding Agent (Google Deepmind)" url="https://deepmind.google" />
                   <CreditItem 
                     name="ながもん (@nagamon_296)" 
