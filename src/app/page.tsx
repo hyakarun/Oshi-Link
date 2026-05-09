@@ -246,6 +246,8 @@ export default function App() {
         setEditingGroupId={setEditingGroupId}
         setPersonalizationOpen={setPersonalizationOpen}
         handleUnfollow={(id) => handleUnfollow(id, activeGroupId, setActiveGroupId)}
+        view={view}
+        setView={setView}
       />
 
       <main className="flex-1 flex flex-col min-w-0 relative h-full">

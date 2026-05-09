@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X } from 'lucide-react';
-import { Group, User } from '@/lib/types';
+import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 
 interface SidebarProps {
@@ -17,6 +17,8 @@ interface SidebarProps {
   setPersonalizationOpen: (open: boolean) => void;
   handleUnfollow: (groupId: string) => void;
   allGroups: Group[];
+  view: View;
+  setView: (view: View) => void;
 }
 
 export function Sidebar({
@@ -32,7 +34,9 @@ export function Sidebar({
   setEditingGroupId,
   setPersonalizationOpen,
   handleUnfollow,
-  allGroups
+  allGroups,
+  view,
+  setView
 }: SidebarProps) {
   function getGroupColor(groupId: string) {
     const g = allGroups.find(item => item.id === groupId);
@@ -84,6 +88,23 @@ export function Sidebar({
               <ChevronRight className="w-4 h-4" />
             )}
           </button>
+        </div>
+
+        {/* View Switcher (Mobile Only) */}
+        <div className="px-3 pt-4 md:hidden">
+          <div className="flex bg-gray-100 p-1 rounded-xl">
+            {(['month', 'week', 'day'] as View[]).map((v) => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                className={`flex-1 py-2 rounded-lg text-[11px] font-black transition-all ${
+                  view === v ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                }`}
+              >
+                {v === 'month' ? '月' : v === 'week' ? '週' : '日'}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* ALL toggle */}
