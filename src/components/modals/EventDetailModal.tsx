@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel } from 'lucide-react';
+import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel, ThumbsUp, MessageSquarePlus } from 'lucide-react';
 import { Event } from '@/lib/types';
+
+type Proposal = {
+  id: string;
+  title: string;
+  description?: string;
+  user_name: string;
+  vote_count: number;
+};
 
 type EventDetailModalProps = {
   isOpen: boolean;
@@ -30,12 +38,85 @@ export function EventDetailModal({
   handleUpdateEvent,
   handleSubscribe
 }: EventDetailModalProps) {
+  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [currentVotes, setCurrentVotes] = useState(0);
+  const [myProposalVote, setMyProposalVote] = useState<string | null>(null);
+  const [isFetchingProposals, setIsFetchingProposals] = useState(false);
+
+  const fetchProposals = useCallback(async () => {
+    if (!selectedEvent) return;
+    setIsFetchingProposals(true);
+    try {
+      const res = await fetch(`/api/events/proposals?event_id=${selectedEvent.id}`);
+      if (res.ok) {
+        const data = await res.json() as any;
+        setProposals(data.proposals);
+        setCurrentVotes(data.current_votes);
+        setMyProposalVote(data.my_vote);
+      }
+    } catch (e) {
+      console.error('Failed to fetch proposals:', e);
+    }
+    setIsFetchingProposals(false);
+  }, [selectedEvent]);
+
+  useEffect(() => {
+    if (isOpen && selectedEvent) {
+      fetchProposals();
+    }
+  }, [isOpen, selectedEvent, fetchProposals]);
+
+  const handleVote = async (proposalId: string | null) => {
+    if (!selectedEvent) return;
+    try {
+      const res = await fetch('/api/events/proposals/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_id: selectedEvent.id, proposal_id: proposalId })
+      });
+      if (res.ok) {
+        fetchProposals();
+      }
+    } catch (e) {
+      console.error('Failed to vote:', e);
+    }
+  };
+
+  const onProposeSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedEvent) return;
+    
+    const fd = new FormData(e.currentTarget);
+    const body = {
+      event_id: selectedEvent.id,
+      title: fd.get('title'),
+      description: fd.get('description'),
+      source_url: selectedEvent.source_url // 既存のソースを引き継ぐ
+    };
+
+    try {
+      const res = await fetch('/api/events/proposals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setIsEditing(false);
+        fetchProposals();
+      } else {
+        const err = await res.json() as any;
+        alert(err.error || '提案の投稿に失敗しました');
+      }
+    } catch (e) {
+      alert('通信エラーが発生しました');
+    }
+  };
+
   if (!selectedEvent) return null;
 
   // 楽天トラベルへのアフィリエイトリンクを生成
   const rakutenAffiliateId = process.env.NEXT_PUBLIC_RAKUTEN_AFFILIATE_ID || '535601d9.adf03288.535601da.eabb1e44';
   const getRakutenHotelSearchUrl = (location: string) => {
-    // ロケーション名のみ抽出（住所全体が入っている場合は最初の部分だけ使用）
     const keyword = location.split(',')[0].split('、')[0].trim();
     const dest = `https://kw.travel.rakuten.co.jp/keyword/Search.do?charset=utf-8&f_max=30&f_query=${encodeURIComponent(keyword)}`;
     return `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffiliateId}/?pc=${encodeURIComponent(dest)}`;
@@ -121,6 +202,7 @@ export function EventDetailModal({
                   </div>
                 )}
 
+                {/* Accuracy Voting Section */}
                 <div className="space-y-4 border-t border-gray-100 pt-8 mt-4 bg-gray-50/30 -mx-8 px-8 pb-8">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">情報の正確さを投票</h3>
@@ -155,27 +237,88 @@ export function EventDetailModal({
                   </div>
                 </div>
 
-                <div className="mt-8">
-                  <Button onClick={() => setIsEditing(true)} className="w-full bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black shadow-xl active:scale-95 transition-all">
-                    情報を修正する
-                  </Button>
+                {/* Community Update Section (Voting on Proposals) */}
+                <div className="mt-8 border-t border-gray-100 pt-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-sm font-black text-[#222222] uppercase tracking-widest">修正提案（0時更新）</h3>
+                      <p className="text-[10px] text-gray-400 font-bold mt-1">最も投票が多い案が採用されます</p>
+                    </div>
+                    {proposals.length < 3 && (
+                      <Button 
+                        onClick={() => setIsEditing(true)} 
+                        variant="ghost" 
+                        className="text-[#ff385c] hover:bg-red-50 font-black text-xs h-9 rounded-xl gap-2"
+                      >
+                        <MessageSquarePlus className="w-4 h-4" /> 修正案を出す
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="space-y-3">
+                    {/* Current Version Option */}
+                    <div 
+                      onClick={() => handleVote(null)}
+                      className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
+                        myProposalVote === 'current' 
+                          ? 'bg-blue-50 border-blue-500' 
+                          : 'bg-white border-gray-100 hover:border-gray-200'
+                      }`}
+                    >
+                      <div>
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">現状</p>
+                        <p className="text-xs font-black text-[#222222]">現状のままで良い</p>
+                      </div>
+                      <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-gray-100">
+                        <ThumbsUp className={`w-3 h-3 ${myProposalVote === 'current' ? 'text-blue-500 fill-blue-500' : 'text-gray-300'}`} />
+                        <span className="text-[11px] font-black text-gray-500">{currentVotes}</span>
+                      </div>
+                    </div>
+
+                    {/* Proposal Options */}
+                    {proposals.map((p, i) => (
+                      <div 
+                        key={p.id}
+                        onClick={() => handleVote(p.id)}
+                        className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
+                          myProposalVote === p.id 
+                            ? 'bg-blue-50 border-blue-500' 
+                            : 'bg-white border-gray-100 hover:border-gray-200'
+                        }`}
+                      >
+                        <div className="min-w-0 flex-1 pr-4">
+                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">案 {i + 1} ({p.user_name})</p>
+                          <p className="text-xs font-black text-[#222222] truncate">{p.title}</p>
+                          {p.description && <p className="text-[9px] text-gray-400 truncate mt-0.5">{p.description}</p>}
+                        </div>
+                        <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-gray-100 shrink-0">
+                          <ThumbsUp className={`w-3 h-3 ${myProposalVote === p.id ? 'text-blue-500 fill-blue-500' : 'text-gray-300'}`} />
+                          <span className="text-[11px] font-black text-gray-500">{p.vote_count}</span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {proposals.length === 0 && !isFetchingProposals && (
+                      <p className="text-center py-4 text-[11px] text-gray-300 font-bold">まだ修正案はありません</p>
+                    )}
+                  </div>
                 </div>
               </>
             ) : (
-              <form onSubmit={handleUpdateEvent} className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
-                <DialogTitle className="text-2xl font-black">予定を修正</DialogTitle>
+              <form onSubmit={onProposeSubmit} className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+                <DialogTitle className="text-2xl font-black">修正案を提案</DialogTitle>
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名</label>
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">修正後のイベント名</label>
                     <input name="title" defaultValue={selectedEvent.title} className="w-full h-12 bg-gray-50 rounded-xl px-4 font-bold outline-none border-none focus:ring-2 focus:ring-[#ff385c]" required />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">詳細</label>
-                    <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#ff385c] resize-none" />
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">修正の理由や詳細</label>
+                    <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#ff385c] resize-none" placeholder="なぜ修正が必要か、具体的な変更点などを入力してください" />
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <Button type="submit" className="flex-1 bg-[#ff385c] text-white h-12 rounded-2xl font-black">保存する</Button>
+                  <Button type="submit" className="flex-1 bg-[#ff385c] text-white h-12 rounded-2xl font-black">提案を投稿する</Button>
                   <Button type="button" onClick={() => setIsEditing(false)} variant="ghost" className="flex-1 h-12 rounded-2xl font-black text-gray-500">キャンセル</Button>
                 </div>
               </form>
