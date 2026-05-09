@@ -26,15 +26,6 @@ export async function GET() {
 
     const xml = await response.text();
 
-    // 解析用データ
-    const debugData = {
-      status: response.status,
-      ok: response.ok,
-      xmlLength: xml.length,
-      xmlPreview: xml.substring(0, 200),
-      _ts: Date.now()
-    };
-
     const items: any[] = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
@@ -45,10 +36,7 @@ export async function GET() {
       const getTagContent = (tag: string, text: string) => {
         const regex = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i');
         const m = text.match(regex);
-        if (!m) return null;
-        let val = m[1];
-        val = val.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
-        return val.trim();
+        return m ? m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim() : null;
       };
 
       const title = getTagContent('title', content);
@@ -66,8 +54,16 @@ export async function GET() {
       }
     }
 
+    // 診断情報を常に返す
     return NextResponse.json({ 
-      items: items.slice(0, 5)
+      items: items.slice(0, 5),
+      _debug: {
+        url: rssUrl,
+        status: response.status,
+        contentLength: xml.length,
+        contentStart: xml.substring(0, 500), // 冒頭500文字
+        timestamp: new Date().toISOString()
+      }
     });
   } catch (error) {
     console.error('Failed to fetch news:', error);
