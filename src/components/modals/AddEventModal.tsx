@@ -94,7 +94,7 @@ export function AddEventModal({
                   type="date" 
                   name="date" 
                   defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 font-bold transition-all outline-none box-border"
                   required 
                 />
               </div>
@@ -106,7 +106,7 @@ export function AddEventModal({
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 sm:px-5 font-bold transition-all outline-none"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 font-bold transition-all outline-none box-border"
                     required
                   />
                 </div>
@@ -116,7 +116,7 @@ export function AddEventModal({
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 sm:px-5 font-bold transition-all outline-none"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 font-bold transition-all outline-none box-border"
                   />
                 </div>
               </div>
