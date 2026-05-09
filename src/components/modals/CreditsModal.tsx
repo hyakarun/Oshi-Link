@@ -68,8 +68,15 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <CreditItem name="Antigravity" desc="AI Coding Agent (Google Deepmind)" url="https://deepmind.google" />
-                  <CreditItem name="hyakarun" desc="Lead Developer & Designer" url="https://github.com/hyakarun" />
+                  <CreditItem 
+                    name="ながもん (@nagamon_296)" 
+                    desc="TSUKURO! 所属 / Lead Developer & Designer" 
+                    url="https://x.com/nagamon_296" 
+                  />
                 </div>
+                <p className="text-[10px] text-gray-400 font-bold text-center mt-2 uppercase tracking-widest leading-none">
+                  Inquiries: <a href="https://x.com/TSUKUROofficial" target="_blank" rel="noopener noreferrer" className="text-[#ff385c] hover:underline">@TSUKUROofficial</a>
+                </p>
               </section>
 
               <section className="space-y-4">
