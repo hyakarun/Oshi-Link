@@ -167,12 +167,12 @@ export function Sidebar({
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 border-t border-gray-100 space-y-2">
+        <div className="px-3 py-4 border-t border-gray-100">
           <button
             onClick={() => { setIsDiscoverOpen(true); setIsMobileMenuOpen(false); }}
-            className="w-full flex items-center justify-center gap-2 h-11 border-2 border-[#ff385c] text-[#ff385c] rounded-xl font-black text-xs hover:bg-red-50 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 h-11 border-2 border-[#ff385c] text-[#ff385c] rounded-xl font-black text-[11px] hover:bg-red-50 transition-all active:scale-[0.98]"
           >
-            <Search className="w-4 h-4" /> カレンダーを探す
+            <Search className="w-3.5 h-3.5" /> カレンダーを探す
           </button>
         </div>
       </aside>
