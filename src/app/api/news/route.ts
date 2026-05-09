@@ -3,9 +3,12 @@ import { NextResponse } from 'next/server';
 export const runtime = 'edge';
 
 export async function GET() {
-  // noteのRSSフィードURL（仮に 'oshilink' としていますが、後でユーザーIDに変更可能）
+  // noteのユーザーIDとマガジンID
   const noteId = 'oshilink'; 
-  const rssUrl = `https://note.com/${noteId}/rss`;
+  const magazineId = 'm1234567890'; // ここにマガジンのID（URLの末尾の英数字）を入れます
+  
+  // マガジン単位のRSSフィードURL
+  const rssUrl = `https://note.com/${noteId}/m/${magazineId}/rss`;
 
   try {
     const response = await fetch(rssUrl, {
