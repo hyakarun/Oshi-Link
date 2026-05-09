@@ -4,7 +4,7 @@ import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com;
-  style-src 'self' 'unsafe-inline';
+  style-src 'self' 'unsafe-inline' https://accounts.google.com;
   img-src 'self' blob: data: https://images.unsplash.com https://*.googleusercontent.com *;
   font-src 'self';
   object-src 'none';
