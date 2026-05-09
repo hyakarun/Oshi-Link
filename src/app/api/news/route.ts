@@ -12,7 +12,8 @@ export async function GET() {
 
   try {
     const response = await fetch(rssUrl, {
-      next: { revalidate: 300 } // 5分キャッシュに変更
+      cache: 'no-store', // キャッシュを無効化して確実に最新を取得
+      next: { revalidate: 0 } 
     });
 
     if (!response.ok) {
@@ -21,29 +22,44 @@ export async function GET() {
 
     const xml = await response.text();
 
-    // 簡易的なXMLパース（サーバーサイドなのでDOMParserは使えない）
-    // 正規表現で <item> を抽出
+    // 解析をより柔軟にする
     const items = [];
-    const itemMatches = xml.matchAll(/<item>([\s\S]*?)<\/item>/g);
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+    let match;
 
-    for (const match of itemMatches) {
+    while ((match = itemRegex.exec(xml)) !== null) {
       const content = match[1];
-      const title = content.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1] || content.match(/<title>(.*?)<\/title>/)?.[1];
-      const link = content.match(/<link>(.*?)<\/link>/)?.[1];
-      const pubDate = content.match(/<pubDate>(.*?)<\/pubDate>/)?.[1];
-      const description = content.match(/<description>(.*?)<\/description>/)?.[1];
+      
+      // 各タグの内容を抽出する補助関数
+      const getTagContent = (tag: string, text: string) => {
+        const regex = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i');
+        const m = text.match(regex);
+        if (!m) return null;
+        let val = m[1];
+        // CDATAを削除
+        val = val.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
+        return val.trim();
+      };
+
+      const title = getTagContent('title', content);
+      const link = getTagContent('link', content);
+      const pubDate = getTagContent('pubDate', content);
+      const description = getTagContent('description', content);
 
       if (title && link) {
         items.push({
-          title: title.trim(),
-          link: link.trim(),
+          title,
+          link,
           pubDate: pubDate ? new Date(pubDate).toISOString() : null,
           summary: description ? description.replace(/<[^>]*>?/gm, '').substring(0, 100).trim() : ''
         });
       }
     }
 
-    return NextResponse.json({ items: items.slice(0, 5) }); // 最新5件
+    return NextResponse.json({ 
+      items: items.slice(0, 5),
+      _ts: Date.now() // デバッグ用タイムスタンプ
+    });
   } catch (error) {
     console.error('Failed to fetch news:', error);
     return NextResponse.json({ items: [] });
