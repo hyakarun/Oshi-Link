@@ -229,6 +229,9 @@ export function Sidebar({
           >
             <Search className="w-3.5 h-3.5" /> カレンダーを探す
           </button>
+          <div className="pt-2 text-center">
+            <p className="text-[9px] text-gray-300 font-bold tracking-widest uppercase">v1.0.3-refreshed</p>
+          </div>
         </div>
       </aside>
     </>
