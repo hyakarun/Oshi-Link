@@ -7,15 +7,17 @@ export async function GET() {
   const noteId = 'tsukuro_team'; 
   const magazineId = 'm264f34cbee5f'; 
   
-  // ユーザー単位のRSSフィードURL（マガジン単位より制限が緩い傾向にあります）
-  const rssUrl = `https://note.com/${noteId}/rss`;
+  const rssUrl = `https://note.com/${noteId}/m/${magazineId}/rss`;
 
   try {
     const response = await fetch(rssUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': `https://note.com/${noteId}/m/${magazineId}`,
+        'Accept': 'application/rss+xml, application/xml, text/xml',
+        'Cache-Control': 'no-cache'
       },
-      next: { revalidate: 300 } // 5分キャッシュ
+      next: { revalidate: 300 } 
     });
 
     if (!response.ok) {
