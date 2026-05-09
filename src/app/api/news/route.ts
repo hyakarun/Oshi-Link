@@ -12,7 +12,6 @@ export async function GET() {
 
   try {
     const response = await fetch(rssUrl, {
-      cache: 'no-store',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Cache-Control': 'no-cache',
@@ -68,8 +67,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ 
-      items: items.slice(0, 5),
-      debug: debugData
+      items: items.slice(0, 5)
     });
   } catch (error) {
     console.error('Failed to fetch news:', error);
