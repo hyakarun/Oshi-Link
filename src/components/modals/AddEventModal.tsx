@@ -52,15 +52,15 @@ export function AddEventModal({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] sm:max-w-[540px] w-full p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
         <div className="p-6 sm:p-8 overflow-y-auto overflow-x-hidden min-w-0">
-          <form onSubmit={onSubmit} className="space-y-6">
+          <form onSubmit={onSubmit} className="space-y-6 w-full">
             <div className="flex items-center justify-between mb-2">
               <DialogTitle className="text-2xl font-black text-[#222222]">新しい予定を追加</DialogTitle>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 w-full">
               <div className="space-y-2">
                 <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">追加先カレンダー</label>
-                <div className="relative group/select">
+                <div className="relative group/select w-full overflow-hidden">
                   <select 
                     value={selectedGroupId}
                     onChange={(e) => setSelectedGroupId(e.target.value)}
@@ -132,7 +132,7 @@ export function AddEventModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">カテゴリー</label>
-                  <div className="relative group/select">
+                  <div className="relative group/select w-full overflow-hidden">
                     <select 
                       value={eventCategory}
                       onChange={(e) => setEventCategory(e.target.value)}
@@ -148,7 +148,7 @@ export function AddEventModal({
                 </div>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">種類</label>
-                  <div className="relative group/select">
+                  <div className="relative group/select w-full overflow-hidden">
                     <select 
                       value={eventSubCategory}
                       onChange={(e) => setEventSubCategory(e.target.value)}
