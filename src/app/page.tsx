@@ -18,6 +18,7 @@ import { EventDetailModal } from '@/components/modals/EventDetailModal';
 import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
 import { CreditsModal } from '@/components/modals/CreditsModal';
 import { AddEventModal } from '@/components/modals/AddEventModal';
+import { NewsModal } from '@/components/modals/NewsModal';
 import { AdBanner } from '@/components/ui/AdBanner';
 import { groupColorSolid } from '@/components/ui/shared';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -56,6 +57,7 @@ export default function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
+  const [isNewsOpen, setIsNewsOpen] = useState(false);
   const [discoverSearch, setDiscoverSearch] = useState('');
 
   // Selected Data
@@ -248,6 +250,7 @@ export default function App() {
         handleUnfollow={(id) => handleUnfollow(id, activeGroupId, setActiveGroupId)}
         view={view}
         setView={setView}
+        setIsNewsOpen={setIsNewsOpen}
       />
 
       <main className="flex-1 flex flex-col min-w-0 relative h-full">
@@ -442,6 +445,11 @@ export default function App() {
       <CreditsModal 
         isOpen={isCreditsOpen}
         onOpenChange={setIsCreditsOpen}
+      />
+
+      <NewsModal 
+        isOpen={isNewsOpen}
+        onOpenChange={setIsNewsOpen}
       />
 
       {/* 不正確判定への警告アラート */}

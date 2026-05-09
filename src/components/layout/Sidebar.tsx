@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X } from 'lucide-react';
+import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell } from 'lucide-react';
 import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 
@@ -19,6 +19,7 @@ interface SidebarProps {
   allGroups: Group[];
   view: View;
   setView: (view: View) => void;
+  setIsNewsOpen: (open: boolean) => void;
 }
 
 export function Sidebar({
@@ -36,8 +37,28 @@ export function Sidebar({
   handleUnfollow,
   allGroups,
   view,
-  setView
+  setView,
+  setIsNewsOpen
 }: SidebarProps) {
+  const [hasNewNews, setHasNewNews] = React.useState(false);
+
+  React.useEffect(() => {
+    async function checkNews() {
+      try {
+        const res = await fetch('/api/news');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.items && data.items.length > 0) {
+            const lastSeen = localStorage.getItem('oshi_news_last_seen');
+            if (lastSeen !== data.items[0].pubDate) {
+              setHasNewNews(true);
+            }
+          }
+        }
+      } catch {}
+    }
+    checkNews();
+  }, []);
   function getGroupColor(groupId: string) {
     const g = allGroups.find(item => item.id === groupId);
     return g?.custom_theme_color || groupColorSolid(groupId);
@@ -188,7 +209,20 @@ export function Sidebar({
         </div>
 
         {/* Footer actions */}
-        <div className="px-3 py-4 border-t border-gray-100">
+        <div className="px-3 py-4 border-t border-gray-100 space-y-2">
+          <button
+            onClick={() => { setIsNewsOpen(true); setIsMobileMenuOpen(false); }}
+            className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-xl font-bold text-[11px] transition-all group"
+          >
+            <div className="flex items-center gap-2">
+              <Bell className="w-3.5 h-3.5 group-hover:text-[#ff385c]" />
+              <span>運営からのお知らせ</span>
+            </div>
+            {hasNewNews && (
+              <div className="w-2 h-2 bg-[#ff385c] rounded-full shadow-[0_0_8px_rgba(255,56,92,0.6)] animate-pulse" />
+            )}
+          </button>
+
           <button
             onClick={() => { setIsDiscoverOpen(true); setIsMobileMenuOpen(false); }}
             className="w-full flex items-center justify-center gap-2 h-11 border-2 border-[#ff385c] text-[#ff385c] rounded-xl font-black text-[11px] hover:bg-red-50 transition-all active:scale-[0.98]"
