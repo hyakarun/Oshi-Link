@@ -99,14 +99,14 @@ export function AddEventModal({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#ff385c]">*</span></label>
                   <input 
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 sm:px-5 font-bold transition-all outline-none"
                     required
                   />
                 </div>
@@ -116,7 +116,7 @@ export function AddEventModal({
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-4 sm:px-5 font-bold transition-all outline-none"
                   />
                 </div>
               </div>
@@ -129,45 +129,55 @@ export function AddEventModal({
                 <input type="hidden" name="location" value={selectedLocation?.name || ''} />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">カテゴリー</label>
-                  <select 
-                    value={eventCategory}
-                    onChange={(e) => setEventCategory(e.target.value)}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer"
-                  >
-                    <option value="オフライン系">オフライン系</option>
-                    <option value="オンライン系">オンライン系</option>
-                  </select>
+                  <div className="relative group/select">
+                    <select 
+                      value={eventCategory}
+                      onChange={(e) => setEventCategory(e.target.value)}
+                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12"
+                    >
+                      <option value="オフライン系">オフライン系</option>
+                      <option value="オンライン系">オンライン系</option>
+                    </select>
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#ff385c] transition-colors">
+                      <ChevronDown className="w-5 h-5" />
+                    </div>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">種類</label>
-                  <select 
-                    value={eventSubCategory}
-                    onChange={(e) => setEventSubCategory(e.target.value)}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer"
-                  >
-                    {eventCategory === 'オフライン系' ? (
-                      <>
-                        <option value="ライブ・コンサート">ライブ・コンサート</option>
-                        <option value="リリースイベント">リリースイベント</option>
-                        <option value="サイン会・お渡し会">サイン会・お渡し会</option>
-                        <option value="コラボカフェ・展示">コラボカフェ・展示</option>
-                        <option value="聖地・ロケ地">聖地・ロケ地</option>
-                        <option value="その他">その他</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="YouTube生配信">YouTube生配信</option>
-                        <option value="テレビ出演">テレビ出演</option>
-                        <option value="ラジオ出演">ラジオ出演</option>
-                        <option value="雑誌発売">雑誌発売</option>
-                        <option value="グッズ発売">グッズ発売</option>
-                        <option value="その他">その他</option>
-                      </>
-                    )}
-                  </select>
+                  <div className="relative group/select">
+                    <select 
+                      value={eventSubCategory}
+                      onChange={(e) => setEventSubCategory(e.target.value)}
+                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12"
+                    >
+                      {eventCategory === 'オフライン系' ? (
+                        <>
+                          <option value="ライブ・コンサート">ライブ・コンサート</option>
+                          <option value="リリースイベント">リリースイベント</option>
+                          <option value="サイン会・お渡し会">サイン会・お渡し会</option>
+                          <option value="コラボカフェ・展示">コラボカフェ・展示</option>
+                          <option value="聖地・ロケ地">聖地・ロケ地</option>
+                          <option value="その他">その他</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="YouTube生配信">YouTube生配信</option>
+                          <option value="テレビ出演">テレビ出演</option>
+                          <option value="ラジオ出演">ラジオ出演</option>
+                          <option value="雑誌発売">雑誌発売</option>
+                          <option value="グッズ発売">グッズ発売</option>
+                          <option value="その他">その他</option>
+                        </>
+                      )}
+                    </select>
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#ff385c] transition-colors">
+                      <ChevronDown className="w-5 h-5" />
+                    </div>
+                  </div>
                 </div>
               </div>
 
