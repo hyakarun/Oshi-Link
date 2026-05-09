@@ -274,6 +274,48 @@ export default function App() {
         />
 
         <div className="flex-1 overflow-hidden">
+          {followedGroups.length === 0 && (
+            <div className="mx-6 mt-6 p-8 rounded-[32px] bg-gradient-to-br from-[#ff385c] to-[#e00b41] text-white shadow-xl animate-in fade-in slide-in-from-top-4 duration-1000">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <div className="flex-1 space-y-4">
+                  <h2 className="text-3xl font-black tracking-tight">Oshi-Link へようこそ！</h2>
+                  <p className="text-white/90 font-medium leading-relaxed">
+                    推しの予定をみんなで共有・管理するカレンダーへようこそ。<br />
+                    まずは気になるグループをフォローして、カレンダーを完成させましょう。
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    {[
+                      { icon: <Users className="w-5 h-5" />, title: "共有", desc: "ファン全員で更新" },
+                      { icon: <Bell className="w-5 h-5" />, title: "通知", desc: "見逃しをゼロに" },
+                      { icon: <Calendar className="w-5 h-5" />, title: "同期", desc: "外部連携もOK" },
+                    ].map((f, i) => (
+                      <div key={i} className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-2">
+                          {f.icon}
+                        </div>
+                        <h3 className="text-xs font-black">{f.title}</h3>
+                        <p className="text-[10px] text-white/60 font-medium">{f.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Button 
+                    onClick={() => setIsDiscoverOpen(true)}
+                    className="h-12 px-8 bg-white text-[#ff385c] hover:bg-white/90 rounded-2xl font-black text-sm shadow-lg transition-all active:scale-[0.98] mt-4"
+                  >
+                    <Search className="w-4 h-4 mr-2" /> カレンダーを探しに行く
+                  </Button>
+                </div>
+                <div className="hidden lg:block w-64 h-64 relative shrink-0">
+                  <div className="absolute inset-0 bg-white/10 rounded-full animate-pulse" />
+                  <div className="absolute inset-4 bg-white/10 rounded-full animate-pulse delay-75" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Calendar className="w-32 h-32 text-white/40 rotate-12" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <CalendarView 
             view={view}
             currentMonth={currentMonth}
