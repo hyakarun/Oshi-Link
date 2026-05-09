@@ -27,8 +27,13 @@ export async function GET() {
 
     const xml = await response.text();
 
-    // 解析をより柔軟にする
-    const items = [];
+    return NextResponse.json({ 
+      status: response.status,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries()),
+      xmlLength: xml.length,
+      xmlPreview: xml.substring(0, 100)
+    });
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
 
