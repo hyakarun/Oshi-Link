@@ -50,8 +50,8 @@ export function AddEventModal({
 }: AddEventModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] sm:max-w-[540px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
-        <div className="p-6 sm:p-8 overflow-y-auto overflow-x-hidden">
+      <DialogContent className="max-w-[95vw] sm:max-w-[540px] w-full p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+        <div className="p-6 sm:p-8 overflow-y-auto overflow-x-hidden min-w-0">
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="flex items-center justify-between mb-2">
               <DialogTitle className="text-2xl font-black text-[#222222]">新しい予定を追加</DialogTitle>
@@ -88,35 +88,35 @@ export function AddEventModal({
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 min-w-0 overflow-hidden">
                 <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付 <span className="text-[#ff385c]">*</span></label>
                 <input 
                   type="date" 
                   name="date" 
                   defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none box-border"
+                  className="w-full max-w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border block"
                   required 
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div className="space-y-2 min-w-0 overflow-hidden">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#ff385c]">*</span></label>
                   <input 
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
+                    className="w-full max-w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border block"
                     required
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 min-w-0 overflow-hidden">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">終了時間</label>
                   <input 
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
+                    className="w-full max-w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border block"
                   />
                 </div>
               </div>
