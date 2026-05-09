@@ -88,17 +88,18 @@ export function AddEventModal({
                 />
               </div>
 
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付 <span className="text-[#ff385c]">*</span></label>
+                <input 
+                  type="date" 
+                  name="date" 
+                  defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
+                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  required 
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付 <span className="text-[#ff385c]">*</span></label>
-                  <input 
-                    type="date" 
-                    name="date" 
-                    defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
-                    required 
-                  />
-                </div>
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#ff385c]">*</span></label>
                   <input 
