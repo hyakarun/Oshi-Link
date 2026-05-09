@@ -130,7 +130,12 @@ export function AddEventModal({
                   <div className="relative group/select w-full overflow-hidden">
                     <select 
                       value={eventCategory}
-                      onChange={(e) => setEventCategory(e.target.value)}
+                      onChange={(e) => {
+                        const newCat = e.target.value;
+                        setEventCategory(newCat);
+                        // カテゴリ変更時にサブカテゴリをリセット
+                        setEventSubCategory(newCat === 'オフライン系' ? 'ライブ・コンサート' : 'YouTube生配信');
+                      }}
                       className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     >
                       <option value="オフライン系">オフライン系</option>
