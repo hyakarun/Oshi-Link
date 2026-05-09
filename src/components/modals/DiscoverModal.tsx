@@ -52,6 +52,25 @@ export function DiscoverModal({
               className="w-full h-11 bg-gray-50 rounded-xl pl-10 pr-4 outline-none border-none focus:ring-2 focus:ring-[#ff385c] font-medium text-[#222222] text-sm"
             />
           </div>
+
+          {/* サービス説明 */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              { icon: <Users className="w-4 h-4" />, title: "コミュニティ管理", desc: "みんなで情報を更新。最新の予定が分かります。" },
+              { icon: <Bell className="w-4 h-4" />, title: "通知でリマインド", desc: "イベント開始前に通知。見逃しを防止します。" },
+              { icon: <Calendar className="w-4 h-4" />, title: "カレンダー同期", desc: "普段のカレンダーに予定を表示できます。" },
+            ].map((f, i) => (
+              <div key={i} className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50">
+                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
+                  {f.icon}
+                </div>
+                <div>
+                  <h3 className="text-[11px] font-black text-[#222222]">{f.title}</h3>
+                  <p className="text-[9px] text-gray-400 font-medium leading-tight mt-0.5">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="overflow-y-auto flex-1 min-h-0">

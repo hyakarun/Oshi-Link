@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Calendar, Loader2 } from 'lucide-react';
+import { Calendar, Loader2, Users, Bell } from 'lucide-react';
 
 // Minimal User interface to match existing
 interface User {
@@ -221,9 +221,50 @@ function LoginContent() {
               </div>
               <h2 className="text-2xl font-black text-[#222222] tracking-tight">Oshi-Link をはじめる</h2>
               <p className="text-sm text-gray-500 leading-relaxed">
-                Googleアカウントで 1秒で登録・ログイン。<br />
-                面倒なパスワード設定は不要です。
+                推しの予定を、これひとつで。
               </p>
+
+              {/* サービス説明セクション */}
+              <div className="grid grid-cols-1 gap-3 pt-2">
+                {[
+                  { 
+                    icon: <Users className="w-5 h-5" />, 
+                    title: "コミュニティ管理", 
+                    desc: "ファン同士で情報を更新。最新の予定がいつでも分かります。" 
+                  },
+                  { 
+                    icon: <Bell className="w-5 h-5" />, 
+                    title: "通知でリマインド", 
+                    desc: "イベント開始前に通知。配信やチケット予約を逃しません。" 
+                  },
+                  { 
+                    icon: <Calendar className="w-5 h-5" />, 
+                    title: "カレンダー同期", 
+                    desc: "Googleカレンダー等、普段の予定と一緒に管理できます。" 
+                  },
+                ].map((f, i) => (
+                  <div 
+                    key={i} 
+                    className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50 animate-in fade-in slide-in-from-bottom-2 duration-700 fill-mode-both"
+                    style={{ animationDelay: `${(i + 1) * 150}ms` }}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
+                      {f.icon}
+                    </div>
+                    <div className="text-left">
+                      <h3 className="text-xs font-black text-[#222222]">{f.title}</h3>
+                      <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="pt-2">
+                <p className="text-[11px] text-gray-400 font-bold">
+                  Googleアカウントで 1秒で登録・ログイン。<br />
+                  面倒なパスワード設定は不要です。
+                </p>
+              </div>
             </div>
 
             <div className="flex flex-col gap-4">
