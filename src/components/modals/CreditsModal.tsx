@@ -176,15 +176,15 @@ function TermSection({ title, children }: { title: string; children: React.React
 
 function CreditItem({ name, desc, url, license }: { name: string; desc: string; url: string; license?: string }) {
   return (
-    <div className="p-4 rounded-[20px] bg-white border border-gray-100 hover:border-[#ff385c]/30 transition-all group">
-      <div className="flex items-center justify-between mb-1">
-        <span className="font-black text-[#222222] text-sm">{name}</span>
-        <a href={url} target="_blank" rel="noopener noreferrer" className="text-gray-300 group-hover:text-[#ff385c]">
+    <div className="p-4 rounded-[20px] bg-white border border-gray-100 hover:border-[#ff385c]/30 transition-all group h-full flex flex-col">
+      <div className="flex items-start justify-between mb-1.5 gap-2">
+        <span className="font-black text-[#222222] text-[13px] leading-tight break-words flex-1">{name}</span>
+        <a href={url} target="_blank" rel="noopener noreferrer" className="text-gray-300 group-hover:text-[#ff385c] shrink-0 mt-0.5">
           <ExternalLink className="w-3.5 h-3.5" />
         </a>
       </div>
-      <p className="text-[11px] text-gray-500 font-medium">{desc}</p>
-      {license && <p className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-wider">{license}</p>}
+      <p className="text-[10px] text-gray-500 font-medium leading-relaxed">{desc}</p>
+      {license && <p className="text-[9px] text-gray-400 font-bold mt-1 uppercase tracking-wider">{license}</p>}
     </div>
   );
 }
