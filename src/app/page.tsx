@@ -287,7 +287,7 @@ export default function App() {
                     {[
                       { icon: <Users className="w-5 h-5" />, title: "共有", desc: "ファン全員で更新" },
                       { icon: <Bell className="w-5 h-5" />, title: "通知", desc: "見逃しをゼロに" },
-                      { icon: <Calendar className="w-5 h-5" />, title: "同期", desc: "外部連携もOK" },
+                      { icon: <Calendar className="w-5 h-5" />, title: "信頼", desc: "不正確な情報を排除" },
                     ].map((f, i) => (
                       <div key={i} className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
                         <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-2">

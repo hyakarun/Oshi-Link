@@ -239,8 +239,8 @@ function LoginContent() {
                   },
                   { 
                     icon: <Calendar className="w-5 h-5" />, 
-                    title: "カレンダー同期", 
-                    desc: "Googleカレンダー等、普段の予定と一緒に管理できます。" 
+                    title: "情報の正確性", 
+                    desc: "不正確な情報はみんなで指摘。精度の高い情報を維持します。" 
                   },
                 ].map((f, i) => (
                   <div 

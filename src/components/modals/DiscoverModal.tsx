@@ -58,7 +58,7 @@ export function DiscoverModal({
             {[
               { icon: <Users className="w-4 h-4" />, title: "コミュニティ管理", desc: "みんなで情報を更新。最新の予定が分かります。" },
               { icon: <Bell className="w-4 h-4" />, title: "通知でリマインド", desc: "イベント開始前に通知。見逃しを防止します。" },
-              { icon: <Calendar className="w-4 h-4" />, title: "カレンダー同期", desc: "普段のカレンダーに予定を表示できます。" },
+              { icon: <Calendar className="w-4 h-4" />, title: "情報の正確性", desc: "みんなでチェックして正確な情報を維持。" },
             ].map((f, i) => (
               <div key={i} className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50">
                 <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
