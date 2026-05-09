@@ -13,11 +13,9 @@ export async function GET() {
   try {
     const response = await fetch(rssUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       },
-      next: { revalidate: 0 } 
+      next: { revalidate: 300 } // 5分キャッシュ
     });
 
     if (!response.ok) {
@@ -54,16 +52,9 @@ export async function GET() {
       }
     }
 
-    // 診断情報を常に返す
+    // 5件に絞って返す
     return NextResponse.json({ 
-      items: items.slice(0, 5),
-      _debug: {
-        url: rssUrl,
-        status: response.status,
-        contentLength: xml.length,
-        contentStart: xml.substring(0, 500), // 冒頭500文字
-        timestamp: new Date().toISOString()
-      }
+      items: items.slice(0, 5)
     });
   } catch (error) {
     console.error('Failed to fetch news:', error);
