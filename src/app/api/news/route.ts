@@ -7,15 +7,14 @@ export async function GET() {
   const noteId = 'tsukuro_team'; 
   const magazineId = 'm264f34cbee5f'; 
   
-  const rssUrl = `https://note.com/${noteId}/m/${magazineId}/rss`;
+  // ユーザー単位のRSSフィードURL（マガジン単位のブロックを回避）
+  const rssUrl = `https://note.com/${noteId}/rss`;
 
   try {
     const response = await fetch(rssUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': `https://note.com/${noteId}/m/${magazineId}`,
-        'Accept': 'application/rss+xml, application/xml, text/xml',
-        'Cache-Control': 'no-cache'
+        'Accept': 'application/rss+xml, application/xml, text/xml'
       },
       next: { revalidate: 300 } 
     });
@@ -39,18 +38,24 @@ export async function GET() {
         return m ? m[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim() : null;
       };
 
-      const title = getTagContent('title', content);
-      const link = getTagContent('link', content);
-      const pubDate = getTagContent('pubDate', content);
-      const description = getTagContent('description', content);
+      const rawTitle = getTagContent('title', content) || '';
+      
+      // 「Oshi-Link:」が含まれる記事だけを抽出
+      if (rawTitle.includes('Oshi-Link:')) {
+        // 表示用に「Oshi-Link:」を削除してクリーンにする
+        const title = rawTitle.replace('Oshi-Link:', '').trim();
+        const link = getTagContent('link', content);
+        const pubDate = getTagContent('pubDate', content);
+        const description = getTagContent('description', content);
 
-      if (title && link) {
-        items.push({
-          title,
-          link,
-          pubDate: pubDate ? new Date(pubDate).toISOString() : null,
-          summary: description ? description.replace(/<[^>]*>?/gm, '').substring(0, 100).trim() : ''
-        });
+        if (title && link) {
+          items.push({
+            title,
+            link,
+            pubDate: pubDate ? new Date(pubDate).toISOString() : null,
+            summary: description ? description.replace(/<[^>]*>?/gm, '').substring(0, 100).trim() : ''
+          });
+        }
       }
     }
 
