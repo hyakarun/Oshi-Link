@@ -21,6 +21,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'event_id is required' }, { status: 400 });
     }
 
+    // セキュリティチェック: 提案IDが指定されたイベントに属しているか確認
+    if (proposal_id) {
+      const proposal = await db.prepare(`
+        SELECT id FROM event_proposals WHERE id = ? AND event_id = ?
+      `).bind(proposal_id, event_id).first();
+
+      if (!proposal) {
+        return NextResponse.json({ error: 'Invalid proposal ID for this event' }, { status: 400 });
+      }
+    }
+
     // INSERT OR REPLACE (UPSERT) を行う
     // D1で ON CONFLICT を使う場合は PRIMARY KEY が必要なので、SQLで DELETE & INSERT する
     await db.prepare(`

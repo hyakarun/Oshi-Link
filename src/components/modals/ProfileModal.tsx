@@ -34,7 +34,6 @@ export function ProfileModal({
 
   if (!user) return null;
 
-  const isPro = user.premium_status === 'pro';
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -51,15 +50,6 @@ export function ProfileModal({
             <div>
               <DialogTitle className="text-xl font-black text-[#222222]">{user.name}</DialogTitle>
               <p className="text-sm text-gray-400">{user.email}</p>
-              <div className="mt-1">
-                {isPro ? (
-                  <span className="px-2 py-0.5 bg-purple-50 text-purple-600 text-[9px] font-black uppercase tracking-widest rounded-full border border-purple-100">Pro Plan</span>
-                ) : user.premium_status === 'onetime' ? (
-                  <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded-full border border-blue-100">Ad-Free</span>
-                ) : (
-                  <span className="px-2 py-0.5 bg-gray-100 text-gray-500 text-[9px] font-black uppercase tracking-widest rounded-full">Free Plan</span>
-                )}
-              </div>
             </div>
           </div>
           

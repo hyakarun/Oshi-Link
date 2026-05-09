@@ -41,10 +41,9 @@ export async function POST(request: Request) {
     // 課金ユーザーは3倍の影響度
     const statsResult = await db.prepare(`
       SELECT 
-        SUM(CASE WHEN v.verification_status = 'confirmed' THEN (CASE WHEN u.premium_status = 'pro' THEN 3 ELSE 1 END) ELSE 0 END) as confirms,
-        SUM(CASE WHEN v.verification_status = 'disputed' THEN (CASE WHEN u.premium_status = 'pro' THEN 3 ELSE 1 END) ELSE 0 END) as disputes
+        SUM(CASE WHEN v.verification_status = 'confirmed' THEN 1 ELSE 0 END) as confirms,
+        SUM(CASE WHEN v.verification_status = 'disputed' THEN 1 ELSE 0 END) as disputes
       FROM verifications v
-      JOIN users u ON v.user_id = u.id
       WHERE v.event_id = ?
     `).bind(event_id).first() as { confirms: number; disputes: number };
 

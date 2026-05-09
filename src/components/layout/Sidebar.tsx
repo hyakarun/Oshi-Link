@@ -63,20 +63,9 @@ export function Sidebar({
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-black text-[#222222] tracking-tight">Oshi-Link</p>
             <div className="flex items-center gap-1.5">
-              <p className="text-[10px] text-gray-400 font-medium truncate max-w-[80px]">
+              <p className="text-[10px] text-gray-400 font-medium truncate max-w-[120px]">
                 {user ? user.name : 'ログインしていません'}
               </p>
-              {user && (
-                <span className={`px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest leading-none ${
-                  user.premium_status === 'pro' 
-                    ? 'bg-purple-50 text-purple-600 border border-purple-100' 
-                    : user.premium_status === 'onetime'
-                    ? 'bg-blue-50 text-blue-600 border border-blue-100'
-                    : 'bg-gray-100 text-gray-400'
-                }`}>
-                  {user.premium_status === 'pro' ? 'Pro' : user.premium_status === 'onetime' ? 'Ad-Free' : 'Free'}
-                </span>
-              )}
             </div>
           </div>
           <button
