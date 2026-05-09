@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json() as any;
     console.log('Proposal POST Body:', body);
-    const { event_id, title, description, location, address, latitude, longitude, source_url } = body;
+    const { event_id, title, description, reason, location, address, latitude, longitude, source_url } = body;
 
     if (!event_id || !title) {
       console.log('Missing fields:', { event_id, title });
@@ -82,14 +82,15 @@ export async function POST(request: NextRequest) {
     const id = crypto.randomUUID();
     try {
       await db.prepare(`
-        INSERT INTO event_proposals (id, event_id, user_id, title, description, location, address, latitude, longitude, source_url)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO event_proposals (id, event_id, user_id, title, description, reason, location, address, latitude, longitude, source_url)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).bind(
         id, 
         event_id, 
         user.id, 
         title, 
         description || null, 
+        reason || null,
         location || null, 
         address || null, 
         latitude ?? null, 

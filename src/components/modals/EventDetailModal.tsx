@@ -9,6 +9,7 @@ type Proposal = {
   id: string;
   title: string;
   description?: string;
+  reason?: string;
   user_name: string;
   vote_count: number;
 };
@@ -62,7 +63,7 @@ export function EventDetailModal({
       console.error('Failed to fetch proposals:', e);
     }
     setIsFetchingProposals(false);
-  }, [selectedEvent]);
+  }, [selectedEvent, authHeaders]);
 
   useEffect(() => {
     if (isOpen && selectedEvent) {
@@ -95,6 +96,7 @@ export function EventDetailModal({
       event_id: selectedEvent.id,
       title: fd.get('title'),
       description: fd.get('description'),
+      reason: fd.get('reason'),
       location: selectedEvent.location,
       address: selectedEvent.address,
       latitude: selectedEvent.latitude,
@@ -273,11 +275,11 @@ export function EventDetailModal({
                           : 'bg-white border-gray-100 hover:border-gray-200'
                       }`}
                     >
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">現状</p>
                         <p className="text-xs font-black text-[#222222]">現状のままで良い</p>
                       </div>
-                      <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-gray-100">
+                      <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-gray-100 shrink-0">
                         <ThumbsUp className={`w-3 h-3 ${myProposalVote === 'current' ? 'text-blue-500 fill-blue-500' : 'text-gray-300'}`} />
                         <span className="text-[11px] font-black text-gray-500">{currentVotes}</span>
                       </div>
@@ -288,20 +290,32 @@ export function EventDetailModal({
                       <div 
                         key={p.id}
                         onClick={() => handleVote(p.id)}
-                        className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
+                        className={`p-4 rounded-2xl border-2 transition-all cursor-pointer space-y-3 ${
                           myProposalVote === p.id 
                             ? 'bg-blue-50 border-blue-500' 
                             : 'bg-white border-gray-100 hover:border-gray-200'
                         }`}
                       >
-                        <div className="min-w-0 flex-1 pr-4">
-                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">案 {i + 1} ({p.user_name})</p>
-                          <p className="text-xs font-black text-[#222222] truncate">{p.title}</p>
-                          {p.description && <p className="text-[9px] text-gray-400 truncate mt-0.5">{p.description}</p>}
+                        <div className="flex items-center justify-between">
+                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">案 {i + 1} ({p.user_name})</p>
+                          <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-gray-100">
+                            <ThumbsUp className={`w-3 h-3 ${myProposalVote === p.id ? 'text-blue-500 fill-blue-500' : 'text-gray-300'}`} />
+                            <span className="text-[11px] font-black text-gray-500">{p.vote_count}</span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 bg-white px-3 py-1 rounded-full border border-gray-100 shrink-0">
-                          <ThumbsUp className={`w-3 h-3 ${myProposalVote === p.id ? 'text-blue-500 fill-blue-500' : 'text-gray-300'}`} />
-                          <span className="text-[11px] font-black text-gray-500">{p.vote_count}</span>
+                        
+                        <div className="space-y-2">
+                          {p.reason && (
+                            <div className="bg-white/50 p-2.5 rounded-lg border border-blue-100/50">
+                              <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-1">修正理由</p>
+                              <p className="text-[11px] font-medium text-gray-600 leading-relaxed line-clamp-2">{p.reason}</p>
+                            </div>
+                          )}
+                          <div className="px-1">
+                            <p className="text-[9px] font-black text-gray-300 uppercase tracking-widest mb-1">変更後の内容</p>
+                            <p className="text-xs font-black text-[#222222] truncate">{p.title}</p>
+                            {p.description && <p className="text-[10px] text-gray-400 truncate mt-0.5">{p.description}</p>}
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -317,16 +331,31 @@ export function EventDetailModal({
                 <DialogTitle className="text-2xl font-black">修正案を提案</DialogTitle>
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">修正後のイベント名</label>
-                    <input name="title" defaultValue={selectedEvent.title} className="w-full h-12 bg-gray-50 rounded-xl px-4 font-bold outline-none border-none focus:ring-2 focus:ring-[#ff385c]" required />
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">1. 修正の理由</label>
+                    <textarea 
+                      name="reason" 
+                      className="w-full h-24 bg-gray-50 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#ff385c] resize-none" 
+                      placeholder="例：公式サイトで日時変更が発表されたため、誤字脱字の修正、など"
+                      required
+                    />
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">修正の理由や詳細</label>
-                    <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#ff385c] resize-none" placeholder="なぜ修正が必要か、具体的な変更点などを入力してください" />
+                  
+                  <div className="border-t border-gray-100 pt-4 mt-2">
+                    <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-4">2. 変更後の内容</p>
+                    <div className="space-y-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-gray-400">イベント名</label>
+                        <input name="title" defaultValue={selectedEvent.title} className="w-full h-12 bg-gray-50 rounded-xl px-4 font-bold outline-none border-none focus:ring-2 focus:ring-[#ff385c]" required />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[10px] font-bold text-gray-400">詳細説明</label>
+                        <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#ff385c] resize-none" />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <Button type="submit" className="flex-1 bg-[#ff385c] text-white h-12 rounded-2xl font-black">提案を投稿する</Button>
+                  <Button type="submit" className="flex-1 bg-[#ff385c] text-white h-12 rounded-2xl font-black shadow-lg shadow-red-100">提案を投稿する</Button>
                   <Button type="button" onClick={() => setIsEditing(false)} variant="ghost" className="flex-1 h-12 rounded-2xl font-black text-gray-500">キャンセル</Button>
                 </div>
               </form>
