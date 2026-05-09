@@ -27,26 +27,27 @@ export async function GET() {
 
     const xml = await response.text();
 
-    return NextResponse.json({ 
+    // 解析用データ
+    const debugData = {
       status: response.status,
       ok: response.ok,
-      headers: Object.fromEntries(response.headers.entries()),
       xmlLength: xml.length,
-      xmlPreview: xml.substring(0, 100)
-    });
+      xmlPreview: xml.substring(0, 200),
+      _ts: Date.now()
+    };
+
+    const items: any[] = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
 
     while ((match = itemRegex.exec(xml)) !== null) {
       const content = match[1];
       
-      // 各タグの内容を抽出する補助関数
       const getTagContent = (tag: string, text: string) => {
         const regex = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i');
         const m = text.match(regex);
         if (!m) return null;
         let val = m[1];
-        // CDATAを削除
         val = val.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1');
         return val.trim();
       };
@@ -68,7 +69,7 @@ export async function GET() {
 
     return NextResponse.json({ 
       items: items.slice(0, 5),
-      _ts: Date.now() // デバッグ用タイムスタンプ
+      debug: debugData
     });
   } catch (error) {
     console.error('Failed to fetch news:', error);
