@@ -12,7 +12,7 @@ export async function GET() {
 
   try {
     const response = await fetch(rssUrl, {
-      next: { revalidate: 3600 } // 1時間キャッシュ
+      next: { revalidate: 300 } // 5分キャッシュに変更
     });
 
     if (!response.ok) {
