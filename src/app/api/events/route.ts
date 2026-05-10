@@ -4,6 +4,37 @@ import { getSessionUser } from '@/app/api/auth/me/route';
 
 export const runtime = 'edge';
 
+/**
+ * URLの安全性を検証する（IPアドレス、短縮URL、不審なパターン）
+ */
+function validateUrlSafety(url: string): { safe: boolean; error?: string } {
+  try {
+    const u = new URL(url);
+    const hostname = u.hostname.toLowerCase();
+
+    // 1. IPアドレス形式の禁止
+    if (/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname)) {
+      return { safe: false, error: '安全上の理由から、IPアドレス形式のURLは登録できません。' };
+    }
+
+    // 2. 短縮URLの制限
+    const shorteners = ['bit.ly', 'tinyurl.com', 't.co', 'buff.ly', 'ow.ly', 'is.gd', 'goo.gl', 't.ly'];
+    if (shorteners.some(s => hostname === s || hostname.endsWith('.' + s))) {
+      return { safe: false, error: '短縮URLは安全性が確認できないため登録できません。元のURL（直リンク）を入力してください。' };
+    }
+
+    // 3. 不審なキーワード（簡易的なブラックリスト）
+    const suspiciousKeywords = ['phishing', 'scam', 'malware', 'virus', 'free-gift', 'win-money'];
+    if (suspiciousKeywords.some(k => hostname.includes(k))) {
+      return { safe: false, error: '入力されたURLは安全ではない可能性があるため、登録できません。' };
+    }
+
+    return { safe: true };
+  } catch {
+    return { safe: false, error: 'URLの形式が正しくありません。' };
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { env } = getRequestContext();
@@ -82,6 +113,13 @@ export async function POST(request: NextRequest) {
         if (u.protocol !== 'http:' && u.protocol !== 'https:') {
           return NextResponse.json({ error: '無効なURLプロトコルです' }, { status: 400 });
         }
+
+        // 安全性チェックの実行
+        const safety = validateUrlSafety(safeSourceUrl);
+        if (!safety.safe) {
+          return NextResponse.json({ error: safety.error }, { status: 400 });
+        }
+
         safeSourceUrl = u.toString();
       } catch {
         return NextResponse.json({ error: '無効なURLフォーマットです' }, { status: 400 });
