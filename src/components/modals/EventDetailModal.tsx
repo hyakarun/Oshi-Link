@@ -44,6 +44,7 @@ export function EventDetailModal({
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [currentVotes, setCurrentVotes] = useState(0);
   const [myProposalVote, setMyProposalVote] = useState<string | null>(null);
+  const [showSafetyDialog, setShowSafetyDialog] = useState(false);
   const [isFetchingProposals, setIsFetchingProposals] = useState(false);
 
   const fetchProposals = useCallback(async () => {
@@ -187,6 +188,13 @@ export function EventDetailModal({
 
                 {selectedEvent.source_url && (
                   <div className="mb-4 pt-2">
+                    <button
+                      onClick={() => setShowSafetyDialog(true)}
+                      className="w-full flex items-center justify-center gap-1.5 py-2 text-[11px] font-black text-gray-400 hover:text-[#ff385c] transition-colors mb-1"
+                    >
+                      <AlertCircle className="w-3.5 h-3.5" />
+                      リンクの安全性について
+                    </button>
                     <button
                       onClick={() => setExternalUrlWarning(selectedEvent.source_url!)}
                       className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#ff385c] hover:bg-[#e03150] text-white text-sm font-black rounded-2xl transition-all shadow-lg active:scale-95"
@@ -372,6 +380,61 @@ export function EventDetailModal({
             )}
           </div>
       </DialogContent>
+      {/* リンクの安全性に関する詳細ダイアログ */}
+      <Dialog open={showSafetyDialog} onOpenChange={setShowSafetyDialog}>
+        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white border-none shadow-2xl top-1/2 -translate-y-1/2">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <DialogTitle className="text-xl font-black text-[#222222]">リンクの安全性について</DialogTitle>
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-0.5">Security Measures</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                <h4 className="text-[12px] font-black text-[#222222] mb-1 flex items-center gap-2">
+                  <span className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-[8px]">1</span>
+                  サーバーサイド検証
+                </h4>
+                <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                  全てのURLは登録時にシステムによる自動検証（IPアドレス形式の禁止、短縮URLの制限、不審なキーワードの検出など）が行われています。
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                <h4 className="text-[12px] font-black text-[#222222] mb-1 flex items-center gap-2">
+                  <span className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-[8px]">2</span>
+                  目視確認
+                </h4>
+                <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                  リンクを開く前に、下部に表示されている実際のURLに不審な点がないか、ご自身でもご確認いただけます。
+                </p>
+              </div>
+
+              <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                <h4 className="text-[12px] font-black text-[#222222] mb-1 flex items-center gap-2">
+                  <span className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-[8px]">3</span>
+                  コミュニティ報告
+                </h4>
+                <p className="text-[11px] text-gray-500 leading-relaxed font-medium">
+                  万が一、悪意のあるリンクを発見した場合は「不正確」ボタンで報告してください。一定数の報告により、リンクは自動的に無効化されます。
+                </p>
+              </div>
+            </div>
+
+            <Button 
+              onClick={() => setShowSafetyDialog(false)}
+              className="w-full bg-[#222222] hover:bg-black text-white h-12 rounded-xl font-black transition-all"
+            >
+              閉じる
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 }
