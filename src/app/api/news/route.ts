@@ -40,8 +40,8 @@ export async function GET() {
 
       const rawTitle = getTagContent('title', content) || '';
       
-      // 「Oshi-Link」が含まれるタイトルを対象にする
-      const matchPattern = rawTitle.match(/Oshi-Link[:：]?\s*(.*)/i);
+      // 「Oshi-Link」が含まれるタイトルを対象にする (【Oshi-Link】形式や Oshi-Link: 形式に対応)
+      const matchPattern = rawTitle.match(/(?:【Oshi-Link】|Oshi-Link[:：]?)\s*(.*)/i);
       
       if (matchPattern) {
         // マッチした後の部分を表示用タイトルにする
