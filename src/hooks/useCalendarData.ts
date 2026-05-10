@@ -10,10 +10,12 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [followedGroups, setFollowedGroups] = useState<Group[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // 初期値をtrueに変更
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [followLoading, setFollowLoading] = useState<string | null>(null);
 
   const loadGroups = useCallback(async (userId?: string) => {
+    setLoading(true);
     try {
       const uid = userId || user?.id || '';
       let url = uid ? `/api/groups?user_id=${uid}` : '/api/groups';
@@ -23,16 +25,24 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
       const groups = data.groups || data as unknown as Group[] || [];
       setAllGroups(groups);
       setFollowedGroups(groups.filter(g => g.is_following));
-    } catch {}
+    } catch {
+    } finally {
+      setLoading(false);
+      setIsInitialLoading(false);
+    }
   }, [user?.id, authHeaders]);
 
   const loadEvents = useCallback(async () => {
+    setLoading(true);
     try {
       const res = await fetch('/api/events?t=' + Date.now(), { cache: 'no-store', headers: authHeaders() });
       const data = await res.json() as { events?: Event[] };
       const eventList = data.events || data as unknown as Event[] || [];
       setEvents(eventList);
-    } catch {}
+    } catch {
+    } finally {
+      setLoading(false);
+    }
   }, [authHeaders]);
 
   const handleFollowToggle = async (group: Group, onProfileOpen: () => void) => {
@@ -138,6 +148,7 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
     followedGroups,
     events,
     loading,
+    isInitialLoading,
     setLoading,
     groupLoading,
     followLoading,

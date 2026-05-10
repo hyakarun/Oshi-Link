@@ -44,7 +44,7 @@ export default function App() {
   } = useAuth();
 
   const {
-    allGroups, followedGroups, events, loading, setLoading, groupLoading, followLoading,
+    allGroups, followedGroups, events, loading, isInitialLoading, setLoading, groupLoading, followLoading,
     loadGroups, loadEvents, handleFollowToggle, handleUnfollow, handleSavePersonalization, handleCreateGroup
   } = useCalendarData({ user, authHeaders });
 
@@ -307,7 +307,7 @@ export default function App() {
         />
 
         <div className="flex-1 overflow-hidden">
-          {followedGroups.length === 0 && (
+          {!isInitialLoading && followedGroups.length === 0 && (
             <div className="mx-6 mt-6 p-8 rounded-[32px] bg-gradient-to-br from-[#ff385c] to-[#e00b41] text-white shadow-xl animate-in fade-in slide-in-from-top-4 duration-1000">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="flex-1 space-y-4">
