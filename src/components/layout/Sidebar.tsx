@@ -219,7 +219,14 @@ export function Sidebar({
               <span>カレンダーを探す</span>
             </div>
           </button>
-          <div className="pt-2 text-center">
+          <div className="pt-2 text-center flex flex-col items-center gap-1">
+            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full text-[8px] font-black uppercase tracking-tighter border border-indigo-100/50">
+              <span className="relative flex h-1 w-1">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1 w-1 bg-indigo-500"></span>
+              </span>
+              Beta Test
+            </div>
             <p className="text-[9px] text-gray-300 font-bold tracking-widest uppercase">v1.0.3-refreshed</p>
           </div>
         </div>
