@@ -309,15 +309,30 @@ export default function App() {
         <div className="flex-1 overflow-hidden h-full">
           {!isInitialLoading && followedGroups.length === 0 ? (
             <div className="h-full flex items-center justify-center p-6">
-              <div className="w-full max-w-4xl p-8 md:p-12 rounded-[40px] bg-gradient-to-br from-[#ff385c] to-[#e00b41] text-white shadow-2xl animate-in fade-in zoom-in duration-700 relative overflow-hidden">
+              <div 
+                className="w-full max-w-4xl p-8 md:p-12 rounded-[40px] text-white shadow-2xl animate-in fade-in zoom-in duration-700 relative overflow-hidden"
+                style={{ 
+                  background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 25%, #34A853 50%, #4285F4 100%)',
+                  backgroundSize: '200% 200%',
+                  animation: 'gradientMove 15s ease infinite'
+                }}
+              >
                 {/* 背景の装飾的な要素 */}
-                <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/20 rounded-full blur-3xl animate-pulse" />
                 <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-black/10 rounded-full blur-3xl" />
+
+                <style jsx>{`
+                  @keyframes gradientMove {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                  }
+                `}</style>
 
                 <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
                   <div className="flex-1 space-y-8 text-center md:text-left">
                     <div className="space-y-4">
-                      <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                      <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight drop-shadow-sm">
                         Oshi-Link へ<br />ようこそ！
                       </h2>
                       <p className="text-lg text-white/90 font-medium leading-relaxed max-w-lg">
