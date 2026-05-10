@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldCheck, Info, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Info, ExternalLink, Mail, Users } from 'lucide-react';
 
 type CreditsModalProps = {
   isOpen: boolean;
@@ -62,9 +62,23 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                 </div>
               </section>
 
+              {/* お問い合わせ先セクション */}
               <section className="space-y-4">
                 <h3 className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
-                  <Info className="w-4 h-4" /> Development Partners
+                  <Mail className="w-4 h-4" /> Inquiries
+                </h3>
+                <div className="flex flex-col gap-3">
+                  <CreditItem 
+                    name="TSUKURO! 公式サポート" 
+                    desc="不具合報告・ご要望・その他お問い合わせ" 
+                    url="https://x.com/TSUKUROofficial" 
+                  />
+                </div>
+              </section>
+
+              <section className="space-y-4">
+                <h3 className="flex items-center gap-2 text-[11px] font-black text-gray-400 uppercase tracking-widest">
+                  <Users className="w-4 h-4" /> Development Partners
                 </h3>
                 <div className="flex flex-col gap-3">
                   <CreditItem name="Antigravity" desc="AI Coding Agent (Google Deepmind)" url="https://deepmind.google" />
@@ -74,9 +88,6 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                     url="https://x.com/nagamon_296" 
                   />
                 </div>
-                <p className="text-[10px] text-gray-400 font-bold text-center mt-2 uppercase tracking-widest leading-none">
-                  Inquiries: <a href="https://x.com/TSUKUROofficial" target="_blank" rel="noopener noreferrer" className="text-[#6366f1] hover:underline">@TSUKUROofficial</a>
-                </p>
               </section>
 
               <section className="space-y-4">
