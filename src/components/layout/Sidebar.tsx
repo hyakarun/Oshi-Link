@@ -65,7 +65,10 @@ export function Sidebar({
       `}>
         {/* Header */}
         <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+          <div 
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md" 
+            style={{ background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 33%, #34A853 66%, #4285F4 100%)' }}
+          >
             <Calendar className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
