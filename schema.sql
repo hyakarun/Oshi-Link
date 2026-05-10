@@ -1,9 +1,16 @@
 -- schema.sql
+PRAGMA foreign_keys = OFF;
+DROP TABLE IF EXISTS proposal_votes;
+DROP TABLE IF EXISTS event_proposals;
 DROP TABLE IF EXISTS verifications;
 DROP TABLE IF EXISTS subscriptions;
 DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS user_group_follows;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS magic_links;
+DROP TABLE IF EXISTS sessions;
+PRAGMA foreign_keys = ON;
 
 CREATE TABLE users (
   id TEXT PRIMARY KEY,
@@ -88,6 +95,31 @@ CREATE TABLE sessions (
   user_id TEXT NOT NULL,
   expires_at TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- イベント修正提案テーブル
+CREATE TABLE event_proposals (
+  id TEXT PRIMARY KEY,
+  event_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  reason TEXT,
+  status TEXT DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (event_id) REFERENCES events(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 提案への投票テーブル
+CREATE TABLE proposal_votes (
+  event_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  proposal_id TEXT, -- NULL の場合は「現状維持」への投票とする
+  voted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (event_id, user_id),
+  FOREIGN KEY (event_id) REFERENCES events(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
