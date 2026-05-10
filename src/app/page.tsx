@@ -284,27 +284,30 @@ export default function App() {
       />
 
       <main className="flex-1 flex flex-col min-w-0 relative h-full">
-        <CalendarHeader 
-          currentMonth={currentMonth}
-          view={view}
-          setView={setView}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          onToday={handleToday}
-          onAddEvent={() => { 
-            if (followedGroups.length === 0) {
-              setIsDiscoverOpen(true);
-              return;
-            }
-            setDefaultEventData(null); 
-            setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
-            setIsAddModalOpen(true); 
-          }}
-          setIsMobileMenuOpen={setIsMobileMenuOpen}
-          isRightPanelOpen={isRightPanelOpen}
-          setIsRightPanelOpen={setIsRightPanelOpen}
-          themeColor={themeColor}
-        />
+        {/* フォロー中が0件の時はヘッダーを非表示にする */}
+        {(!isInitialLoading && followedGroups.length === 0) ? null : (
+          <CalendarHeader 
+            currentMonth={currentMonth}
+            view={view}
+            setView={setView}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onToday={handleToday}
+            onAddEvent={() => { 
+              if (followedGroups.length === 0) {
+                setIsDiscoverOpen(true);
+                return;
+              }
+              setDefaultEventData(null); 
+              setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
+              setIsAddModalOpen(true); 
+            }}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
+            isRightPanelOpen={isRightPanelOpen}
+            setIsRightPanelOpen={setIsRightPanelOpen}
+            themeColor={themeColor}
+          />
+        )}
 
         <div className="flex-1 overflow-hidden h-full">
           {!isInitialLoading && followedGroups.length === 0 ? (
