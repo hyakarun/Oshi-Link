@@ -306,70 +306,90 @@ export default function App() {
           themeColor={themeColor}
         />
 
-        <div className="flex-1 overflow-hidden">
-          {!isInitialLoading && followedGroups.length === 0 && (
-            <div className="mx-6 mt-6 p-8 rounded-[32px] bg-gradient-to-br from-[#ff385c] to-[#e00b41] text-white shadow-xl animate-in fade-in slide-in-from-top-4 duration-1000">
-              <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="flex-1 space-y-4">
-                  <h2 className="text-3xl font-black tracking-tight">Oshi-Link へようこそ！</h2>
-                  <p className="text-white/90 font-medium leading-relaxed">
-                    推しの予定をみんなで共有・管理するカレンダーへようこそ。<br />
-                    まずは気になるグループをフォローして、カレンダーを完成させましょう。
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    {[
-                      { icon: <Users className="w-5 h-5" />, title: "共有", desc: "ファン全員で更新" },
-                      { icon: <Bell className="w-5 h-5" />, title: "通知", desc: "見逃しをゼロに" },
-                      { icon: <Calendar className="w-5 h-5" />, title: "信頼", desc: "不正確な情報を排除" },
-                    ].map((f, i) => (
-                      <div key={i} className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-                        <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-2">
-                          {f.icon}
+        <div className="flex-1 overflow-hidden h-full">
+          {!isInitialLoading && followedGroups.length === 0 ? (
+            <div className="h-full flex items-center justify-center p-6">
+              <div className="w-full max-w-4xl p-8 md:p-12 rounded-[40px] bg-gradient-to-br from-[#ff385c] to-[#e00b41] text-white shadow-2xl animate-in fade-in zoom-in duration-700 relative overflow-hidden">
+                {/* 背景の装飾的な要素 */}
+                <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-black/10 rounded-full blur-3xl" />
+
+                <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                  <div className="flex-1 space-y-8 text-center md:text-left">
+                    <div className="space-y-4">
+                      <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight">
+                        Oshi-Link へ<br />ようこそ！
+                      </h2>
+                      <p className="text-lg text-white/90 font-medium leading-relaxed max-w-lg">
+                        推しの予定をみんなで共有・管理するカレンダーへようこそ。<br />
+                        まずは気になるグループをフォローして、あなただけのカレンダーを完成させましょう。
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                      {[
+                        { icon: <Users className="w-6 h-6" />, title: "共有", desc: "ファン全員で更新" },
+                        { icon: <Bell className="w-6 h-6" />, title: "通知", desc: "見逃しをゼロに" },
+                        { icon: <Calendar className="w-6 h-6" />, title: "信頼", desc: "不正確な情報を排除" },
+                      ].map((f, i) => (
+                        <div key={i} className="bg-white/10 backdrop-blur-md rounded-[24px] p-5 border border-white/10 hover:bg-white/20 transition-all cursor-default group">
+                          <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            {f.icon}
+                          </div>
+                          <h3 className="text-sm font-black mb-1">{f.title}</h3>
+                          <p className="text-[11px] text-white/60 font-bold leading-tight">{f.desc}</p>
                         </div>
-                        <h3 className="text-xs font-black">{f.title}</h3>
-                        <p className="text-[10px] text-white/60 font-medium">{f.desc}</p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+
+                    <div className="pt-4">
+                      <Button 
+                        onClick={() => setIsDiscoverOpen(true)}
+                        className="h-14 px-10 bg-white text-[#ff385c] hover:bg-white/90 rounded-[20px] font-black text-base shadow-xl transition-all active:scale-[0.95] hover:shadow-2xl hover:-translate-y-0.5"
+                      >
+                        <Search className="w-5 h-5 mr-3" /> カレンダーを探しに行く
+                      </Button>
+                    </div>
                   </div>
-                  <Button 
-                    onClick={() => setIsDiscoverOpen(true)}
-                    className="h-12 px-8 bg-white text-[#ff385c] hover:bg-white/90 rounded-2xl font-black text-sm shadow-lg transition-all active:scale-[0.98] mt-4"
-                  >
-                    <Search className="w-4 h-4 mr-2" /> カレンダーを探しに行く
-                  </Button>
-                </div>
-                <div className="hidden lg:block w-64 h-64 relative shrink-0">
-                  <div className="absolute inset-0 bg-white/10 rounded-full animate-pulse" />
-                  <div className="absolute inset-4 bg-white/10 rounded-full animate-pulse delay-75" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Calendar className="w-32 h-32 text-white/40 rotate-12" />
+
+                  <div className="hidden lg:block w-80 h-80 relative shrink-0">
+                    <div className="absolute inset-0 bg-white/10 rounded-[60px] rotate-12 animate-pulse" />
+                    <div className="absolute inset-0 bg-white/5 rounded-[60px] -rotate-6 animate-pulse delay-700" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative">
+                        <Calendar className="w-40 h-40 text-white/20 rotate-12" />
+                        <div className="absolute -top-4 -right-4 w-20 h-20 bg-white/20 rounded-3xl backdrop-blur-xl flex items-center justify-center animate-bounce">
+                          <Search className="w-10 h-10 text-white" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          ) : (
+            <CalendarView 
+              view={view}
+              currentMonth={currentMonth}
+              events={filteredEvents}
+              themeColor={themeColor}
+              getGroupColor={getGroupColor}
+              onEventClick={setSelectedEvent}
+              onDateClick={(d, startTime, endTime) => {
+                if (followedGroups.length === 0) {
+                  setIsDiscoverOpen(true);
+                  return;
+                }
+                setDefaultEventData({ 
+                  date: format(d, 'yyyy-MM-dd'),
+                  startTime,
+                  endTime
+                });
+                setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
+                setIsAddModalOpen(true);
+              }}
+            />
           )}
-
-          <CalendarView 
-            view={view}
-            currentMonth={currentMonth}
-            events={filteredEvents}
-            themeColor={themeColor}
-            getGroupColor={getGroupColor}
-            onEventClick={setSelectedEvent}
-            onDateClick={(d, startTime, endTime) => {
-              if (followedGroups.length === 0) {
-                setIsDiscoverOpen(true);
-                return;
-              }
-              setDefaultEventData({ 
-                date: format(d, 'yyyy-MM-dd'),
-                startTime,
-                endTime
-              });
-              setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
-              setIsAddModalOpen(true);
-            }}
-          />
         </div>
 
         <AdBanner premiumStatus={user?.premium_status} />
