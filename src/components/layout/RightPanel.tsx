@@ -44,7 +44,7 @@ export function RightPanel({
         {/* Header */}
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-[#ff385c]">
+            <div className="w-8 h-8 rounded-xl bg-gray-100 flex items-center justify-center text-[#6366f1]">
               <Calendar className="w-4 h-4" />
             </div>
             <h2 className="text-sm font-black text-[#222222] uppercase tracking-widest">予定一覧</h2>
@@ -92,7 +92,7 @@ export function RightPanel({
                       </span>
                     </div>
                     
-                    <h3 className="text-xs font-black text-[#222222] mb-2 leading-tight group-hover:text-[#ff385c] transition-colors line-clamp-2">
+                    <h3 className="text-xs font-black text-[#222222] mb-2 leading-tight group-hover:text-[#6366f1] transition-colors line-clamp-2">
                       {e.title}
                     </h3>
 

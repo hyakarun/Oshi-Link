@@ -40,7 +40,10 @@ export function ProfileModal({
       <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
         <div className="p-8 space-y-6 max-h-[85vh] overflow-y-auto">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-[#ff385c] to-[#e00b41] rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg overflow-hidden">
+            <div 
+              className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg overflow-hidden"
+              style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
+            >
               {user.avatar_url ? (
                 <img src={user.avatar_url} alt={user.name} className="w-full h-full object-cover" />
               ) : (
@@ -58,14 +61,14 @@ export function ProfileModal({
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">表示名</label>
-                <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" required />
+                <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" required />
               </div>
             </div>
 
             {/* 通知設定セクション */}
             <div className="space-y-4 pt-2 border-t border-gray-100">
               <div className="flex items-center gap-2 mb-1">
-                <Bell className="w-4 h-4 text-[#ff385c]" />
+                <Bell className="w-4 h-4 text-[#6366f1]" />
                 <h3 className="text-sm font-black text-[#222222] uppercase tracking-wider">通知設定</h3>
               </div>
 
@@ -85,7 +88,7 @@ export function ProfileModal({
                     type="checkbox" 
                     name="email_enabled" 
                     defaultChecked={user.email_enabled} 
-                    className="w-5 h-5 accent-[#ff385c] rounded-md"
+                    className="w-5 h-5 accent-[#6366f1] rounded-md"
                   />
                 </label>
 
@@ -111,7 +114,7 @@ export function ProfileModal({
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                  <Info className="w-5 h-5 text-gray-400 group-hover:text-[#ff385c]" />
+                  <Info className="w-5 h-5 text-gray-400 group-hover:text-[#6366f1]" />
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-black text-[#222222]">クレジットと法務情報</p>

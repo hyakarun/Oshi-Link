@@ -49,7 +49,7 @@ export function DiscoverModal({
               placeholder="グループ名で検索..."
               value={discoverSearch}
               onChange={e => setDiscoverSearch(e.target.value)}
-              className="w-full h-11 bg-gray-50 rounded-xl pl-10 pr-4 outline-none border-none focus:ring-2 focus:ring-[#ff385c] font-medium text-[#222222] text-sm"
+              className="w-full h-11 bg-gray-50 rounded-xl pl-10 pr-4 outline-none border-none focus:ring-2 focus:ring-[#6366f1] font-medium text-[#222222] text-sm"
             />
           </div>
 
@@ -61,7 +61,7 @@ export function DiscoverModal({
               { icon: <Calendar className="w-4 h-4" />, title: "情報の正確性", desc: "みんなでチェックして正確な情報を維持。" },
             ].map((f, i) => (
               <div key={i} className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50">
-                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#6366f1] shadow-sm shrink-0">
                   {f.icon}
                 </div>
                 <div>
@@ -79,7 +79,7 @@ export function DiscoverModal({
               <p className="text-gray-400 font-bold text-sm">見つかりませんでした</p>
               <button
                 onClick={openCreateGroup}
-                className="mt-2 text-[#ff385c] font-bold text-xs hover:underline"
+                className="mt-2 text-[#6366f1] font-bold text-xs hover:underline"
               >
                 新しくカレンダーを作成する →
               </button>
@@ -89,14 +89,14 @@ export function DiscoverModal({
               {discoverFiltered.map(g => (
                 <div
                   key={g.id}
-                  className={`flex items-center gap-3 p-2.5 sm:p-3 rounded-xl transition-all border ${g.is_following ? 'bg-[#fff0f3] border-[#ff385c] border-opacity-20' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
+                  className={`flex items-center gap-3 p-2.5 sm:p-3 rounded-xl transition-all border ${g.is_following ? 'bg-indigo-50/50 border-[#6366f1] border-opacity-20' : 'bg-white border-gray-100 hover:border-gray-200 hover:bg-gray-50'}`}
                 >
                   <GroupAvatar group={g} size="sm" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <h3 className="font-black text-[#222222] truncate text-xs sm:text-sm max-w-[100px] sm:max-w-none">{g.name}</h3>
                       {g.is_following && (
-                        <Badge className="bg-[#ff385c] text-white border-none text-[7px] px-1 py-0 shrink-0">フォロー中</Badge>
+                        <Badge className="bg-[#6366f1] text-white border-none text-[7px] px-1 py-0 shrink-0">フォロー中</Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mt-0.5">
@@ -115,7 +115,7 @@ export function DiscoverModal({
                       className={`h-7 px-2.5 rounded-lg font-black text-[10px] transition-all ${
                         g.is_following
                           ? 'bg-white border text-gray-400 hover:text-red-500 hover:border-red-500'
-                          : 'bg-[#ff385c] text-white hover:bg-[#e00b41]'
+                          : 'bg-[#6366f1] text-white hover:bg-[#e00b41]'
                       }`}
                     >
                       {followLoading === g.id ? (

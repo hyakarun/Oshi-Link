@@ -131,7 +131,7 @@ export default function App() {
   }), [events, activeGroupId, followedGroups]);
 
   const themeColor = useMemo(() => {
-    if (activeGroupId === '0') return '#ff385c';
+    if (activeGroupId === '0') return '#6366f1';
     const g = allGroups.find(item => item.id === activeGroupId);
     return g?.custom_theme_color || groupColorSolid(activeGroupId);
   }, [allGroups, activeGroupId]);
@@ -251,7 +251,7 @@ export default function App() {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-gray-100 border-t-[#ff385c] rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-gray-100 border-t-[#6366f1] rounded-full animate-spin" />
           <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Oshi-Link Loading...</p>
         </div>
       </div>
@@ -259,7 +259,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen bg-[#fafafa] overflow-hidden text-[#222222] font-sans selection:bg-red-100 selection:text-[#ff385c]">
+    <div className="flex h-screen bg-[#fafafa] overflow-hidden text-[#222222] font-sans selection:bg-indigo-100 selection:text-[#6366f1]">
       <Sidebar 
         user={user}
         followedGroups={followedGroups}
@@ -363,7 +363,7 @@ export default function App() {
                     <div className="pt-4">
                       <Button 
                         onClick={() => setIsDiscoverOpen(true)}
-                        className="h-14 px-10 bg-white text-[#ff385c] hover:bg-white/90 rounded-[20px] font-black text-base shadow-xl transition-all active:scale-[0.95] hover:shadow-2xl hover:-translate-y-0.5"
+                        className="h-14 px-10 bg-white text-[#6366f1] hover:bg-white/90 rounded-[20px] font-black text-base shadow-xl transition-all active:scale-[0.95] hover:shadow-2xl hover:-translate-y-0.5"
                       >
                         <Search className="w-5 h-5 mr-3" /> カレンダーを探しに行く
                       </Button>
@@ -428,7 +428,7 @@ export default function App() {
           className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-white border border-r-0 border-gray-100 rounded-l-2xl p-3 shadow-xl hover:pr-5 transition-all group flex items-center justify-center"
           title="予定一覧を表示"
         >
-          <ChevronLeft className="w-5 h-5 text-gray-400 group-hover:text-[#ff385c]" />
+          <ChevronLeft className="w-5 h-5 text-gray-400 group-hover:text-[#6366f1]" />
         </button>
       )}
 
@@ -525,7 +525,7 @@ export default function App() {
         <DialogContent className="max-w-md p-8 rounded-[32px] bg-white border-none shadow-2xl top-1/2 -translate-y-1/2">
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
-              <AlertCircle className="w-8 h-8 text-[#ff385c]" />
+              <AlertCircle className="w-8 h-8 text-[#6366f1]" />
             </div>
             <DialogTitle className="text-xl font-black text-[#222222]">投稿に関するご注意</DialogTitle>
             <DialogDescription className="text-sm text-gray-500 font-medium leading-relaxed">

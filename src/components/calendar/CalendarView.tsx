@@ -115,13 +115,13 @@ function TimeGrid({
             <div
               key={d.toISOString()}
               className={`flex-1 py-3 text-center border-r border-gray-100 last:border-r-0 ${
-                isSameDay(d, new Date()) ? 'bg-[#ff385c]/5' : ''
+                isSameDay(d, new Date()) ? 'bg-[#6366f1]/5' : ''
               }`}
             >
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
                 {format(d, 'EEE')}
               </p>
-              <p className={`text-xl font-black ${isSameDay(d, new Date()) ? 'text-[#ff385c]' : 'text-[#222222]'}`}>
+              <p className={`text-xl font-black ${isSameDay(d, new Date()) ? 'text-[#6366f1]' : 'text-[#222222]'}`}>
                 {format(d, 'd')}
               </p>
             </div>
@@ -229,8 +229,8 @@ function TimeGrid({
                         height: ((dragBottomMin - dragTopMin) / 60) * HOUR_HEIGHT,
                       }}
                     >
-                      <div className="h-full mx-0.5 bg-[#ff385c]/15 border-2 border-[#ff385c] border-dashed rounded-xl">
-                        <div className="absolute top-1 left-2 bg-[#ff385c] text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow whitespace-nowrap">
+                      <div className="h-full mx-0.5 bg-[#6366f1]/15 border-2 border-[#6366f1] border-dashed rounded-xl">
+                        <div className="absolute top-1 left-2 bg-[#6366f1] text-white text-[9px] font-black px-1.5 py-0.5 rounded-md shadow whitespace-nowrap">
                           {minsToTime(dragTopMin)} → {minsToTime(dragBottomMin)}
                         </div>
                       </div>
@@ -284,7 +284,7 @@ export function CalendarView({
             <div className="mb-1">
               <span className={`text-[10px] md:text-xs font-black ${
                 isSameDay(d, new Date())
-                  ? 'bg-[#ff385c] text-white w-5 h-5 md:w-6 md:h-6 inline-flex items-center justify-center rounded-full'
+                  ? 'bg-[#6366f1] text-white w-5 h-5 md:w-6 md:h-6 inline-flex items-center justify-center rounded-full'
                   : !isSameMonth(d, monthStart) ? 'text-gray-300' : 'text-[#222222]'
               }`}>
                 {format(d, 'd')}

@@ -64,7 +64,7 @@ export function AddEventModal({
                   <select 
                     value={selectedGroupId}
                     onChange={(e) => setSelectedGroupId(e.target.value)}
-                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
+                    className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     required
                   >
                     <option value="" disabled>カレンダーを選択してください</option>
@@ -72,29 +72,29 @@ export function AddEventModal({
                       <option key={g.id} value={g.id}>{g.name}</option>
                     ))}
                   </select>
-                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#ff385c] transition-colors">
+                  <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#6366f1] transition-colors">
                     <ChevronDown className="w-5 h-5" />
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名 <span className="text-[#ff385c]">*</span></label>
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">イベント名 <span className="text-[#6366f1]">*</span></label>
                 <input 
                   name="title" 
                   placeholder="ライブ、リリースイベントなど" 
-                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
+                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none box-border"
                   required 
                 />
               </div>
 
               <div className="space-y-2 min-w-0 overflow-hidden">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付 <span className="text-[#ff385c]">*</span></label>
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">日付 <span className="text-[#6366f1]">*</span></label>
                 <input 
                   type="date" 
                   name="date" 
                   defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                  className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
                   style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                   required 
                 />
@@ -102,12 +102,12 @@ export function AddEventModal({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2 min-w-0 overflow-hidden">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#ff385c]">*</span></label>
+                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#6366f1]">*</span></label>
                   <input 
                     type="time" 
                     name="startTime" 
                     defaultValue={defaultEventData?.startTime}
-                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
+                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
                     style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                     required
                   />
@@ -118,7 +118,7 @@ export function AddEventModal({
                     type="time" 
                     name="endTime" 
                     defaultValue={defaultEventData?.endTime}
-                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
+                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
                     style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                   />
                 </div>
@@ -136,12 +136,12 @@ export function AddEventModal({
                         // カテゴリ変更時にサブカテゴリをリセット
                         setEventSubCategory(newCat === 'オフライン系' ? 'ライブ・コンサート' : 'YouTube生配信');
                       }}
-                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
+                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     >
                       <option value="オフライン系">オフライン系</option>
                       <option value="オンライン系">オンライン系</option>
                     </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#ff385c] transition-colors">
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#6366f1] transition-colors">
                       <ChevronDown className="w-5 h-5" />
                     </div>
                   </div>
@@ -152,7 +152,7 @@ export function AddEventModal({
                     <select 
                       value={eventSubCategory}
                       onChange={(e) => setEventSubCategory(e.target.value)}
-                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
+                      className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border"
                     >
                       {eventCategory === 'オフライン系' ? (
                         <>
@@ -174,7 +174,7 @@ export function AddEventModal({
                         </>
                       )}
                     </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#ff385c] transition-colors">
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#6366f1] transition-colors">
                       <ChevronDown className="w-5 h-5" />
                     </div>
                   </div>
@@ -202,7 +202,7 @@ export function AddEventModal({
                   <input 
                     name="location" 
                     placeholder="チャンネル名、番組名、URLなど..." 
-                    className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222] transition-all"
+                    className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] transition-all"
                   />
                 ) : (
                   <>
@@ -220,16 +220,16 @@ export function AddEventModal({
                 <textarea 
                   name="description" 
                   placeholder="イベントの詳細や持ち物など" 
-                  className="w-full h-32 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl p-5 font-medium transition-all outline-none resize-none"
+                  className="w-full h-32 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl p-5 font-medium transition-all outline-none resize-none"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">参考URL <span className="text-[#ff385c]">*</span></label>
+                <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">参考URL <span className="text-[#6366f1]">*</span></label>
                 <input 
                   name="source_url" 
                   placeholder="公式サイト、告知ツイートなど" 
-                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#ff385c] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
+                  className="w-full h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-5 font-bold transition-all outline-none"
                   required
                 />
               </div>
