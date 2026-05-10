@@ -180,7 +180,7 @@ function LoginContent() {
     return (
       <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
         <div className="flex flex-col items-center gap-6">
-          <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+          <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
           <p className="text-sm font-bold text-gray-400">認証情報を確認中...</p>
         </div>
       </div>
@@ -192,12 +192,12 @@ function LoginContent() {
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full animate-in fade-in zoom-in-95 duration-500">
         {authStep === 'logging_in' ? (
           <div className="py-12 flex flex-col items-center gap-4">
-            <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+            <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
             <h2 className="text-lg font-black text-[#222222]">ログイン中...</h2>
           </div>
         ) : authStep === 'sent' ? (
           <div className="text-center space-y-4 py-8">
-            <div className="w-16 h-16 bg-[#fff0f3] rounded-2xl flex items-center justify-center mx-auto">
+            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto">
               <span className="text-3xl">📧</span>
             </div>
             <h2 className="text-xl font-black text-[#222222]">メールを確認してください</h2>
@@ -208,7 +208,7 @@ function LoginContent() {
             <p className="text-xs text-gray-400 mt-4">リンクは15分間有効です</p>
             <button
               onClick={() => { setAuthStep('idle'); setAuthEmail(''); }}
-              className="text-sm font-bold text-[#ff385c] hover:underline mt-4"
+              className="text-sm font-bold text-[#6366f1] hover:underline mt-4"
             >
               別のメールアドレスで試す
             </button>
@@ -216,7 +216,19 @@ function LoginContent() {
         ) : (
           <div className="space-y-6">
             <div className="text-center space-y-2">
-              <div className="w-14 h-14 bg-[#ff385c] rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-4">
+              <div className="flex items-center justify-center mb-4">
+                <div className="flex items-center justify-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-100/50">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500"></span>
+                  </span>
+                  Beta Test in Progress
+                </div>
+              </div>
+              <div 
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-4"
+                style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
+              >
                 <Calendar className="w-7 h-7" />
               </div>
               <h2 className="text-2xl font-black text-[#222222] tracking-tight">Oshi-Link をはじめる</h2>
@@ -226,7 +238,7 @@ function LoginContent() {
 
               {/* サービス説明セクション */}
               <div className="space-y-3 pt-2">
-                <p className="text-[10px] font-black text-[#ff385c] uppercase tracking-widest text-center">Service Features</p>
+                <p className="text-[10px] font-black text-[#6366f1] uppercase tracking-widest text-center">Service Features</p>
                 <div className="grid grid-cols-1 gap-3">
                   {[
                     { 
@@ -249,7 +261,7 @@ function LoginContent() {
                       key={i} 
                       className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#ff385c] shadow-sm shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#6366f1] shadow-sm shrink-0">
                         {f.icon}
                       </div>
                       <div className="text-left">
@@ -282,13 +294,18 @@ function LoginContent() {
               <form onSubmit={handleSendMagicLink} className="space-y-4">
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">お名前（初回のみ）</label>
-                  <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" />
+                  <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">メールアドレス <span className="text-red-500">*</span></label>
-                  <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#ff385c] outline-none font-bold text-[#222222]" required />
+                  <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" required />
                 </div>
-                <button type="submit" disabled={loading} className="w-full h-14 bg-[#ff385c] hover:bg-[#e00b41] text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base">
+                <button 
+                  type="submit" 
+                  disabled={loading} 
+                  className="w-full h-14 text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base"
+                  style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
+                >
                   {loading ? <Loader2 className="animate-spin h-5 w-5 mx-auto" /> : 'ログインリンクを送る 📧'}
                 </button>
               </form>
@@ -307,7 +324,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
-        <Loader2 className="animate-spin h-10 w-10 text-[#ff385c]" />
+        <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
       </div>
     }>
       <LoginContent />
