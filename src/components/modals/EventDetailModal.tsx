@@ -424,6 +424,16 @@ export function EventDetailModal({
                   万が一、悪意のあるリンクを発見した場合は「不正確」ボタンで報告してください。一定数の報告により、リンクは自動的に無効化されます。
                 </p>
               </div>
+
+              <div className="p-4 bg-blue-50/30 rounded-2xl border border-blue-100/50">
+                <p className="text-[10px] text-blue-600 font-bold leading-relaxed flex items-center gap-1.5">
+                  <AlertCircle className="w-3 h-3" />
+                  今後のアップデート予定
+                </p>
+                <p className="text-[10px] text-blue-500/70 font-medium mt-1">
+                  現在はシステム独自のチェックを行っていますが、今後は Google Safe Browsing 等の外部サービスとも連携し、さらに安全性を高めていく予定です。
+                </p>
+              </div>
             </div>
 
             <Button 
