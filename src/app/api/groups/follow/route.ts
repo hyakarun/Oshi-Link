@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
       const followCount = followCountResult.count;
       const premiumStatus = user.premium_status || 'free';
 
-      let limit = 1; // 無課金・買い切り（広告削除のみ）
+      let limit = 3; // 無課金・買い切り（広告削除のみ）
       if (premiumStatus === 'pro') limit = 10; // プロ（サブスクリプション）
 
       if (followCount >= limit) {
