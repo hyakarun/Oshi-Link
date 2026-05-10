@@ -201,19 +201,23 @@ export function Sidebar({
             className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-xl font-bold text-[11px] transition-all group"
           >
             <div className="flex items-center gap-2">
-              <Bell className="w-3.5 h-3.5 group-hover:text-[#ff385c]" />
+              <Bell className="w-3.5 h-3.5 group-hover:text-blue-500" />
               <span>運営からのお知らせ</span>
             </div>
             {hasNewNews && (
-              <span className="bg-[#ff385c] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full animate-bounce shadow-sm">New!</span>
+              <span className="bg-gradient-to-r from-[#EA4335] to-[#4285F4] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full animate-bounce shadow-sm">New!</span>
             )}
           </button>
 
           <button
             onClick={() => { setIsDiscoverOpen(true); setIsMobileMenuOpen(false); }}
-            className="w-full flex items-center justify-center gap-2 h-11 border-2 border-[#ff385c] text-[#ff385c] rounded-xl font-black text-[11px] hover:bg-red-50 transition-all active:scale-[0.98]"
+            className="w-full flex items-center justify-center gap-2 h-11 relative rounded-xl font-black text-[11px] transition-all active:scale-[0.98] group overflow-hidden"
           >
-            <Search className="w-3.5 h-3.5" /> カレンダーを探す
+            <div className="absolute inset-0 bg-white border-2 border-transparent bg-clip-padding" style={{ borderImage: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4) 1' }}></div>
+            <div className="relative flex items-center gap-2 text-gray-700 group-hover:text-black">
+              <Search className="w-3.5 h-3.5" /> 
+              <span>カレンダーを探す</span>
+            </div>
           </button>
           <div className="pt-2 text-center">
             <p className="text-[9px] text-gray-300 font-bold tracking-widest uppercase">v1.0.3-refreshed</p>

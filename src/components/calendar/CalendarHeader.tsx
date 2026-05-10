@@ -90,8 +90,10 @@ export function CalendarHeader({
 
         <Button 
           onClick={onAddEvent}
-          className="text-white rounded-xl h-10 md:h-11 px-4 md:px-6 text-xs font-black shadow-lg shadow-red-200 active:scale-95 transition-all flex items-center gap-2"
-          style={{ backgroundColor: themeColor }}
+          className="text-white rounded-xl h-10 md:h-11 px-4 md:px-6 text-xs font-black shadow-lg active:scale-95 transition-all flex items-center gap-2"
+          style={themeColor === '#ff385c' 
+            ? { background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' } 
+            : { backgroundColor: themeColor }}
         >
           <Plus className="w-4 h-4" /> <span className="hidden md:inline">予定を追加</span>
         </Button>
