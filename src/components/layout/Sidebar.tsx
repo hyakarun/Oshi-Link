@@ -211,13 +211,10 @@ export function Sidebar({
 
           <button
             onClick={() => { setIsDiscoverOpen(true); setIsMobileMenuOpen(false); }}
-            className="w-full flex items-center justify-center gap-2 h-11 relative rounded-xl font-black text-[11px] transition-all active:scale-[0.98] group overflow-hidden"
+            className="w-full flex items-center justify-center gap-2 h-11 border-2 border-[#ff385c] text-[#ff385c] rounded-xl font-black text-[11px] hover:bg-red-50 transition-all active:scale-[0.98] group"
           >
-            <div className="absolute inset-0 bg-white border-2 border-transparent bg-clip-padding" style={{ borderImage: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4) 1' }}></div>
-            <div className="relative flex items-center gap-2 text-gray-700 group-hover:text-black">
-              <Search className="w-3.5 h-3.5" /> 
-              <span>カレンダーを探す</span>
-            </div>
+            <Search className="w-3.5 h-3.5" /> 
+            <span>カレンダーを探す</span>
           </button>
           <div className="pt-2 text-center flex flex-col items-center gap-1">
             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full text-[8px] font-black uppercase tracking-tighter border border-indigo-100/50">
