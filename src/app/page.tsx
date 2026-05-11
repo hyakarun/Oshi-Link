@@ -318,7 +318,7 @@ export default function App() {
               <div 
                 className="w-full max-w-4xl p-8 md:p-12 rounded-[40px] text-white shadow-2xl animate-in fade-in zoom-in duration-700 relative overflow-hidden"
                 style={{ 
-                  background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 25%, #34A853 50%, #4285F4 100%)',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%)',
                   backgroundSize: '200% 200%',
                   animation: 'gradientMove 15s ease infinite'
                 }}
@@ -338,6 +338,13 @@ export default function App() {
                 <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
                   <div className="flex-1 space-y-8 text-center md:text-left">
                     <div className="space-y-4">
+                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-[10px] font-black uppercase tracking-[0.2em] mb-2 shadow-sm">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                        </span>
+                        Public Beta Test
+                      </div>
                       <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-tight drop-shadow-sm">
                         Oshi-Link へ<br />ようこそ！
                       </h2>
