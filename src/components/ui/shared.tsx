@@ -4,7 +4,7 @@ import { Group } from '@/lib/types';
 export const FALLBACK_IMG = 'https://images.unsplash.com/photo-1540039155732-d67414bc5c4a?w=800&q=80';
 
 export const GROUP_COLORS = [
-  'from-[#ff385c] to-[#e00b41]',
+  'from-indigo-500 to-indigo-700',
   'from-purple-500 to-purple-700',
   'from-blue-500 to-blue-700',
   'from-emerald-500 to-emerald-700',
@@ -14,7 +14,7 @@ export const GROUP_COLORS = [
 ];
 
 export const GROUP_COLORS_SOLID = [
-  '#ff385c', // Default Oshi Pink
+  '#6366f1', // Indigo
   '#a855f7', // Purple
   '#3b82f6', // Blue
   '#10b981', // Emerald

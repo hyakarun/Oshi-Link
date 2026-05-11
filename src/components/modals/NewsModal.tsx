@@ -50,7 +50,7 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
       <DialogContent className="max-w-md p-0 overflow-hidden rounded-[32px] border-none shadow-2xl bg-white bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2">
         <div className="p-8 space-y-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-[#ff385c] rounded-2xl flex items-center justify-center text-white shadow-lg">
+            <div className="w-12 h-12 bg-[#6366f1] rounded-2xl flex items-center justify-center text-white shadow-lg">
               <Bell className="w-6 h-6" />
             </div>
             <div>
@@ -64,7 +64,7 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
           <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
             {loading ? (
               <div className="py-12 flex flex-col items-center gap-3">
-                <Loader2 className="w-8 h-8 animate-spin text-[#ff385c]" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#6366f1]" />
                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Loading news...</p>
               </div>
             ) : news.length === 0 ? (
@@ -84,9 +84,9 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
                     <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                       {item.pubDate ? format(new Date(item.pubDate), 'yyyy.MM.dd', { locale: ja }) : ''}
                     </span>
-                    <ExternalLink className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#ff385c] transition-colors" />
+                    <ExternalLink className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#6366f1] transition-colors" />
                   </div>
-                  <h3 className="text-sm font-black text-[#222222] leading-snug group-hover:text-[#ff385c] transition-colors">
+                  <h3 className="text-sm font-black text-[#222222] leading-snug group-hover:text-[#6366f1] transition-colors">
                     {item.title}
                   </h3>
                   {item.summary && (
