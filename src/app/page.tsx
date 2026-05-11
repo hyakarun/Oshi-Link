@@ -318,7 +318,7 @@ export default function App() {
               <div 
                 className="w-full max-w-4xl p-8 md:p-12 rounded-[40px] text-white shadow-2xl animate-in fade-in zoom-in duration-700 relative overflow-hidden"
                 style={{ 
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #3730a3 100%)',
+                  background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 25%, #34A853 50%, #4285F4 100%)',
                   backgroundSize: '200% 200%',
                   animation: 'gradientMove 15s ease infinite'
                 }}
@@ -391,11 +391,11 @@ export default function App() {
                         </div>
                       </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
-          ) : (
+          </div>
+        ) : (
             <CalendarView 
               view={view}
               currentMonth={currentMonth}

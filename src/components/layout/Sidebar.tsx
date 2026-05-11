@@ -67,7 +67,7 @@ export function Sidebar({
         <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3">
           <div 
             className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md" 
-            style={{ background: '#6366f1' }}
+            style={{ background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 33%, #34A853 66%, #4285F4 100%)' }}
           >
             <Calendar className="w-5 h-5" />
           </div>
