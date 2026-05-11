@@ -13,6 +13,15 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden border-none rounded-[32px] bg-white shadow-2xl flex flex-col h-[85vh]">
+        {/* Beta Status Banner */}
+        <div className="bg-indigo-600 text-white px-4 py-2.5 text-center text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shrink-0">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+          </span>
+          Oshi-Link Public Beta Test
+        </div>
+
         <DialogHeader className="p-8 bg-gray-50 border-b border-gray-100 shrink-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-2xl bg-[#6366f1] flex items-center justify-center shadow-lg shadow-[#6366f1]/20">
