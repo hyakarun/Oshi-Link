@@ -137,9 +137,12 @@ export default function App() {
   }, [allGroups, activeGroupId]);
 
   const getGroupColor = useCallback((groupId: string) => {
+    // 「すべての予定」表示の時は、予定の色を一律で青（#6366f1）にする
+    if (activeGroupId === '0') return '#6366f1';
+    
     const g = allGroups.find(item => item.id === groupId);
     return g?.custom_theme_color || groupColorSolid(groupId);
-  }, [allGroups]);
+  }, [allGroups, activeGroupId]);
 
   // Handlers
   const handleToday = () => setCurrentMonth(new Date());
