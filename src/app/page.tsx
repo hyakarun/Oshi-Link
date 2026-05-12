@@ -8,7 +8,7 @@ import {
   Calendar, 
   Search 
 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { format, addMonths, subMonths, isSameDay, parseISO, addDays } from 'date-fns';
 import { Group, Event, View } from '@/lib/types';
 
@@ -30,13 +30,15 @@ import { AdBanner } from '@/components/ui/AdBanner';
 import { groupColorSolid } from '@/components/ui/shared';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Suspense } from 'react';
 
 // Hooks
 import { useAuth } from '@/hooks/useAuth';
 import { useCalendarData } from '@/hooks/useCalendarData';
 
-export default function App() {
+export function AppContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { 
     user, sessionToken, isAuthChecking, mounted, checkAuth, authHeaders,
     logout, loading: authLoading, handleProfileUpdate,
@@ -50,6 +52,22 @@ export default function App() {
 
   // UI States
   const [activeGroupId, setActiveGroupId] = useState<string>('0');
+
+  // URL Parameter Handling
+  useEffect(() => {
+    if (isAuthChecking || !mounted) return;
+
+    const groupParam = searchParams.get('group');
+    if (groupParam) {
+      if (!user) {
+        // 未ログインならログイン画面へ飛ばす
+        router.push(`/login?group=${groupParam}`);
+      } else {
+        // ログイン済みならそのグループを選択状態にする
+        setActiveGroupId(groupParam);
+      }
+    }
+  }, [searchParams, user, isAuthChecking, mounted, router]);
   const [view, setView] = useState<View>('month');
   const [currentMonth, setCurrentMonth] = useState(new Date());
   
@@ -309,6 +327,7 @@ export default function App() {
             isRightPanelOpen={isRightPanelOpen}
             setIsRightPanelOpen={setIsRightPanelOpen}
             themeColor={themeColor}
+            activeGroupId={activeGroupId}
           />
         )}
 
@@ -552,5 +571,13 @@ export default function App() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Suspense fallback={null}>
+      <AppContent />
+    </Suspense>
   );
 }

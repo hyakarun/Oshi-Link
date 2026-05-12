@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
-import { ChevronLeft, ChevronRight, Menu, Plus, List } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Menu, Plus, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { View } from '@/lib/types';
 
@@ -16,6 +16,7 @@ interface CalendarHeaderProps {
   isRightPanelOpen: boolean;
   setIsRightPanelOpen: (open: boolean) => void;
   themeColor: string;
+  activeGroupId: string;
 }
 
 export function CalendarHeader({
@@ -29,8 +30,32 @@ export function CalendarHeader({
   setIsMobileMenuOpen,
   isRightPanelOpen,
   setIsRightPanelOpen,
-  themeColor
+  themeColor,
+  activeGroupId
 }: CalendarHeaderProps) {
+  const handleShare = async () => {
+    const url = `${window.location.origin}/?group=${activeGroupId}`;
+    const text = 'Oshi-Linkでカレンダーをチェックしよう！';
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Oshi-Link カレンダー共有',
+          text: text,
+          url: url,
+        });
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('共有用URLをクリップボードにコピーしました！');
+      } catch (err) {
+        alert('URLのコピーに失敗しました');
+      }
+    }
+  };
   return (
     <header className="h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 shrink-0">
       <div className="flex items-center gap-2 md:gap-4 min-w-0">
@@ -87,6 +112,16 @@ export function CalendarHeader({
           ))}
         </div>
 
+
+        {activeGroupId !== '0' && (
+          <button 
+            onClick={handleShare}
+            className="p-2.5 hover:bg-gray-100 rounded-xl transition-all group shrink-0"
+            title="カレンダーを共有"
+          >
+            <Share2 className="w-5 h-5 text-gray-500 group-hover:text-[#6366f1]" />
+          </button>
+        )}
 
         <Button 
           onClick={onAddEvent}

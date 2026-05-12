@@ -36,7 +36,8 @@ function LoginContent() {
           const data = await res.json() as { ok?: boolean; sessionToken?: string; user?: User; error?: string };
           if (data.ok && data.sessionToken && data.user) {
             localStorage.setItem('oshi_session', data.sessionToken);
-            router.push('/');
+            const group = searchParams.get('group');
+            router.push(group ? `/?group=${group}` : '/');
             return;
           } else {
             alert(data.error || 'ログインリンクが無効です');
@@ -54,7 +55,8 @@ function LoginContent() {
           if (res.ok) {
             const data = await res.json() as { user?: User };
             if (data.user) {
-              router.push('/');
+              const group = searchParams.get('group');
+              router.push(group ? `/?group=${group}` : '/');
               return;
             }
           } else {
@@ -119,7 +121,8 @@ function LoginContent() {
               
               if (res.ok && data.ok && data.sessionToken && data.user) {
                 localStorage.setItem('oshi_session', data.sessionToken);
-                router.push('/');
+                const group = searchParams.get('group');
+                router.push(group ? `/?group=${group}` : '/');
               } else {
                 alert('ログイン処理に失敗しました: ' + (data.error || text));
                 setAuthStep('idle');
