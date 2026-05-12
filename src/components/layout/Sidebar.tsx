@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell } from 'lucide-react';
+import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell, Share2 } from 'lucide-react';
 import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 
@@ -172,6 +172,22 @@ export function Sidebar({
                       </p>
                     </div>
                     <div className="flex items-center shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity gap-1 md:gap-0.5">
+                      <button
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          const url = `${window.location.origin}/?group=${g.id}`;
+                          if (navigator.share) {
+                            navigator.share({ title: 'Oshi-Link', text: `${g.name}のカレンダーを共有！`, url });
+                          } else {
+                            navigator.clipboard.writeText(url);
+                            alert('共有URLをコピーしました！');
+                          }
+                        }}
+                        className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100"
+                        title="カレンダーを共有"
+                      >
+                        <Share2 className="w-3.5 h-3.5 md:w-3 md:h-3 text-gray-400" />
+                      </button>
                       <button
                         onClick={(ev) => { ev.stopPropagation(); setEditingGroupId(g.id); setPersonalizationOpen(true); }}
                         className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100"

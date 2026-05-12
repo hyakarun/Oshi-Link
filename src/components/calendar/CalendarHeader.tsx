@@ -34,13 +34,16 @@ export function CalendarHeader({
   activeGroupId
 }: CalendarHeaderProps) {
   const handleShare = async () => {
-    const url = `${window.location.origin}/?group=${activeGroupId}`;
-    const text = 'Oshi-Linkでカレンダーをチェックしよう！';
+    const isAll = activeGroupId === '0';
+    const url = isAll ? window.location.origin : `${window.location.origin}/?group=${activeGroupId}`;
+    const text = isAll 
+      ? 'Oshi-Link | 推しの予定を共有・管理するカレンダー' 
+      : 'Oshi-Linkでカレンダーをチェックしよう！';
     
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Oshi-Link カレンダー共有',
+          title: 'Oshi-Link',
           text: text,
           url: url,
         });
@@ -56,6 +59,7 @@ export function CalendarHeader({
       }
     }
   };
+
   return (
     <header className="h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 shrink-0">
       <div className="flex items-center gap-2 md:gap-4 min-w-0">
@@ -113,15 +117,13 @@ export function CalendarHeader({
         </div>
 
 
-        {activeGroupId !== '0' && (
-          <button 
-            onClick={handleShare}
-            className="p-2.5 hover:bg-gray-100 rounded-xl transition-all group shrink-0"
-            title="カレンダーを共有"
-          >
-            <Share2 className="w-5 h-5 text-gray-500 group-hover:text-[#6366f1]" />
-          </button>
-        )}
+        <button 
+          onClick={handleShare}
+          className="p-2.5 hover:bg-gray-100 rounded-xl transition-all group shrink-0"
+          title="共有"
+        >
+          <Share2 className="w-5 h-5 text-gray-500 group-hover:text-[#6366f1]" />
+        </button>
 
         <Button 
           onClick={onAddEvent}
