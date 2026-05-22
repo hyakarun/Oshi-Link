@@ -173,8 +173,9 @@ export function AppContent() {
     setLoading(true);
     const fd = new FormData(e.currentTarget);
     const dateVal = fd.get('date') as string;
-    const startTime = fd.get('startTime') as string;
-    const endTime = fd.get('endTime') as string;
+    const isAllDay = fd.get('isAllDay') === '1';
+    const startTime = isAllDay ? null : fd.get('startTime') as string;
+    const endTime = isAllDay ? null : fd.get('endTime') as string;
     const dateStr = startTime ? `${dateVal}T${startTime}:00` : `${dateVal}T00:00:00`;
     
     const body = {

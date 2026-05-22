@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -48,6 +48,8 @@ export function AddEventModal({
   setSelectedGroupId,
   onSubmit
 }: AddEventModalProps) {
+  const [isAllDay, setIsAllDay] = useState(false);
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[95vw] sm:max-w-[540px] w-full p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
@@ -100,29 +102,54 @@ export function AddEventModal({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2 min-w-0 overflow-hidden">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#6366f1]">*</span></label>
-                  <input 
-                    type="time" 
-                    name="startTime" 
-                    defaultValue={defaultEventData?.startTime}
-                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
-                    style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
-                    required
-                  />
-                </div>
-                <div className="space-y-2 min-w-0 overflow-hidden">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">終了時間</label>
-                  <input 
-                    type="time" 
-                    name="endTime" 
-                    defaultValue={defaultEventData?.endTime}
-                    className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
-                    style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
-                  />
-                </div>
+              {/* 終日トグル */}
+              <div className="flex items-center gap-3 py-1">
+                <button
+                  type="button"
+                  onClick={() => setIsAllDay(v => !v)}
+                  className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none shrink-0 ${
+                    isAllDay ? 'bg-[#6366f1]' : 'bg-gray-200'
+                  }`}
+                >
+                  <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${
+                    isAllDay ? 'translate-x-5' : 'translate-x-0'
+                  }`} />
+                </button>
+                <span
+                  className="text-sm font-bold text-gray-600 cursor-pointer select-none"
+                  onClick={() => setIsAllDay(v => !v)}
+                >
+                  終日
+                </span>
+                <input type="hidden" name="isAllDay" value={isAllDay ? '1' : '0'} />
               </div>
+
+              {/* 時間入力（終日OFFの時のみ表示） */}
+              {!isAllDay && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2 min-w-0 overflow-hidden">
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">開始時間 <span className="text-[#6366f1]">*</span></label>
+                    <input 
+                      type="time" 
+                      name="startTime" 
+                      defaultValue={defaultEventData?.startTime}
+                      className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
+                      style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2 min-w-0 overflow-hidden">
+                    <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest">終了時間</label>
+                    <input 
+                      type="time" 
+                      name="endTime" 
+                      defaultValue={defaultEventData?.endTime}
+                      className="h-14 bg-gray-50 border-2 border-transparent focus:border-[#6366f1] focus:bg-white rounded-2xl px-3 font-bold transition-all outline-none"
+                      style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
