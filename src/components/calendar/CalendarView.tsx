@@ -315,13 +315,13 @@ export function CalendarView({
         day = addDays(day, 1);
       }
       rows.push(
-        <div className="grid grid-cols-7" key={day.toISOString()}>
+        <div className="grid grid-cols-7 flex-1" key={day.toISOString()}>
           {cells}
         </div>
       );
       cells = [];
     }
-    return <div className="bg-white">{rows}</div>;
+    return <div className="bg-white h-full flex flex-col">{rows}</div>;
   }
 
   // ── Week View ──────────────────────────────────
