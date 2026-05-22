@@ -48,6 +48,7 @@ export function GroupSettingsModal({
             </div>
           </div>
           
+          {/* 外部カレンダー連携 (iCal) - Pro機能のため一時非表示
           <div className="space-y-4 bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
             <label className="text-[11px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -91,6 +92,7 @@ export function GroupSettingsModal({
               </a>
             </div>
           </div>
+          */}
           
           <div className="pt-2">
             <Button type="submit" disabled={loading} className="w-full bg-[#222222] hover:bg-black text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
