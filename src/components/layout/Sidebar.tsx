@@ -126,7 +126,7 @@ export function Sidebar({
                 key={v}
                 onClick={() => setView(v)}
                 className={`flex-1 py-2 rounded-lg text-[11px] font-black transition-all ${
-                  view === v ? 'bg-white dark:bg-zinc-700 text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'
+                  view === v ? 'bg-white dark:bg-zinc-700 text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-400 hover:text-gray-600 dark:hover:text-zinc-200'
                 }`}
               >
                 {v === 'month' ? '月' : v === 'week' ? '週' : '日'}

@@ -108,7 +108,7 @@ export function CalendarHeader({
               key={v}
               onClick={() => setView(v)}
               className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${
-                view === v ? 'bg-white dark:bg-zinc-750 text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'
+                view === v ? 'bg-white dark:bg-zinc-700 text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-400 hover:text-gray-600 dark:hover:text-zinc-200'
               }`}
             >
               {v === 'month' ? '月' : v === 'week' ? '週' : '日'}
