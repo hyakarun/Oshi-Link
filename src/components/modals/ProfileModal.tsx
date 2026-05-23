@@ -37,7 +37,7 @@ export function ProfileModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
+      <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white dark:bg-zinc-900 bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
         <div className="p-8 space-y-6 max-h-[85vh] overflow-y-auto">
           <div className="flex items-center gap-4">
             <div 
@@ -51,8 +51,8 @@ export function ProfileModal({
               )}
             </div>
             <div>
-              <DialogTitle className="text-xl font-black text-[#222222]">{user.name}</DialogTitle>
-              <p className="text-sm text-gray-400">{user.email}</p>
+              <DialogTitle className="text-xl font-black text-[#222222] dark:text-zinc-100">{user.name}</DialogTitle>
+              <p className="text-sm text-gray-400 dark:text-zinc-500">{user.email}</p>
             </div>
           </div>
           
@@ -60,28 +60,28 @@ export function ProfileModal({
             {/* 基本設定 */}
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">表示名</label>
-                <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" required />
+                <label className="text-[11px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-[0.1em]">表示名</label>
+                <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 dark:bg-zinc-800 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" required />
               </div>
             </div>
 
             {/* 通知設定セクション */}
-            <div className="space-y-4 pt-2 border-t border-gray-100">
+            <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-zinc-800">
               <div className="flex items-center gap-2 mb-1">
                 <Bell className="w-4 h-4 text-[#6366f1]" />
-                <h3 className="text-sm font-black text-[#222222] uppercase tracking-wider">通知設定</h3>
+                <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-wider">通知設定</h3>
               </div>
 
               <div className="space-y-3">
                 {/* メール通知 */}
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
+                <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-lg shadow-sm">
-                      <Mail className="w-4 h-4 text-gray-600" />
+                    <div className="p-2 bg-white dark:bg-zinc-700 rounded-lg shadow-sm">
+                      <Mail className="w-4 h-4 text-gray-600 dark:text-zinc-300" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#222222]">メール通知</p>
-                      <p className="text-[10px] text-gray-400 font-medium">イベントのリマインドを受信</p>
+                      <p className="text-sm font-bold text-[#222222] dark:text-zinc-100">メール通知</p>
+                      <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium">イベントのリマインドを受信</p>
                     </div>
                   </div>
                   <input 
@@ -98,7 +98,7 @@ export function ProfileModal({
               {/* リリース当初はタイミング選択を非表示（10分前固定） */}
             </div>
 
-            <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
+            <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black dark:bg-zinc-800 dark:hover:bg-zinc-750 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
               {loading ? '保存中...' : '設定を保存'}
             </button>
           </form>
@@ -110,22 +110,22 @@ export function ProfileModal({
                 onOpenChange(false); // プロフィールを閉じてからクレジットを開く
                 setIsCreditsOpen(true);
               }}
-              className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-all group"
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-700 flex items-center justify-center shadow-sm">
                   <Info className="w-5 h-5 text-gray-400 group-hover:text-[#6366f1]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-black text-[#222222]">クレジットと法務情報</p>
-                  <p className="text-[10px] text-gray-400 font-medium">運営・利用規約・プライバシーポリシー</p>
+                  <p className="text-sm font-black text-[#222222] dark:text-zinc-100">クレジットと法務情報</p>
+                  <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium">運営・利用規約・プライバシーポリシー</p>
                 </div>
               </div>
             </button>
 
             <button
               onClick={handleLogout}
-              className="w-full py-3 text-sm font-bold text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+              className="w-full py-3 text-sm font-bold text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-all"
             >
               ログアウト
             </button>

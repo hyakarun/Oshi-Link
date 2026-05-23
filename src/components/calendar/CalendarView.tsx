@@ -106,22 +106,22 @@ function TimeGrid({
   }, [getRelativeY]);
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-hidden select-none">
+    <div className="flex flex-col h-full bg-white dark:bg-[#121215] overflow-hidden select-none">
       {/* ── Header ─────────────────────────────────── */}
-      <div className="flex border-b border-gray-100 shrink-0 bg-white z-10">
-        <div className="w-16 md:w-20 shrink-0 border-r border-gray-100" />
+      <div className="flex border-b border-gray-100 dark:border-zinc-800 shrink-0 bg-white dark:bg-[#121215] z-10">
+        <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 dark:border-zinc-800" />
         <div className="flex-1 flex">
           {days.map(d => (
             <div
               key={d.toISOString()}
-              className={`flex-1 py-3 text-center border-r border-gray-100 last:border-r-0 ${
-                isSameDay(d, new Date()) ? 'bg-[#6366f1]/5' : ''
+              className={`flex-1 py-3 text-center border-r border-gray-100 dark:border-zinc-800 last:border-r-0 ${
+                isSameDay(d, new Date()) ? 'bg-[#6366f1]/5 dark:bg-[#6366f1]/10' : ''
               }`}
             >
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
+              <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-0.5">
                 {format(d, 'EEE')}
               </p>
-              <p className={`text-xl font-black ${isSameDay(d, new Date()) ? 'text-[#6366f1]' : 'text-[#222222]'}`}>
+              <p className={`text-xl font-black ${isSameDay(d, new Date()) ? 'text-[#6366f1]' : 'text-[#222222] dark:text-zinc-100'}`}>
                 {format(d, 'd')}
               </p>
             </div>
@@ -134,15 +134,15 @@ function TimeGrid({
         <div className="flex" style={{ height: HOUR_HEIGHT * 24 }}>
 
           {/* Time labels */}
-          <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 relative">
+          <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 dark:border-zinc-800 relative">
             {HOURS.map(h => (
               <div
                 key={h}
-                className="absolute w-full border-t border-gray-100"
+                className="absolute w-full border-t border-gray-100 dark:border-zinc-800"
                 style={{ top: h * HOUR_HEIGHT }}
               >
                 {h !== 0 && (
-                  <span className="absolute -top-2.5 right-2 text-[9px] font-bold text-gray-300 tabular-nums">
+                  <span className="absolute -top-2.5 right-2 text-[9px] font-bold text-gray-300 dark:text-zinc-650 tabular-nums">
                     {`${h.toString().padStart(2, '0')}:00`}
                   </span>
                 )}
@@ -157,7 +157,7 @@ function TimeGrid({
               {HOURS.map(h => (
                 <div
                   key={h}
-                  className="absolute w-full border-t border-gray-100"
+                  className="absolute w-full border-t border-gray-100 dark:border-zinc-800"
                   style={{ top: h * HOUR_HEIGHT }}
                 />
               ))}
@@ -165,7 +165,7 @@ function TimeGrid({
               {HOURS.map(h => (
                 <div
                   key={`h-${h}`}
-                  className="absolute w-full border-t border-gray-50"
+                  className="absolute w-full border-t border-gray-50 dark:border-zinc-800/40"
                   style={{ top: h * HOUR_HEIGHT + HOUR_HEIGHT / 2 }}
                 />
               ))}
@@ -180,7 +180,7 @@ function TimeGrid({
               return (
                 <div
                   key={day.toISOString()}
-                  className="flex-1 relative border-r border-gray-100 last:border-r-0 cursor-crosshair"
+                  className="flex-1 relative border-r border-gray-100 dark:border-zinc-800 last:border-r-0 cursor-crosshair"
                   onMouseDown={e => handleMouseDown(e, day)}
                 >
                   {/* Events */}
@@ -212,7 +212,7 @@ function TimeGrid({
                           >
                             {format(startDate, 'HH:mm')}
                           </p>
-                          <p className="text-[11px] font-black text-[#222] line-clamp-2 leading-tight mt-0.5">
+                          <p className="text-[11px] font-black text-[#222] dark:text-zinc-200 line-clamp-2 leading-tight mt-0.5">
                             {e.title}
                           </p>
                         </div>
@@ -277,15 +277,15 @@ export function CalendarView({
           <div
             key={d.toISOString()}
             onClick={() => onDateClick(d)}
-            className={`min-h-[100px] md:min-h-[120px] p-2 border-r border-b border-gray-100 transition-colors cursor-pointer hover:bg-gray-50/50 ${
-              !isSameMonth(d, monthStart) ? 'bg-gray-50/30' : ''
+            className={`min-h-[100px] md:min-h-[120px] p-2 border-r border-b border-gray-100 dark:border-zinc-800 transition-colors cursor-pointer hover:bg-gray-50/50 dark:hover:bg-zinc-800/20 ${
+              !isSameMonth(d, monthStart) ? 'bg-gray-50/30 dark:bg-zinc-900/20' : ''
             }`}
           >
             <div className="mb-1">
               <span className={`text-[10px] md:text-xs font-black ${
                 isSameDay(d, new Date())
                   ? 'bg-[#6366f1] text-white w-5 h-5 md:w-6 md:h-6 inline-flex items-center justify-center rounded-full'
-                  : !isSameMonth(d, monthStart) ? 'text-gray-300' : 'text-[#222222]'
+                  : !isSameMonth(d, monthStart) ? 'text-gray-300 dark:text-zinc-650' : 'text-[#222222] dark:text-zinc-100'
               }`}>
                 {format(d, 'd')}
               </span>
@@ -305,7 +305,7 @@ export function CalendarView({
                 </div>
               ))}
               {dayEvents.length > 4 && (
-                <div className="text-[8px] md:text-[9px] text-gray-400 font-bold pl-1">
+                <div className="text-[8px] md:text-[9px] text-gray-400 dark:text-zinc-550 font-bold pl-1">
                   他 {dayEvents.length - 4} 件...
                 </div>
               )}
@@ -321,7 +321,7 @@ export function CalendarView({
       );
       cells = [];
     }
-    return <div className="bg-white h-full flex flex-col">{rows}</div>;
+    return <div className="bg-white dark:bg-[#121215] h-full flex flex-col">{rows}</div>;
   }
 
   // ── Week View ──────────────────────────────────

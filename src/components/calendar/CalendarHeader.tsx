@@ -61,54 +61,54 @@ export function CalendarHeader({
   };
 
   return (
-    <header className="h-[72px] bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 shrink-0">
+    <header className="h-[72px] bg-white dark:bg-[#121215] border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between px-4 md:px-8 shrink-0">
       <div className="flex items-center gap-2 md:gap-4 min-w-0">
         <button 
           onClick={() => setIsMobileMenuOpen(true)}
-          className="p-2 md:hidden hover:bg-gray-50 rounded-xl shrink-0"
+          className="p-2 md:hidden hover:bg-gray-50 dark:hover:bg-zinc-800 rounded-xl shrink-0"
         >
-          <Menu className="w-6 h-6 text-[#222222]" />
+          <Menu className="w-6 h-6 text-[#222222] dark:text-zinc-100" />
         </button>
 
-        <h1 className="text-lg md:text-2xl font-black text-[#222222] tracking-tighter whitespace-nowrap shrink-0">
+        <h1 className="text-lg md:text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tighter whitespace-nowrap shrink-0">
           {format(currentMonth, view === 'month' ? 'yyyy年 M月' : 'M月 d日')}
         </h1>
       </div>
 
       <div className="flex items-center gap-2 md:gap-4">
         {/* 移動ボタンを右側に移動 */}
-        <div className="flex items-center bg-gray-100 p-1 rounded-xl shrink-0">
+        <div className="flex items-center bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl shrink-0">
           <button 
             onClick={onPrev} 
-            className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all"
+            className="p-1.5 hover:bg-white dark:hover:bg-zinc-700 hover:shadow-sm rounded-lg transition-all"
             title="前へ"
           >
-            <ChevronLeft className="w-4 h-4 text-gray-500" />
+            <ChevronLeft className="w-4 h-4 text-gray-500 dark:text-zinc-400" />
           </button>
           
           <button 
             onClick={onToday}
-            className="px-3 py-1.5 hover:bg-white hover:shadow-sm text-[#222222] text-[10px] font-black rounded-lg transition-all"
+            className="px-3 py-1.5 hover:bg-white dark:hover:bg-zinc-700 hover:shadow-sm text-[#222222] dark:text-zinc-100 text-[10px] font-black rounded-lg transition-all"
           >
             今日
           </button>
           
           <button 
             onClick={onNext} 
-            className="p-1.5 hover:bg-white hover:shadow-sm rounded-lg transition-all"
+            className="p-1.5 hover:bg-white dark:hover:bg-zinc-700 hover:shadow-sm rounded-lg transition-all"
             title="次へ"
           >
-            <ChevronRight className="w-4 h-4 text-gray-500" />
+            <ChevronRight className="w-4 h-4 text-gray-500 dark:text-zinc-400" />
           </button>
         </div>
 
-        <div className="hidden sm:flex bg-gray-100 p-1 rounded-xl">
+        <div className="hidden sm:flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl">
           {(['month', 'week', 'day'] as View[]).map((v) => (
             <button
               key={v}
               onClick={() => setView(v)}
               className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${
-                view === v ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                view === v ? 'bg-white dark:bg-zinc-750 text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'
               }`}
             >
               {v === 'month' ? '月' : v === 'week' ? '週' : '日'}
@@ -119,10 +119,10 @@ export function CalendarHeader({
 
         <button 
           onClick={handleShare}
-          className="p-2.5 hover:bg-gray-100 rounded-xl transition-all group shrink-0"
+          className="p-2.5 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-xl transition-all group shrink-0"
           title="共有"
         >
-          <Share2 className="w-5 h-5 text-gray-500 group-hover:text-[#6366f1]" />
+          <Share2 className="w-5 h-5 text-gray-500 dark:text-zinc-400 group-hover:text-[#6366f1]" />
         </button>
 
         <Button 
