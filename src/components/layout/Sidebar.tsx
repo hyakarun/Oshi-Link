@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell, Share2, Sun, Moon, Laptop } from 'lucide-react';
+import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell, Share2, Sun, Moon, Laptop, BookOpen, ExternalLink } from 'lucide-react';
 import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 import { useTheme } from '@/components/ThemeProvider';
@@ -233,6 +233,21 @@ export function Sidebar({
 
         {/* Footer actions */}
         <div className="px-3 py-4 border-t border-gray-100 dark:border-zinc-800 space-y-2">
+          {/* Note Manual Link */}
+          <a
+            href="https://note.com/preview/nad616c182cc9?prev_access_key=c61dfc6145574f6322c6e7b0b9f66305"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+          >
+            <div className="flex items-center gap-2">
+              <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500" />
+              <span>使い方マニュアル</span>
+            </div>
+            <ExternalLink className="w-3 h-3 text-gray-400 dark:text-zinc-550 group-hover:text-gray-500" />
+          </a>
+
           <button
             onClick={() => { setIsNewsOpen(true); setIsMobileMenuOpen(false); }}
             className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"

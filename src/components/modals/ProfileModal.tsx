@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { User, Group } from '@/lib/types';
-import { Bell, Mail, Smartphone, Info, Sun, Moon, Laptop, Palette } from 'lucide-react';
+import { Bell, Mail, Smartphone, Info, Sun, Moon, Laptop, Palette, BookOpen } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
 type ProfileModalProps = {
@@ -138,6 +138,24 @@ export function ProfileModal({
           </form>
 
           <div className="pt-2 space-y-2">
+            {/* Note Manual Link */}
+            <a
+              href="https://note.com/preview/nad616c182cc9?prev_access_key=c61dfc6145574f6322c6e7b0b9f66305"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all group cursor-pointer"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-700 flex items-center justify-center shadow-sm">
+                  <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-[#6366f1]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm font-black text-[#222222] dark:text-zinc-100">使い方マニュアル</p>
+                  <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium">noteでマニュアルを読む（外部サイト）</p>
+                </div>
+              </div>
+            </a>
+
             <button
               type="button"
               onClick={() => {
