@@ -76,7 +76,7 @@ export function useAuth() {
     };
     try {
       const res = await fetch('/api/users', {
-        method: 'PUT',
+        method: 'POST',
         headers: authHeaders(),
         body: JSON.stringify(body),
       });
