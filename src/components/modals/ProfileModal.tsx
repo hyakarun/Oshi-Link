@@ -140,7 +140,7 @@ export function ProfileModal({
           <div className="pt-2 space-y-2">
             {/* Note Manual Link */}
             <a
-              href="https://note.com/preview/nad616c182cc9?prev_access_key=c61dfc6145574f6322c6e7b0b9f66305"
+              href="https://note.com/tsukuro_team/n/nad616c182cc9"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all group cursor-pointer"

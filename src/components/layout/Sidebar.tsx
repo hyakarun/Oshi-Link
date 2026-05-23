@@ -235,7 +235,7 @@ export function Sidebar({
         <div className="px-3 py-4 border-t border-gray-100 dark:border-zinc-800 space-y-2">
           {/* Note Manual Link */}
           <a
-            href="https://note.com/preview/nad616c182cc9?prev_access_key=c61dfc6145574f6322c6e7b0b9f66305"
+            href="https://note.com/tsukuro_team/n/nad616c182cc9"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setIsMobileMenuOpen(false)}
