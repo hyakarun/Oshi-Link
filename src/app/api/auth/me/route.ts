@@ -25,6 +25,16 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
   if (!session) return null;
   if (new Date(session.expires_at) < new Date()) return null;
 
+  let official_groups: string[] = [];
+  try {
+    const officials = await db.prepare(
+      'SELECT group_id FROM group_officials WHERE user_id = ?'
+    ).bind(session.uid).all() as { results: { group_id: string }[] };
+    official_groups = officials.results?.map(r => r.group_id) || [];
+  } catch (err) {
+    console.error('Failed to fetch official groups:', err);
+  }
+
   return { 
     id: session.uid, 
     name: session.name, 
@@ -35,6 +45,7 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
     email_enabled: !!session.email_enabled,
     push_enabled: !!session.push_enabled,
     is_official: !!session.is_official,
+    official_groups,
     notification_timing: (session.notification_timing || '10m') as any
   };
 }

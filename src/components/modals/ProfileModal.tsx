@@ -55,7 +55,7 @@ export function ProfileModal({
             <div>
               <div className="flex items-center gap-2">
                 <DialogTitle className="text-xl font-black text-[#222222] dark:text-zinc-100">{user.name}</DialogTitle>
-                {user.is_official && (
+                {(user.is_official || (user.official_groups && user.official_groups.length > 0)) && (
                   <ShieldCheck className="w-5 h-5 text-[#6366f1] fill-indigo-100 dark:fill-indigo-950/40 shrink-0" />
                 )}
               </div>
@@ -63,7 +63,12 @@ export function ProfileModal({
                 <p className="text-sm text-gray-400 dark:text-zinc-550">{user.email}</p>
                 {user.is_official && (
                   <span className="px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/20 text-[#6366f1] dark:text-indigo-400 rounded-md text-[8px] font-black tracking-widest uppercase">
-                    公式
+                    システム公式
+                  </span>
+                )}
+                {!user.is_official && user.official_groups && user.official_groups.length > 0 && (
+                  <span className="px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/20 text-[#6366f1] dark:text-indigo-400 rounded-md text-[8px] font-black tracking-widest uppercase">
+                    カレンダー公式
                   </span>
                 )}
               </div>
@@ -105,6 +110,28 @@ export function ProfileModal({
                     <label className="text-[11px] font-black text-gray-400 dark:text-zinc-550 uppercase tracking-[0.1em]">表示名</label>
                     <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 dark:bg-zinc-800 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" required />
                   </div>
+
+                  {/* 管理中の公式カレンダー */}
+                  {user.official_groups && user.official_groups.length > 0 && (
+                    <div className="space-y-2 pt-2">
+                      <label className="text-[11px] font-black text-gray-400 dark:text-zinc-550 uppercase tracking-[0.1em]">管理中の公式カレンダー</label>
+                      <div className="space-y-1.5">
+                        {user.official_groups.map(groupId => {
+                          const group = followedGroups.find(g => g.id === groupId);
+                          return (
+                            <div key={groupId} className="flex items-center gap-2.5 p-3 bg-indigo-50/20 dark:bg-indigo-950/10 border border-indigo-100/30 dark:border-indigo-950/20 rounded-2xl">
+                              <div className="w-6 h-6 rounded-lg bg-[#6366f1] flex items-center justify-center text-white text-[10px] font-black shrink-0">
+                                {group?.name?.[0] || 'G'}
+                              </div>
+                              <span className="text-xs font-bold text-[#222222] dark:text-zinc-200 truncate">
+                                {group?.name || `グループID: ${groupId}`}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* テーマ設定 */}

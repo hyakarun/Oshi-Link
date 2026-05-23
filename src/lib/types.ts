@@ -45,6 +45,7 @@ export type User = {
   email_enabled?: boolean;
   push_enabled?: boolean;
   is_official?: boolean;
+  official_groups?: string[];
   notification_timing?: '10m' | '1h' | '1d' | '1w'; // 無料は10m固定
 };
 

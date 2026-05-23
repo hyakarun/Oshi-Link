@@ -98,7 +98,7 @@ export function Sidebar({
               <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium truncate max-w-[120px]">
                 {user ? user.name : 'ログインしていません'}
               </p>
-              {user?.is_official && (
+              {user && (user.is_official || (activeGroupId !== '0' && user.official_groups?.includes(activeGroupId))) && (
                 <ShieldCheck className="w-3 h-3 text-[#6366f1] fill-indigo-100 dark:fill-indigo-950/40 shrink-0" />
               )}
             </div>

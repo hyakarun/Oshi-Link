@@ -16,10 +16,16 @@ export async function POST(request: NextRequest) {
   const resendKey = (env as unknown as Env).RESEND_API_KEY;
   const siteUrl = (env as unknown as Env).SITE_URL || 'https://oshi-link-official.pages.dev';
 
-  const { email, name } = await request.json() as { email: string; name?: string };
+  const { email, name, is_official, calendar_name } = await request.json() as {
+    email: string; name?: string; is_official?: boolean; calendar_name?: string;
+  };
 
   if (!email || !email.includes('@')) {
     return NextResponse.json({ error: '有効なメールアドレスを入力してください' }, { status: 400 });
+  }
+
+  if (is_official && (!calendar_name || calendar_name.trim().length === 0)) {
+    return NextResponse.json({ error: '公式カレンダーとして登録する場合はカレンダー名を入力してください' }, { status: 400 });
   }
 
   // 1. ユーザーが存在しなければ作成（名前はあれば使用）
@@ -27,11 +33,22 @@ export async function POST(request: NextRequest) {
     id: string; name: string; email: string;
   } | null;
 
+  const isNewUser = !user;
+
   if (!user) {
     const userId = crypto.randomUUID();
     const userName = name || email.split('@')[0];
-    await db.prepare('INSERT INTO users (id, name, email) VALUES (?, ?, ?)').bind(userId, userName, email).run();
+    const officialFlag = is_official ? 1 : 0;
+    await db.prepare('INSERT INTO users (id, name, email, is_official) VALUES (?, ?, ?, ?)').bind(userId, userName, email, officialFlag).run();
     user = { id: userId, name: userName, email };
+  }
+
+  // 新規ユーザーかつ公式登録の場合：カレンダー作成 + group_officials登録
+  if (isNewUser && is_official && calendar_name?.trim()) {
+    const groupId = crypto.randomUUID();
+    await db.prepare('INSERT INTO groups (id, name) VALUES (?, ?)').bind(groupId, calendar_name.trim()).run();
+    const officialId = crypto.randomUUID();
+    await db.prepare('INSERT INTO group_officials (id, group_id, user_id) VALUES (?, ?, ?)').bind(officialId, groupId, user.id).run();
   }
 
   // 2. 有効な Magic Link を生成（15分で失効）

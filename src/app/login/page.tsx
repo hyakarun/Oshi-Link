@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Calendar, Loader2, Users, Bell } from 'lucide-react';
+import { Calendar, Loader2, Users, Bell, ShieldCheck } from 'lucide-react';
 
 // Minimal User interface to match existing
 interface User {
@@ -12,6 +12,10 @@ interface User {
   avatar_url?: string;
   role: string;
 }
+
+// モジュールレベルで管理：React再レンダリング・StrictModeの二重実行でもリセットされない
+// ※ windowに持たせることでHMR時のリセットも防ぐ
+declare global { interface Window { __gsiInitialized?: boolean } }
 
 function LoginContent() {
   const router = useRouter();
@@ -23,6 +27,14 @@ function LoginContent() {
   const [authEmail, setAuthEmail] = useState('');
   const [googleLoaded, setGoogleLoaded] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
+  const [isOfficial, setIsOfficial] = useState(false);
+  const [calendarName, setCalendarName] = useState('');
+  const isOfficialRef = React.useRef(false);
+  const calendarNameRef = React.useRef('');
+
+  // refをstateと同期（Googleコールバックのクロージャから最新値を参照するため）
+  React.useEffect(() => { isOfficialRef.current = isOfficial; }, [isOfficial]);
+  React.useEffect(() => { calendarNameRef.current = calendarName; }, [calendarName]);
 
   // 1. セッションが既にあるか、URLトークンがあるかチェック
   useEffect(() => {
@@ -71,27 +83,14 @@ function LoginContent() {
 
 
   // 2. Googleスクリプトの動的読み込み
+  // 2. Googleログインボタンの初期化（マウント時のみ実行）
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if ((window as any).google) {
-      setGoogleLoaded(true);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => setGoogleLoaded(true);
-    document.body.appendChild(script);
-  }, []);
-
-  // 3. Googleログインボタンの描画
-  useEffect(() => {
-    if (isAuthChecking || authStep !== 'idle') return;
-
+    // Run once on mount to set up Google Sign‑In button.
     let initTimer: NodeJS.Timeout;
+    let cancelled = false;
 
     const setupGoogle = () => {
+      if (cancelled) return;
       if (typeof window === 'undefined' || !(window as any).google) {
         initTimer = setTimeout(setupGoogle, 200);
         return;
@@ -103,28 +102,35 @@ function LoginContent() {
         return;
       }
 
+      // Prevent duplicate initialization across re‑renders/HMR.
+      if (window.__gsiInitialized) return;
       const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
       try {
+        window.__gsiInitialized = true;
         (window as any).google.accounts.id.initialize({
           client_id: clientId,
+          auto_select: false,
+          cancel_on_tap_outside: true,
           callback: async (response: any) => {
             setAuthStep('logging_in');
             try {
+              const body: Record<string, unknown> = { credential: response.credential };
+              if (isOfficialRef.current && calendarNameRef.current.trim()) {
+                body.is_official = true;
+                body.calendar_name = calendarNameRef.current.trim();
+              }
               const res = await fetch('/api/auth/google', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ credential: response.credential }),
+                body: JSON.stringify(body),
               });
-              const text = await res.text();
-              let data;
-              try { data = JSON.parse(text); } catch { data = { error: 'Unknown server error' }; }
-              
+              const data = await res.json();
               if (res.ok && data.ok && data.sessionToken && data.user) {
                 localStorage.setItem('oshi_session', data.sessionToken);
                 const group = searchParams.get('group');
                 router.push(group ? `/?group=${group}` : '/');
               } else {
-                alert('ログイン処理に失敗しました: ' + (data.error || text));
+                alert('ログイン処理に失敗しました: ' + (data.error || '不明エラー'));
                 setAuthStep('idle');
               }
             } catch (err: any) {
@@ -133,7 +139,6 @@ function LoginContent() {
             }
           },
         });
-
         btnEl.innerHTML = '';
         (window as any).google.accounts.id.renderButton(btnEl, {
           theme: 'filled_blue',
@@ -151,9 +156,10 @@ function LoginContent() {
     setupGoogle();
 
     return () => {
+      cancelled = true;
       if (initTimer) clearTimeout(initTimer);
     };
-  }, [isAuthChecking, authStep, router]);
+  }, []);
 
   async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -161,17 +167,31 @@ function LoginContent() {
     const fd = new FormData(e.currentTarget);
     const email = fd.get('email') as string;
     const name = fd.get('name') as string;
+
+    if (isOfficial && !calendarName.trim()) {
+      alert('公式カレンダーとして登録する場合はカレンダー名を入力してください');
+      setLoading(false);
+      return;
+    }
+
+    const body: Record<string, unknown> = { email, name };
+    if (isOfficial && calendarName.trim()) {
+      body.is_official = true;
+      body.calendar_name = calendarName.trim();
+    }
+
     try {
       const res = await fetch('/api/auth/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         setAuthEmail(email);
         setAuthStep('sent');
       } else {
-        alert('エラーが発生しました');
+        const data = await res.json() as { error?: string };
+        alert(data.error || 'エラーが発生しました');
       }
     } catch {
       alert('エラーが発生しました');
@@ -286,6 +306,43 @@ function LoginContent() {
             </div>
 
             <div className="flex flex-col gap-4">
+              {/* 公式カレンダー登録オプション */}
+              <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4 space-y-3">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    id="is-official-checkbox"
+                    type="checkbox"
+                    checked={isOfficial}
+                    onChange={(e) => {
+                      setIsOfficial(e.target.checked);
+                      if (!e.target.checked) setCalendarName('');
+                    }}
+                    className="mt-0.5 w-4 h-4 accent-[#6366f1] rounded shrink-0"
+                  />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <ShieldCheck className="w-4 h-4 text-[#6366f1]" />
+                      <span className="text-xs font-black text-[#222222]">公式カレンダーとして登録する</span>
+                    </div>
+                    <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed">アーティストや団体の公式情報発信アカウントとして登録します。登録時にカレンダーを1つ作成します。</p>
+                  </div>
+                </label>
+                {isOfficial && (
+                  <div className="space-y-1.5 pl-7">
+                    <label className="text-[10px] font-black text-[#6366f1] uppercase tracking-[0.1em]">カレンダー名 <span className="text-red-500">*</span></label>
+                    <input
+                      id="calendar-name-input"
+                      type="text"
+                      placeholder="例：〇〇 公式スケジュール"
+                      value={calendarName}
+                      onChange={(e) => setCalendarName(e.target.value)}
+                      maxLength={50}
+                      className="w-full h-11 bg-white border border-indigo-100 rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div id="google-login-btn" className="flex justify-center h-11"></div>
 
               <div className="flex items-center gap-4 py-2">
