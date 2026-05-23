@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { User, Group } from '@/lib/types';
-import { Bell, Mail, Smartphone, Info } from 'lucide-react';
+import { Bell, Mail, Smartphone, Info, Sun, Moon, Laptop, Palette } from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
 
 type ProfileModalProps = {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export function ProfileModal({
   setIsCreditsOpen,
   loading
 }: ProfileModalProps) {
+  const { theme, setTheme } = useTheme();
   const [selectedTiming, setSelectedTiming] = React.useState<string>('10m');
 
   React.useEffect(() => {
@@ -62,6 +64,38 @@ export function ProfileModal({
               <div className="space-y-1.5">
                 <label className="text-[11px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-[0.1em]">表示名</label>
                 <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 dark:bg-zinc-800 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" required />
+              </div>
+            </div>
+
+            {/* テーマ設定 */}
+            <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+              <div className="flex items-center gap-2 mb-1">
+                <Palette className="w-4 h-4 text-[#6366f1]" />
+                <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-wider">表示設定</h3>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-[0.1em]">表示モード</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['light', 'dark', 'system'] as const).map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTheme(t)}
+                      className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
+                        theme === t
+                          ? 'border-[#6366f1] bg-indigo-50/20 dark:bg-indigo-950/20 text-[#6366f1]'
+                          : 'border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/40 text-gray-500 dark:text-zinc-400 hover:border-gray-250 dark:hover:border-zinc-700'
+                      }`}
+                    >
+                      {t === 'light' && <Sun className="w-4 h-4" />}
+                      {t === 'dark' && <Moon className="w-4 h-4" />}
+                      {t === 'system' && <Laptop className="w-4 h-4" />}
+                      <span className="text-[10px] font-black">
+                        {t === 'light' ? 'ライト' : t === 'dark' ? 'ダーク' : '自動'}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
