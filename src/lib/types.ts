@@ -31,6 +31,7 @@ export type Event = {
   confirms_count?: number;
   disputes_count?: number;
   creator_name?: string;
+  creator_is_official?: boolean;
   user_vote?: 'confirmed' | 'disputed' | null;
 };
 
@@ -43,6 +44,7 @@ export type User = {
   notifications_enabled?: boolean;
   email_enabled?: boolean;
   push_enabled?: boolean;
+  is_official?: boolean;
   notification_timing?: '10m' | '1h' | '1d' | '1w'; // 無料は10m固定
 };
 

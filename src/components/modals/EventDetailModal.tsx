@@ -137,8 +137,13 @@ export function EventDetailModal({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white dark:bg-zinc-900 shadow-2xl ring-1 ring-gray-100 dark:ring-zinc-800 top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
         <div className="p-8 overflow-y-auto flex-1">
-          <div className="mb-6 flex items-center">
-            {selectedEvent.is_tentative ? (
+          <div className="mb-6 flex flex-wrap items-center gap-2">
+            {selectedEvent.creator_is_official ? (
+              <div className="flex items-center gap-2 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-950/20 text-[#6366f1] dark:text-indigo-400 rounded-full border border-indigo-200 dark:border-indigo-900/30">
+                <ShieldCheck className="w-4 h-4 fill-indigo-100 dark:fill-indigo-950/40" />
+                <span className="text-[11px] font-black uppercase tracking-widest">公式情報（公認アカウント）</span>
+              </div>
+            ) : selectedEvent.is_tentative ? (
               <div className="flex items-center gap-2 px-4 py-1.5 bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-400 rounded-full border border-yellow-200 dark:border-yellow-900/30">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 低（仮）</span>
@@ -171,10 +176,15 @@ export function EventDetailModal({
                     )}
                     {selectedEvent.creator_name && (
                       <div className="flex items-center gap-2 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-zinc-700">
-                        <div className="w-4 h-4 bg-[#6366f1] rounded-full flex items-center justify-center text-[8px] text-white font-black">
+                        <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] text-white font-black ${selectedEvent.creator_is_official ? 'bg-[#6366f1]' : 'bg-gray-400'}`}>
                           {selectedEvent.creator_name[0]}
                         </div>
-                        <span className="text-[11px] font-bold text-gray-500 dark:text-zinc-400">投稿: {selectedEvent.creator_name}</span>
+                        <span className="text-[11px] font-bold text-gray-550 dark:text-zinc-400 flex items-center gap-1">
+                          投稿: {selectedEvent.creator_name}
+                          {selectedEvent.creator_is_official && (
+                            <ShieldCheck className="w-3 h-3 text-[#6366f1] fill-indigo-100 dark:fill-indigo-950/40 shrink-0" />
+                          )}
+                        </span>
                       </div>
                     )}
                   </div>

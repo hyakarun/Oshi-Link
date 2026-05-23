@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell, Share2, Sun, Moon, Laptop, BookOpen, ExternalLink } from 'lucide-react';
+import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell, Share2, Sun, Moon, Laptop, BookOpen, ExternalLink, ShieldCheck } from 'lucide-react';
 import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 import { useTheme } from '@/components/ThemeProvider';
@@ -94,10 +94,13 @@ export function Sidebar({
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-black text-[#222222] dark:text-zinc-100 tracking-tight">Oshi-Link</p>
-            <div className="flex items-center gap-1.5">
-              <p className="text-[10px] text-gray-400 dark:text-zinc-500 font-medium truncate max-w-[120px]">
+            <div className="flex items-center gap-1 min-w-0">
+              <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium truncate max-w-[120px]">
                 {user ? user.name : 'ログインしていません'}
               </p>
+              {user?.is_official && (
+                <ShieldCheck className="w-3 h-3 text-[#6366f1] fill-indigo-100 dark:fill-indigo-950/40 shrink-0" />
+              )}
             </div>
           </div>
           <button

@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     const userId = user?.id || null;
 
     let query = `
-      SELECT e.*, u.name as creator_name,
+      SELECT e.*, u.name as creator_name, u.is_official as creator_is_official,
       (SELECT v.verification_status FROM verifications v WHERE v.event_id = e.id AND v.user_id = ?) as user_vote
       FROM events e 
       LEFT JOIN users u ON e.added_by = u.id 
@@ -127,9 +127,10 @@ export async function POST(request: NextRequest) {
     }
 
     const eventId = crypto.randomUUID();
+    const isTentative = user.is_official ? 0 : 1;
 
     await db.prepare(
-      'INSERT INTO events (id, group_id, title, date, end_time, description, category, sub_category, location, address, latitude, longitude, source_url, added_by, is_tentative) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)'
+      'INSERT INTO events (id, group_id, title, date, end_time, description, category, sub_category, location, address, latitude, longitude, source_url, added_by, is_tentative) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     ).bind(
       eventId, 
       group_id, 
@@ -144,7 +145,8 @@ export async function POST(request: NextRequest) {
       latitude ?? null,
       longitude ?? null,
       safeSourceUrl || null, 
-      added_by
+      added_by,
+      isTentative
     ).run();
 
     // デフォルトで投稿者を最初の「正確」投票者として登録

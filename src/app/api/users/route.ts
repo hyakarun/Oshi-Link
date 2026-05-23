@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     const db = (env as any).DB;
 
     // プライバシーのため、emailやgoogle_idは返さない
-    const user = await db.prepare('SELECT id, name, avatar_url FROM users WHERE id = ?').bind(userId).first();
+    const user = await db.prepare('SELECT id, name, avatar_url, is_official FROM users WHERE id = ?').bind(userId).first();
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
