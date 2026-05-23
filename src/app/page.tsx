@@ -469,7 +469,10 @@ export function AppContent() {
           onOpenChange={setIsProfileModalOpen} 
           user={user} 
           followedGroups={followedGroups}
-          handleProfileUpdate={handleProfileUpdate}
+          handleProfileUpdate={(e) => handleProfileUpdate(e, () => {
+            loadEvents();
+            loadGroups();
+          })}
           handleLogout={logout}
           setIsCreditsOpen={setIsCreditsOpen}
           loading={authLoading}

@@ -233,33 +233,35 @@ export function Sidebar({
 
         {/* Footer actions */}
         <div className="px-3 py-4 border-t border-gray-100 dark:border-zinc-800 space-y-2">
-          {/* Note Manual Link */}
-          <a
-            href="https://note.com/tsukuro_team/n/nad616c182cc9"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
-          >
-            <div className="flex items-center gap-2">
-              <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500" />
-              <span>使い方マニュアル</span>
-            </div>
-            <ExternalLink className="w-3 h-3 text-gray-400 dark:text-zinc-550 group-hover:text-gray-500" />
-          </a>
+          <div className="flex gap-2">
+            {/* Note Manual Link */}
+            <a
+              href="https://note.com/tsukuro_team/n/nad616c182cc9"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500 shrink-0" />
+                <span className="truncate">使い方</span>
+              </div>
+              <ExternalLink className="w-3 h-3 text-gray-400 dark:text-zinc-550 group-hover:text-gray-500 shrink-0" />
+            </a>
 
-          <button
-            onClick={() => { setIsNewsOpen(true); setIsMobileMenuOpen(false); }}
-            className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
-          >
-            <div className="flex items-center gap-2">
-              <Bell className="w-3.5 h-3.5 group-hover:text-blue-500" />
-              <span>運営からのお知らせ</span>
-            </div>
-            {hasNewNews && (
-              <span className="bg-gradient-to-r from-[#EA4335] to-[#4285F4] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full animate-bounce shadow-sm">New!</span>
-            )}
-          </button>
+            <button
+              onClick={() => { setIsNewsOpen(true); setIsMobileMenuOpen(false); }}
+              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Bell className="w-3.5 h-3.5 group-hover:text-blue-500 shrink-0" />
+                <span className="truncate">お知らせ</span>
+              </div>
+              {hasNewNews && (
+                <span className="bg-gradient-to-r from-[#EA4335] to-[#4285F4] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full animate-bounce shadow-sm shrink-0">New!</span>
+              )}
+            </button>
+          </div>
 
           <button
             onClick={() => { setIsDiscoverOpen(true); setIsMobileMenuOpen(false); }}
@@ -267,17 +269,6 @@ export function Sidebar({
           >
             <Search className="w-3.5 h-3.5" /> 
             <span>カレンダーを探す</span>
-          </button>
-
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="w-full flex items-center justify-between px-4 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
-          >
-            <div className="flex items-center gap-2">
-              {getThemeIcon()}
-              <span>テーマ: {getThemeLabel()}</span>
-            </div>
           </button>
 
           <div className="pt-2 text-center flex flex-col items-center gap-1">

@@ -15,7 +15,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const { name, avatar_url, email_enabled, push_enabled, notification_timing } = await request.json() as any;
+    const reqData = await request.json() as any;
+    const name = reqData.name !== undefined ? reqData.name : user.name;
+    const avatar_url = reqData.avatar_url !== undefined ? reqData.avatar_url : user.avatar_url;
+    const email_enabled = reqData.email_enabled !== undefined ? reqData.email_enabled : user.email_enabled;
+    const push_enabled = reqData.push_enabled !== undefined ? reqData.push_enabled : user.push_enabled;
+    const notification_timing = reqData.notification_timing !== undefined ? reqData.notification_timing : user.notification_timing;
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });

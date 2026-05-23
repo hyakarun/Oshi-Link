@@ -64,7 +64,7 @@ export function useAuth() {
     router.push('/login');
   }, [authHeaders, router]);
 
-  const handleProfileUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleProfileUpdate = async (e: React.FormEvent<HTMLFormElement>, onSuccess?: () => void) => {
     e.preventDefault();
     if (!user) return;
     setLoading(true);
@@ -82,6 +82,7 @@ export function useAuth() {
       });
       if (res.ok) {
         await checkAuth();
+        if (onSuccess) onSuccess();
       }
     } catch {}
     setLoading(false);
