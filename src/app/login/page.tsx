@@ -207,7 +207,7 @@ function LoginContent() {
 
   return (
     <div className="flex h-screen w-full bg-gradient-to-br from-[#f2f2f2] to-gray-100 items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full animate-in fade-in zoom-in-95 duration-500">
+      <div className="bg-white rounded-3xl shadow-2xl p-6 max-w-md w-full animate-in fade-in zoom-in-95 duration-500">
         {authStep === 'logging_in' ? (
           <div className="py-12 flex flex-col items-center gap-4">
             <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
@@ -232,78 +232,34 @@ function LoginContent() {
             </button>
           </div>
         ) : (
-          <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <div className="flex items-center justify-center mb-4">
-                <div className="flex items-center justify-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-100/50">
+          <div className="space-y-4">
+            <div className="text-center relative">
+              <div className="absolute top-0 right-0">
+                <div className="flex items-center gap-1 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-indigo-100/50">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500"></span>
                   </span>
-                  Beta Test in Progress
+                  Beta
                 </div>
               </div>
               <div 
-                className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-4"
+                className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-3"
                 style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
               >
-                <Calendar className="w-7 h-7" />
+                <Calendar className="w-6 h-6" />
               </div>
-              <h2 className="text-2xl font-black text-[#222222] tracking-tight">Oshi-Link をはじめる</h2>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <h2 className="text-xl font-black text-[#222222] tracking-tight">Oshi-Link をはじめる</h2>
+              <p className="text-xs text-gray-500 mt-1">
                 推しの予定を、これひとつで。
               </p>
-
-              {/* サービス説明セクション */}
-              <div className="space-y-3 pt-2">
-                <p className="text-[10px] font-black text-[#6366f1] uppercase tracking-widest text-center">Service Features</p>
-                <div className="grid grid-cols-1 gap-3">
-                  {[
-                    { 
-                      icon: <Users className="w-5 h-5" />, 
-                      title: "コミュニティ管理", 
-                      desc: "ファン同士で情報を更新。最新の予定がいつでも分かります。" 
-                    },
-                    { 
-                      icon: <Bell className="w-5 h-5" />, 
-                      title: "通知でリマインド", 
-                      desc: "イベント開始前に通知。配信やチケット予約を逃しません。" 
-                    },
-                    { 
-                      icon: <Calendar className="w-5 h-5" />, 
-                      title: "情報の正確性", 
-                      desc: "不正確な情報はみんなで指摘。精度の高い情報を維持します。" 
-                    },
-                  ].map((f, i) => (
-                    <div 
-                      key={i} 
-                      className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100/50"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#6366f1] shadow-sm shrink-0">
-                        {f.icon}
-                      </div>
-                      <div className="text-left">
-                        <h3 className="text-xs font-black text-[#222222]">{f.title}</h3>
-                        <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">{f.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <p className="text-[11px] text-gray-400 font-bold text-center">
-                  Googleアカウントで 1秒で登録・ログイン。<br />
-                  面倒なパスワード設定は不要です。
-                </p>
-                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.11-typeerror-and-schema-fix</p>
-              </div>
+              <p className="text-[8px] text-gray-200 mt-1 text-center">v1.0.11-typeerror-and-schema-fix</p>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               {/* 公式カレンダー登録オプション */}
-              <div className="rounded-2xl border border-indigo-100 bg-indigo-50/40 p-4 space-y-3">
-                <label className="flex items-start gap-3 cursor-pointer">
+              <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-3 space-y-2">
+                <label className="flex items-start gap-2 cursor-pointer">
                   <input
                     id="is-official-checkbox"
                     type="checkbox"
@@ -312,79 +268,75 @@ function LoginContent() {
                       setIsOfficial(e.target.checked);
                       if (!e.target.checked) setCalendarName('');
                     }}
-                    className="mt-0.5 w-4 h-4 accent-[#6366f1] rounded shrink-0"
+                    className="mt-0.5 w-3.5 h-3.5 accent-[#6366f1] rounded shrink-0"
                   />
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-[#6366f1]" />
-                      <span className="text-xs font-black text-[#222222]">公式カレンダーとして登録する</span>
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#6366f1]" />
+                      <span className="text-[11px] font-black text-[#222222]">公式カレンダーとして登録する</span>
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed">アーティストや団体の公式情報発信アカウントとして登録します。登録時にカレンダーを1つ作成します。</p>
                   </div>
                 </label>
                 {isOfficial && (
-                  <div className="space-y-1.5 pl-7">
-                    <label className="text-[10px] font-black text-[#6366f1] uppercase tracking-[0.1em]">カレンダー名 <span className="text-red-500">*</span></label>
+                  <div className="pl-5">
                     <input
                       id="calendar-name-input"
                       type="text"
-                      placeholder="例：〇〇 公式スケジュール"
+                      placeholder="カレンダー名 (例：〇〇 公式)"
                       value={calendarName}
                       onChange={(e) => setCalendarName(e.target.value)}
                       maxLength={50}
-                      className="w-full h-11 bg-white border border-indigo-100 rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm"
+                      className="w-full h-9 bg-white border border-indigo-100 rounded-lg px-3 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-xs"
                     />
                   </div>
                 )}
               </div>
 
-              <div className="flex bg-gray-100 rounded-xl p-1 mb-2">
+              <div className="flex bg-gray-100 rounded-xl p-1">
                 <button
                   type="button"
                   onClick={() => setLoginTab('google')}
-                  className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${loginTab === 'google' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${loginTab === 'google' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                 >
                   Googleで続ける
                 </button>
                 <button
                   type="button"
                   onClick={() => setLoginTab('email')}
-                  className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${loginTab === 'email' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${loginTab === 'email' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
                 >
                   メールで続ける
                 </button>
               </div>
 
-              <div className="min-h-[260px] relative">
+              <div className="min-h-[180px] relative">
                 <div className={`transition-opacity duration-300 ${loginTab === 'google' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
-                  <div className="flex flex-col justify-center items-center h-full pt-10">
+                  <div className="flex flex-col justify-center items-center h-full pt-6">
                     <div id="google-login-btn" className="flex justify-center h-11 w-full"></div>
-                    <p className="text-center text-[11px] text-gray-400 mt-6">
+                    <p className="text-center text-[10px] text-gray-400 mt-4">
                       Googleアカウントで安全にログインできます
                     </p>
                   </div>
                 </div>
 
                 <div className={`transition-opacity duration-300 ${loginTab === 'email' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
-                  <form onSubmit={handleSendMagicLink} className="space-y-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">お名前（初回のみ）</label>
-                      <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" />
+                  <form onSubmit={handleSendMagicLink} className="space-y-3 pt-2">
+                    <div>
+                      <input name="name" type="text" placeholder="お名前（初回のみ）" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm" />
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">メールアドレス <span className="text-red-500">*</span></label>
-                      <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" required />
+                    <div>
+                      <input name="email" type="email" placeholder="メールアドレス *" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm" required />
                     </div>
                     <button 
                       type="submit" 
                       disabled={loading} 
-                      className="w-full h-14 text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base"
+                      className="w-full h-12 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-sm mt-2"
                       style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
                     >
-                      {loading ? <Loader2 className="animate-spin h-5 w-5 mx-auto" /> : 'ログインリンクを送る 📧'}
+                      {loading ? <Loader2 className="animate-spin h-4 w-4 mx-auto" /> : 'ログインリンクを送る 📧'}
                     </button>
                   </form>
-                  <p className="text-center text-[11px] text-gray-400 mt-2">
+                  <p className="text-center text-[10px] text-gray-400 mt-3">
                     アカウントがない場合は自動で作成されます
                   </p>
                 </div>
