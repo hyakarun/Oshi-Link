@@ -295,7 +295,7 @@ function LoginContent() {
                   Googleアカウントで 1秒で登録・ログイン。<br />
                   面倒なパスワード設定は不要です。
                 </p>
-                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.8-redirect-ux</p>
+                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.9-redirect-parser-fix</p>
               </div>
             </div>
 
