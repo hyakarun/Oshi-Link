@@ -309,9 +309,9 @@ function LoginContent() {
                 </button>
               </div>
 
-              <div className="min-h-[180px] relative">
-                <div className={`transition-opacity duration-300 ${loginTab === 'google' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
-                  <div className="flex flex-col justify-center items-center h-full pt-6">
+              <div className="h-[210px] relative">
+                <div className={`transition-opacity duration-300 h-full ${loginTab === 'google' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
+                  <div className="flex flex-col justify-center items-center h-full pt-4">
                     <div id="google-login-btn" className="flex justify-center h-11 w-full"></div>
                     <p className="text-center text-[10px] text-gray-400 mt-4">
                       Googleアカウントで安全にログインできます
@@ -319,7 +319,7 @@ function LoginContent() {
                   </div>
                 </div>
 
-                <div className={`transition-opacity duration-300 ${loginTab === 'email' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
+                <div className={`transition-opacity duration-300 h-full ${loginTab === 'email' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
                   <form onSubmit={handleSendMagicLink} className="space-y-3 pt-2">
                     <div>
                       <input name="name" type="text" placeholder="お名前（初回のみ）" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm" />
@@ -330,13 +330,13 @@ function LoginContent() {
                     <button 
                       type="submit" 
                       disabled={loading} 
-                      className="w-full h-12 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-sm mt-2"
+                      className="w-full h-12 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-sm mt-1"
                       style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
                     >
                       {loading ? <Loader2 className="animate-spin h-4 w-4 mx-auto" /> : 'ログインリンクを送る 📧'}
                     </button>
                   </form>
-                  <p className="text-center text-[10px] text-gray-400 mt-3">
+                  <p className="text-center text-[10px] text-gray-400 mt-2">
                     アカウントがない場合は自動で作成されます
                   </p>
                 </div>
