@@ -40,8 +40,8 @@ export function ProfileModal({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white dark:bg-zinc-900 bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
-        <div className="p-8 space-y-6 max-h-[85vh] overflow-y-auto">
-          <div className="flex items-center gap-4">
+        <div className="p-8 space-y-6 h-[580px] flex flex-col">
+          <div className="flex items-center gap-4 shrink-0">
             <div 
               className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-lg overflow-hidden"
               style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
@@ -76,7 +76,7 @@ export function ProfileModal({
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-gray-100 dark:border-zinc-800">
+          <div className="flex border-b border-gray-100 dark:border-zinc-800 shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab('settings')}
@@ -101,7 +101,7 @@ export function ProfileModal({
             </button>
           </div>
 
-          <div className="min-h-[380px]">
+          <div className="flex-1 overflow-y-auto pr-1">
             {activeTab === 'settings' ? (
               <form onSubmit={handleProfileUpdate} className="space-y-6">
                 {/* 基本設定 */}
