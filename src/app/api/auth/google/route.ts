@@ -91,8 +91,8 @@ export async function POST(request: NextRequest) {
       user: { id: user.id, name: user.name, email: user.email, avatar_url: user.avatar_url },
     });
 
-  } catch (e) {
+  } catch (e: any) {
     console.error('Google Auth Error:', e);
-    return NextResponse.json({ error: '認証処理中にエラーが発生しました' }, { status: 500 });
+    return NextResponse.json({ error: `認証処理中にエラーが発生しました: ${e?.message || e}` }, { status: 500 });
   }
 }
