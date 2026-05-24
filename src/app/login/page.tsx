@@ -29,6 +29,7 @@ function LoginContent() {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [isOfficial, setIsOfficial] = useState(false);
   const [calendarName, setCalendarName] = useState('');
+  const [loginTab, setLoginTab] = useState<'google' | 'email'>('google');
   const isOfficialRef = React.useRef(false);
   const calendarNameRef = React.useRef('');
 
@@ -337,35 +338,57 @@ function LoginContent() {
                 )}
               </div>
 
-              <div id="google-login-btn" className="flex justify-center h-11"></div>
-
-              <div className="flex items-center gap-4 py-2">
-                <div className="h-[1px] bg-gray-100 flex-1"></div>
-                <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">または</span>
-                <div className="h-[1px] bg-gray-100 flex-1"></div>
+              <div className="flex bg-gray-100 rounded-xl p-1 mb-2">
+                <button
+                  type="button"
+                  onClick={() => setLoginTab('google')}
+                  className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${loginTab === 'google' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  Googleで続ける
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLoginTab('email')}
+                  className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${loginTab === 'email' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  メールで続ける
+                </button>
               </div>
 
-              <form onSubmit={handleSendMagicLink} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">お名前（初回のみ）</label>
-                  <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" />
+              <div className="min-h-[260px] relative">
+                <div className={`transition-opacity duration-300 ${loginTab === 'google' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
+                  <div className="flex flex-col justify-center items-center h-full pt-10">
+                    <div id="google-login-btn" className="flex justify-center h-11 w-full"></div>
+                    <p className="text-center text-[11px] text-gray-400 mt-6">
+                      Googleアカウントで安全にログインできます
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">メールアドレス <span className="text-red-500">*</span></label>
-                  <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" required />
+
+                <div className={`transition-opacity duration-300 ${loginTab === 'email' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
+                  <form onSubmit={handleSendMagicLink} className="space-y-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">お名前（初回のみ）</label>
+                      <input name="name" type="text" placeholder="推しファン太郎" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-black text-gray-400 uppercase tracking-[0.1em]">メールアドレス <span className="text-red-500">*</span></label>
+                      <input name="email" type="email" placeholder="hello@example.com" className="w-full h-12 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222]" required />
+                    </div>
+                    <button 
+                      type="submit" 
+                      disabled={loading} 
+                      className="w-full h-14 text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base"
+                      style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
+                    >
+                      {loading ? <Loader2 className="animate-spin h-5 w-5 mx-auto" /> : 'ログインリンクを送る 📧'}
+                    </button>
+                  </form>
+                  <p className="text-center text-[11px] text-gray-400 mt-2">
+                    アカウントがない場合は自動で作成されます
+                  </p>
                 </div>
-                <button 
-                  type="submit" 
-                  disabled={loading} 
-                  className="w-full h-14 text-white font-black rounded-2xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-base"
-                  style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
-                >
-                  {loading ? <Loader2 className="animate-spin h-5 w-5 mx-auto" /> : 'ログインリンクを送る 📧'}
-                </button>
-              </form>
-              <p className="text-center text-[11px] text-gray-400 mt-2">
-                アカウントがない場合は自動で作成されます
-              </p>
+              </div>
             </div>
           </div>
         )}
