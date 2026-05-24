@@ -16,6 +16,7 @@ type DiscoverModalProps = {
   handleFollowToggle: (group: Group) => void;
   handleSubscribe: (groupId: string) => void;
   openCreateGroup: () => void;
+  onGroupIconClick?: (groupId: string) => void;
 };
 
 export function DiscoverModal({
@@ -27,7 +28,8 @@ export function DiscoverModal({
   followLoading,
   handleFollowToggle,
   handleSubscribe,
-  openCreateGroup
+  openCreateGroup,
+  onGroupIconClick
 }: DiscoverModalProps) {
   const discoverFiltered = allGroups.filter(g =>
     g.name.toLowerCase().includes(discoverSearch.toLowerCase()) ||
@@ -91,7 +93,16 @@ export function DiscoverModal({
                   key={g.id}
                   className={`flex items-center gap-3 p-2.5 sm:p-3 rounded-xl transition-all border ${g.is_following ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-[#6366f1] dark:border-indigo-900/30 border-opacity-20' : 'bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-800 hover:border-gray-200 dark:hover:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800/60'}`}
                 >
-                  <GroupAvatar group={g} size="sm" />
+                  <div 
+                    onClick={(ev) => {
+                      ev.stopPropagation();
+                      onGroupIconClick?.(g.id);
+                    }}
+                    className="cursor-pointer hover:scale-105 transition-transform"
+                    title="カレンダー詳細を表示"
+                  >
+                    <GroupAvatar group={g} size="sm" />
+                  </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <h3 className="font-black text-[#222222] dark:text-zinc-100 truncate text-xs sm:text-sm max-w-[100px] sm:max-w-none">{g.name}</h3>

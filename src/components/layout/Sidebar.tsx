@@ -22,6 +22,7 @@ interface SidebarProps {
   setView: (view: View) => void;
   setIsNewsOpen: (open: boolean) => void;
   hasNewNews: boolean;
+  onGroupIconClick?: (groupId: string) => void;
 }
 
 export function Sidebar({
@@ -41,7 +42,8 @@ export function Sidebar({
   view,
   setView,
   setIsNewsOpen,
-  hasNewNews
+  hasNewNews,
+  onGroupIconClick
 }: SidebarProps) {
   const { theme, setTheme } = useTheme();
 
@@ -186,7 +188,16 @@ export function Sidebar({
                     }`}
                     style={isActive ? { backgroundColor: `${getGroupColor(g.id)}12` } : {}}
                   >
-                    <GroupAvatar group={g} size="sm" />
+                    <div
+                      onClick={(ev) => {
+                        ev.stopPropagation();
+                        onGroupIconClick?.(g.id);
+                      }}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                      title="カレンダー詳細を表示"
+                    >
+                      <GroupAvatar group={g} size="sm" />
+                    </div>
                     <div className="flex-1 min-w-0">
                       <p className={`text-[12px] font-black truncate ${
                         !isActive ? 'text-[#222222] dark:text-zinc-100' : 'text-gray-400 dark:text-zinc-500'

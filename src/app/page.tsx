@@ -25,6 +25,7 @@ import { EventDetailModal } from '@/components/modals/EventDetailModal';
 import { GroupSettingsModal } from '@/components/modals/GroupSettingsModal';
 import { CreditsModal } from '@/components/modals/CreditsModal';
 import { AddEventModal } from '@/components/modals/AddEventModal';
+import { GroupDetailModal } from '@/components/modals/GroupDetailModal';
 import { NewsModal } from '@/components/modals/NewsModal';
 import { AdBanner } from '@/components/ui/AdBanner';
 import { groupColorSolid } from '@/components/ui/shared';
@@ -78,6 +79,8 @@ export function AppContent() {
   const [isDiscoverOpen, setIsDiscoverOpen] = useState(false);
   const [personalizationOpen, setPersonalizationOpen] = useState(false);
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
+  const [isGroupDetailOpen, setIsGroupDetailOpen] = useState(false);
+  const [detailGroupId, setDetailGroupId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(false);
@@ -111,6 +114,11 @@ export function AppContent() {
   const [externalUrlWarning, setExternalUrlWarning] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<{ name: string; shortName: string; address: string; latitude: number; longitude: number } | null>(null);
   const [selectedGroupId, setSelectedGroupId] = useState<string>('');
+
+  const handleOpenGroupDetail = useCallback((groupId: string) => {
+    setDetailGroupId(groupId);
+    setIsGroupDetailOpen(true);
+  }, []);
 
 
   // Form States
@@ -303,6 +311,7 @@ export function AppContent() {
           if (open) setHasNewNews(false);
         }}
         hasNewNews={hasNewNews}
+        onGroupIconClick={handleOpenGroupDetail}
       />
 
       <main className="flex-1 flex flex-col min-w-0 relative h-full">
@@ -489,6 +498,7 @@ export function AppContent() {
         followLoading={followLoading}
         handleSubscribe={handleiCalExport}
         openCreateGroup={() => { setIsDiscoverOpen(false); setIsGroupModalOpen(true); }}
+        onGroupIconClick={handleOpenGroupDetail}
       />
 
       <EventDetailModal 
@@ -546,6 +556,13 @@ export function AppContent() {
       <CreditsModal 
         isOpen={isCreditsOpen}
         onOpenChange={setIsCreditsOpen}
+      />
+
+      <GroupDetailModal
+        isOpen={isGroupDetailOpen}
+        onOpenChange={setIsGroupDetailOpen}
+        groupId={detailGroupId}
+        authHeaders={authHeaders}
       />
 
       <NewsModal 
