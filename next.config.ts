@@ -1,5 +1,15 @@
 import type { NextConfig } from "next";
-import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
+
+if (process.env.NODE_ENV === 'development') {
+  (async () => {
+    try {
+      const { setupDevPlatform } = await import('@cloudflare/next-on-pages/next-dev');
+      await setupDevPlatform();
+    } catch (e) {
+      console.error('Failed to setup Cloudflare dev platform:', e);
+    }
+  })();
+}
 
 const cspHeader = `
   default-src 'self';
@@ -44,14 +54,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default async function config() {
-  if (process.env.NODE_ENV === 'development') {
-    try {
-      const { setupDevPlatform } = await import('@cloudflare/next-on-pages/next-dev');
-      await setupDevPlatform();
-    } catch (e) {
-      console.error('Failed to setup Cloudflare dev platform:', e);
-    }
-  }
-  return nextConfig;
-}
+export default nextConfig;
