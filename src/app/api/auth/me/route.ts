@@ -52,37 +52,42 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
 
 // GET /api/auth/me  → セッションから現在のユーザーを取得
 export async function GET(request: NextRequest) {
-  const { env } = getRequestContext();
-  const db = (env as unknown as Env).DB;
-
-  const user = await getSessionUser(db, request);
-  if (!user) {
-    return NextResponse.json({ user: null }, { status: 401 });
-  }
-
-  // 不正確（disputed）と判定され、かつ未確認の予定があるかチェック
-  let hasNewDispute = false;
   try {
-    const disputed = await db.prepare(
-      'SELECT id FROM events WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0 LIMIT 1'
-    ).bind(user.id).all();
+    const { env } = getRequestContext();
+    const db = (env as unknown as Env).DB;
 
-    hasNewDispute = !!(disputed.results && disputed.results.length > 0);
-
-    if (hasNewDispute) {
-      // 今回のログインで警告を出すため、既読（1）に更新
-      await db.prepare(
-        'UPDATE events SET dispute_acknowledged = 1 WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0'
-      ).bind(user.id).run();
+    const user = await getSessionUser(db, request);
+    if (!user) {
+      return NextResponse.json({ user: null }, { status: 401 });
     }
-  } catch (err) {
-    console.error('Dispute warning check failed:', err);
-  }
 
-  return NextResponse.json({ 
-    user, 
-    dispute_warning: hasNewDispute 
-  });
+    // 不正確（disputed）と判定され、かつ未確認の予定があるかチェック
+    let hasNewDispute = false;
+    try {
+      const disputed = await db.prepare(
+        'SELECT id FROM events WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0 LIMIT 1'
+      ).bind(user.id).all();
+
+      hasNewDispute = !!(disputed.results && disputed.results.length > 0);
+
+      if (hasNewDispute) {
+        // 今回のログインで警告を出すため、既読（1）に更新
+        await db.prepare(
+          'UPDATE events SET dispute_acknowledged = 1 WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0'
+        ).bind(user.id).run();
+      }
+    } catch (err) {
+      console.error('Dispute warning check failed:', err);
+    }
+
+    return NextResponse.json({ 
+      user, 
+      dispute_warning: hasNewDispute 
+    });
+  } catch (error: any) {
+    console.error('GET /api/auth/me failed:', error);
+    return NextResponse.json({ error: `auth_me_failed: ${error?.message || error}` }, { status: 500 });
+  }
 }
 
 // DELETE /api/auth/me  → ログアウト（セッション削除）

@@ -33,10 +33,17 @@ export function useAuth() {
             setIsAuthChecking(false);
             return;
           }
+        } else {
+          const data = await res.json() as { error?: string };
+          if (data.error) {
+            alert(data.error);
+          }
         }
         localStorage.removeItem('oshi_session');
         setSessionToken(null);
-      } catch {}
+      } catch (err: any) {
+        alert('auth_me_catch_error: ' + err.message);
+      }
     }
     setIsAuthChecking(false);
     router.push('/login');

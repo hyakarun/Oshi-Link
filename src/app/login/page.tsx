@@ -51,7 +51,7 @@ function LoginContent() {
       if (sessionTokenParam) {
         localStorage.setItem('oshi_session', sessionTokenParam);
         const group = searchParams.get('group');
-        router.push(group ? `/?group=${group}` : '/');
+        router.replace(group ? `/?group=${group}` : '/');
         return;
       }
 
@@ -295,7 +295,7 @@ function LoginContent() {
                   Googleアカウントで 1秒で登録・ログイン。<br />
                   面倒なパスワード設定は不要です。
                 </p>
-                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.9-redirect-parser-fix</p>
+                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.10-debug-loop-fix</p>
               </div>
             </div>
 
