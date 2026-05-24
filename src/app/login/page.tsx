@@ -124,7 +124,7 @@ function LoginContent() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body),
               });
-              const data = await res.json();
+              const data = await res.json() as any;
               if (res.ok && data.ok && data.sessionToken && data.user) {
                 localStorage.setItem('oshi_session', data.sessionToken);
                 const group = searchParams.get('group');
