@@ -21,8 +21,10 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
       let url = uid ? `/api/groups?user_id=${uid}` : '/api/groups';
       url += (url.includes('?') ? '&' : '?') + 't=' + Date.now();
       const res = await fetch(url, { cache: 'no-store', headers: authHeaders() });
-      const data = await res.json() as { groups?: Group[] };
-      const groups = data.groups || data as unknown as Group[] || [];
+      const data = await res.json() as any;
+      const groups: Group[] = (data && Array.isArray(data.groups))
+        ? data.groups
+        : (Array.isArray(data) ? data : []);
       setAllGroups(groups);
       setFollowedGroups(groups.filter(g => g.is_following));
     } catch {
@@ -36,8 +38,10 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
     setLoading(true);
     try {
       const res = await fetch('/api/events?t=' + Date.now(), { cache: 'no-store', headers: authHeaders() });
-      const data = await res.json() as { events?: Event[] };
-      const eventList = data.events || data as unknown as Event[] || [];
+      const data = await res.json() as any;
+      const eventList: Event[] = (data && Array.isArray(data.events))
+        ? data.events
+        : (Array.isArray(data) ? data : []);
       setEvents(eventList);
     } catch {
     } finally {
