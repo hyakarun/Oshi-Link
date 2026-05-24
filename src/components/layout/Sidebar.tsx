@@ -223,13 +223,7 @@ export function Sidebar({
                       >
                         <Share2 className="w-3.5 h-3.5 md:w-3 md:h-3 text-gray-400 dark:text-zinc-500" />
                       </button>
-                      <button
-                        onClick={(ev) => { ev.stopPropagation(); setEditingGroupId(g.id); setPersonalizationOpen(true); }}
-                        className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700"
-                        title="個人設定（色・背景）"
-                      >
-                        <img src="https://api.iconify.design/lucide:palette.svg?color=%239ca3af" alt="設定" className="w-3.5 h-3.5 md:w-3 md:h-3" />
-                      </button>
+
                       <button
                         onClick={(ev) => { ev.stopPropagation(); handleUnfollow(g.id); }}
                         className="p-1.5 md:p-1 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/30 text-gray-300 dark:text-zinc-650 hover:text-red-500 dark:hover:text-red-400 transition-colors"

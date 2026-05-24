@@ -563,6 +563,11 @@ export function AppContent() {
         onOpenChange={setIsGroupDetailOpen}
         groupId={detailGroupId}
         authHeaders={authHeaders}
+        isFollowing={followedGroups.some(g => g.id === detailGroupId)}
+        onOpenPersonalization={(groupId) => {
+          setEditingGroupId(groupId);
+          setPersonalizationOpen(true);
+        }}
       />
 
       <NewsModal 

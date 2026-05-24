@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { ShieldCheck, Calendar, Users, Loader2, MapPin, Clock, Info } from 'lucide-react';
+import { ShieldCheck, Calendar, Users, Loader2, MapPin, Clock, Info, Palette } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Group } from '@/lib/types';
 import { GroupAvatar } from '@/components/ui/shared';
@@ -24,13 +24,17 @@ type GroupDetailModalProps = {
   onOpenChange: (open: boolean) => void;
   groupId: string | null;
   authHeaders?: () => Record<string, string>;
+  isFollowing?: boolean;
+  onOpenPersonalization?: (groupId: string) => void;
 };
 
 export function GroupDetailModal({
   isOpen,
   onOpenChange,
   groupId,
-  authHeaders
+  authHeaders,
+  isFollowing,
+  onOpenPersonalization
 }: GroupDetailModalProps) {
   const [loading, setLoading] = useState(true);
   const [detail, setDetail] = useState<GroupDetail | null>(null);
@@ -97,6 +101,15 @@ export function GroupDetailModal({
                 </div>
               )}
             </div>
+            {detail && isFollowing && onOpenPersonalization && (
+              <button
+                onClick={() => onOpenPersonalization(detail.id)}
+                className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-[#6366f1] transition-all shadow-sm shrink-0"
+                title="個人設定（色・背景）"
+              >
+                <Palette className="w-5 h-5" />
+              </button>
+            )}
           </div>
 
           {/* Content Area */}
