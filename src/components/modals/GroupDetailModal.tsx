@@ -101,15 +101,6 @@ export function GroupDetailModal({
                 </div>
               )}
             </div>
-            {detail && isFollowing && onOpenPersonalization && (
-              <button
-                onClick={() => onOpenPersonalization(detail.id)}
-                className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-[#6366f1] transition-all shadow-sm shrink-0"
-                title="個人設定（色・背景）"
-              >
-                <Palette className="w-5 h-5" />
-              </button>
-            )}
           </div>
 
           {/* Content Area */}
@@ -123,9 +114,21 @@ export function GroupDetailModal({
               <div className="space-y-6 animate-in fade-in duration-300">
                 {/* Description */}
                 <div className="space-y-1.5">
-                  <h3 className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
-                    <Info className="w-3.5 h-3.5 text-[#6366f1]" /> カレンダーの概要
-                  </h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
+                      <Info className="w-3.5 h-3.5 text-[#6366f1]" /> カレンダーの概要
+                    </h3>
+                    {detail && isFollowing && onOpenPersonalization && (
+                      <button
+                        onClick={() => onOpenPersonalization(detail.id)}
+                        className="flex items-center gap-1 text-[10px] font-black text-[#6366f1] dark:text-indigo-400 hover:opacity-85 transition-opacity"
+                        title="個人設定（色・背景）"
+                      >
+                        <Palette className="w-3 h-3" />
+                        <span>個人設定（色・背景）</span>
+                      </button>
+                    )}
+                  </div>
                   <div className="p-4 bg-gray-50 dark:bg-zinc-800/40 rounded-2xl border border-gray-100 dark:border-zinc-800/30">
                     <p className="text-xs text-gray-600 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-wrap">
                       {detail.description || 'このカレンダーの説明はありません。'}
