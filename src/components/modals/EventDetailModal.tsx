@@ -213,7 +213,7 @@ export function EventDetailModal({
                       公式ソース・関連リンクを開く
                     </button>
                     {/* URLを直接表示（目視確認用） */}
-                    <div className="mt-3 px-4 py-3 bg-gray-50 dark:bg-zinc-850/40 rounded-xl border border-gray-100 dark:border-zinc-800 overflow-hidden">
+                    <div className="mt-3 px-4 py-3 bg-gray-50 dark:bg-zinc-800/40 rounded-xl border border-gray-100 dark:border-zinc-800 overflow-hidden">
                       <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                         <AlertCircle className="w-3 h-3 text-gray-300 dark:text-zinc-650" />
                         リンク先URL (目視確認用)
@@ -241,7 +241,7 @@ export function EventDetailModal({
                 )}
 
                 {/* Accuracy Voting Section */}
-                <div className="space-y-4 border-t border-gray-100 dark:border-zinc-800 pt-8 mt-4 bg-gray-50/30 dark:bg-zinc-850/10 -mx-8 px-8 pb-8">
+                <div className="space-y-4 border-t border-gray-100 dark:border-zinc-800 pt-8 mt-4 bg-gray-50/30 dark:bg-zinc-800/10 -mx-8 px-8 pb-8">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">情報の正確さを投票</h3>
                     <div className="flex gap-4">
@@ -342,7 +342,7 @@ export function EventDetailModal({
                           <div className="px-1">
                             <p className="text-[9px] font-black text-gray-300 dark:text-zinc-500 uppercase tracking-widest mb-1">変更後の内容</p>
                             <p className="text-xs font-black text-[#222222] dark:text-zinc-100 truncate">{p.title}</p>
-                            {p.description && <p className="text-[10px] text-gray-400 dark:text-zinc-550 truncate mt-0.5">{p.description}</p>}
+                            {p.description && <p className="text-[10px] text-gray-400 dark:text-zinc-400 truncate mt-0.5">{p.description}</p>}
                           </div>
                         </div>
                       </div>
@@ -400,7 +400,7 @@ export function EventDetailModal({
               </div>
               <div>
                 <DialogTitle className="text-xl font-black text-[#222222] dark:text-zinc-100">リンクの安全性について</DialogTitle>
-                <p className="text-xs text-gray-400 dark:text-zinc-555 font-bold uppercase tracking-widest mt-0.5">Security Measures</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-500 font-bold uppercase tracking-widest mt-0.5">Security Measures</p>
               </div>
             </div>
 

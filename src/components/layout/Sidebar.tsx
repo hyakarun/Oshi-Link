@@ -95,7 +95,7 @@ export function Sidebar({
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-black text-[#222222] dark:text-zinc-100 tracking-tight">Oshi-Link</p>
             <div className="flex items-center gap-1 min-w-0">
-              <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium truncate max-w-[120px]">
+              <p className="text-[10px] text-gray-400 dark:text-zinc-400 font-medium truncate max-w-[120px]">
                 {user ? user.name : 'ログインしていません'}
               </p>
               {user && (user.is_official || (activeGroupId !== '0' && user.official_groups?.includes(activeGroupId))) && (
@@ -167,7 +167,7 @@ export function Sidebar({
         <div className="flex-1 overflow-y-auto px-3 pb-3">
           {followedGroups.length === 0 ? (
             <div className="p-5 text-center">
-              <div className="w-12 h-12 bg-gray-100 dark:bg-zinc-850 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-gray-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-gray-300 dark:text-zinc-600" />
               </div>
               <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 mb-1">フォロー中なし</p>
@@ -249,7 +249,7 @@ export function Sidebar({
                 <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500 shrink-0" />
                 <span className="truncate">使い方</span>
               </div>
-              <ExternalLink className="w-3 h-3 text-gray-400 dark:text-zinc-550 group-hover:text-gray-500 shrink-0" />
+              <ExternalLink className="w-3 h-3 text-gray-400 dark:text-zinc-400 group-hover:text-gray-500 shrink-0" />
             </a>
 
             <button

@@ -84,7 +84,7 @@ export function RightPanel({
                   
                   <div 
                     onClick={() => onEventClick(e)}
-                    className="group p-4 bg-white dark:bg-zinc-900/30 border border-gray-100 dark:border-zinc-850 rounded-2xl hover:border-gray-200 dark:hover:border-zinc-700 hover:shadow-sm transition-all cursor-pointer active:scale-[0.98]"
+                    className="group p-4 bg-white dark:bg-zinc-900/30 border border-gray-100 dark:border-zinc-800 rounded-2xl hover:border-gray-200 dark:hover:border-zinc-700 hover:shadow-sm transition-all cursor-pointer active:scale-[0.98]"
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getGroupColor(e.group_id) }} />

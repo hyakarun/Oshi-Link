@@ -22,7 +22,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           Oshi-Link Public Beta Test
         </div>
 
-        <DialogHeader className="p-8 bg-gray-50 dark:bg-zinc-850 border-b border-gray-100 dark:border-zinc-800 shrink-0">
+        <DialogHeader className="p-8 bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-800 shrink-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-2xl bg-[#6366f1] flex items-center justify-center shadow-lg shadow-[#6366f1]/20">
               <ShieldCheck className="w-6 h-6 text-white" />
@@ -172,7 +172,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           )}
         </div>
 
-        <div className="p-6 border-t border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-850 shrink-0 text-center">
+        <div className="p-6 border-t border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 shrink-0 text-center">
           <p className="text-[12px] text-gray-400 dark:text-zinc-500 font-bold flex items-center justify-center gap-1.5 uppercase tracking-widest leading-none mb-2">
             Presented by <span className="text-[#6366f1]">TSUKURO!</span>
           </p>
@@ -204,7 +204,7 @@ function CreditItem({ name, desc, url, license }: { name: string; desc: string; 
         </a>
       </div>
       <p className="text-[10px] text-gray-500 dark:text-zinc-400 font-medium leading-relaxed">{desc}</p>
-      {license && <p className="text-[9px] text-gray-400 dark:text-zinc-550 font-bold mt-1 uppercase tracking-wider">{license}</p>}
+      {license && <p className="text-[9px] text-gray-400 dark:text-zinc-400 font-bold mt-1 uppercase tracking-wider">{license}</p>}
     </div>
   );
 }

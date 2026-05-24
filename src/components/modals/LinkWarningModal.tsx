@@ -25,7 +25,7 @@ export function LinkWarningModal({ url, onClose }: LinkWarningModalProps) {
             <span className="text-orange-600 dark:text-orange-400 font-bold">フィッシング詐欺や悪質なウイルスが含まれる可能性があるリンクには十分にご注意ください。怪しい場合は絶対に開かないでください。</span>
           </DialogDescription>
           <div className="flex gap-3 w-full mt-4">
-            <Button onClick={onClose} className="flex-1 bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-350 h-12 rounded-2xl font-black hover:bg-gray-200 dark:hover:bg-zinc-700 shadow-sm active:scale-95 transition-all">キャンセル</Button>
+            <Button onClick={onClose} className="flex-1 bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-300 h-12 rounded-2xl font-black hover:bg-gray-200 dark:hover:bg-zinc-700 shadow-sm active:scale-95 transition-all">キャンセル</Button>
             <a 
               href={url || '#'} 
               target="_blank" 

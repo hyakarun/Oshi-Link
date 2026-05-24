@@ -142,7 +142,7 @@ function TimeGrid({
                 style={{ top: h * HOUR_HEIGHT }}
               >
                 {h !== 0 && (
-                  <span className="absolute -top-2.5 right-2 text-[9px] font-bold text-gray-300 dark:text-zinc-650 tabular-nums">
+                  <span className="absolute -top-2.5 right-2 text-[9px] font-bold text-gray-300 dark:text-zinc-500 tabular-nums">
                     {`${h.toString().padStart(2, '0')}:00`}
                   </span>
                 )}
@@ -285,7 +285,7 @@ export function CalendarView({
               <span className={`text-[10px] md:text-xs font-black ${
                 isSameDay(d, new Date())
                   ? 'bg-[#6366f1] text-white w-5 h-5 md:w-6 md:h-6 inline-flex items-center justify-center rounded-full'
-                  : !isSameMonth(d, monthStart) ? 'text-gray-300 dark:text-zinc-650' : 'text-[#222222] dark:text-zinc-100'
+                  : !isSameMonth(d, monthStart) ? 'text-gray-300 dark:text-zinc-500' : 'text-[#222222] dark:text-zinc-100'
               }`}>
                 {format(d, 'd')}
               </span>
@@ -305,7 +305,7 @@ export function CalendarView({
                 </div>
               ))}
               {dayEvents.length > 4 && (
-                <div className="text-[8px] md:text-[9px] text-gray-400 dark:text-zinc-550 font-bold pl-1">
+                <div className="text-[8px] md:text-[9px] text-gray-400 dark:text-zinc-400 font-bold pl-1">
                   他 {dayEvents.length - 4} 件...
                 </div>
               )}

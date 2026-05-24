@@ -273,7 +273,7 @@ export function AppContent() {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-white dark:bg-[#0f0f12]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-gray-100 dark:border-zinc-850 border-t-[#6366f1] rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-gray-100 dark:border-zinc-800 border-t-[#6366f1] rounded-full animate-spin" />
           <p className="text-xs font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">Oshi-Link Loading...</p>
         </div>
       </div>

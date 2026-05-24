@@ -60,7 +60,7 @@ export function ProfileModal({
                 )}
               </div>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <p className="text-sm text-gray-400 dark:text-zinc-550">{user.email}</p>
+                <p className="text-sm text-gray-400 dark:text-zinc-400">{user.email}</p>
                 {user.is_official && (
                   <span className="px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/20 text-[#6366f1] dark:text-indigo-400 rounded-md text-[8px] font-black tracking-widest uppercase">
                     システム公式
@@ -107,14 +107,14 @@ export function ProfileModal({
                 {/* 基本設定 */}
                 <div className="space-y-4">
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-black text-gray-400 dark:text-zinc-550 uppercase tracking-[0.1em]">表示名</label>
+                    <label className="text-[11px] font-black text-gray-400 dark:text-zinc-400 uppercase tracking-[0.1em]">表示名</label>
                     <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 dark:bg-zinc-800 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" required />
                   </div>
 
                   {/* 管理中の公式カレンダー */}
                   {user.official_groups && user.official_groups.length > 0 && (
                     <div className="space-y-2 pt-2">
-                      <label className="text-[11px] font-black text-gray-400 dark:text-zinc-550 uppercase tracking-[0.1em]">管理中の公式カレンダー</label>
+                      <label className="text-[11px] font-black text-gray-400 dark:text-zinc-400 uppercase tracking-[0.1em]">管理中の公式カレンダー</label>
                       <div className="space-y-1.5">
                         {user.official_groups.map(groupId => {
                           const group = followedGroups.find(g => g.id === groupId);
@@ -141,7 +141,7 @@ export function ProfileModal({
                     <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-wider">表示設定</h3>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[11px] font-black text-gray-400 dark:text-zinc-550 uppercase tracking-[0.1em]">表示モード</label>
+                    <label className="text-[11px] font-black text-gray-400 dark:text-zinc-400 uppercase tracking-[0.1em]">表示モード</label>
                     <div className="grid grid-cols-3 gap-2">
                       {(['light', 'dark', 'system'] as const).map((t) => (
                         <button
@@ -151,7 +151,7 @@ export function ProfileModal({
                           className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
                             theme === t
                               ? 'border-[#6366f1] bg-indigo-50/20 dark:bg-indigo-950/20 text-[#6366f1]'
-                              : 'border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/40 text-gray-500 dark:text-zinc-400 hover:border-gray-250 dark:hover:border-zinc-700'
+                              : 'border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/40 text-gray-500 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-700'
                           }`}
                         >
                           {t === 'light' && <Sun className="w-4 h-4" />}
@@ -182,7 +182,7 @@ export function ProfileModal({
                         </div>
                         <div>
                           <p className="text-sm font-bold text-[#222222] dark:text-zinc-100">メール通知</p>
-                          <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium">イベントのリマインドを受信</p>
+                          <p className="text-[10px] text-gray-400 dark:text-zinc-400 font-medium">イベントのリマインドを受信</p>
                         </div>
                       </div>
                       <input 
@@ -195,7 +195,7 @@ export function ProfileModal({
                   </div>
                 </div>
 
-                <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black dark:bg-zinc-800 dark:hover:bg-zinc-750 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
+                <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
                   {loading ? '保存中...' : '設定を保存'}
                 </button>
               </form>
@@ -214,7 +214,7 @@ export function ProfileModal({
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-black text-[#222222] dark:text-zinc-100">使い方マニュアル</p>
-                      <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium">noteでマニュアルを読む（外部サイト）</p>
+                      <p className="text-[10px] text-gray-400 dark:text-zinc-400 font-medium">noteでマニュアルを読む（外部サイト）</p>
                     </div>
                   </div>
                 </a>
@@ -233,7 +233,7 @@ export function ProfileModal({
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-black text-[#222222] dark:text-zinc-100">クレジットと法務情報</p>
-                      <p className="text-[10px] text-gray-400 dark:text-zinc-550 font-medium">運営・利用規約・プライバシーポリシー</p>
+                      <p className="text-[10px] text-gray-400 dark:text-zinc-400 font-medium">運営・利用規約・プライバシーポリシー</p>
                     </div>
                   </div>
                 </button>
