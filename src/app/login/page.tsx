@@ -83,9 +83,8 @@ function LoginContent() {
 
 
   // 2. Googleスクリプトの動的読み込み
-  // 2. Googleログインボタンの初期化（マウント時のみ実行）
+  // 2. Googleログインボタンの初期化と描画
   useEffect(() => {
-    // Run once on mount to set up Google Sign‑In button.
     let initTimer: NodeJS.Timeout;
     let cancelled = false;
 
@@ -102,43 +101,44 @@ function LoginContent() {
         return;
       }
 
-      // Prevent duplicate initialization across re‑renders/HMR.
-      if (window.__gsiInitialized) return;
       const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
       try {
-        window.__gsiInitialized = true;
-        (window as any).google.accounts.id.initialize({
-          client_id: clientId,
-          auto_select: false,
-          cancel_on_tap_outside: true,
-          callback: async (response: any) => {
-            setAuthStep('logging_in');
-            try {
-              const body: Record<string, unknown> = { credential: response.credential };
-              if (isOfficialRef.current && calendarNameRef.current.trim()) {
-                body.is_official = true;
-                body.calendar_name = calendarNameRef.current.trim();
-              }
-              const res = await fetch('/api/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body),
-              });
-              const data = await res.json() as any;
-              if (res.ok && data.ok && data.sessionToken && data.user) {
-                localStorage.setItem('oshi_session', data.sessionToken);
-                const group = searchParams.get('group');
-                router.push(group ? `/?group=${group}` : '/');
-              } else {
-                alert('ログイン処理に失敗しました: ' + (data.error || '不明エラー'));
+        if (!window.__gsiInitialized) {
+          (window as any).google.accounts.id.initialize({
+            client_id: clientId,
+            auto_select: false,
+            cancel_on_tap_outside: true,
+            callback: async (response: any) => {
+              setAuthStep('logging_in');
+              try {
+                const body: Record<string, unknown> = { credential: response.credential };
+                if (isOfficialRef.current && calendarNameRef.current.trim()) {
+                  body.is_official = true;
+                  body.calendar_name = calendarNameRef.current.trim();
+                }
+                const res = await fetch('/api/auth/google', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(body),
+                });
+                const data = await res.json() as any;
+                if (res.ok && data.ok && data.sessionToken && data.user) {
+                  localStorage.setItem('oshi_session', data.sessionToken);
+                  const group = searchParams.get('group');
+                  router.push(group ? `/?group=${group}` : '/');
+                } else {
+                  alert('ログイン処理に失敗しました: ' + (data.error || '不明エラー'));
+                  setAuthStep('idle');
+                }
+              } catch (err: any) {
+                alert('通信エラー: ' + err.message);
                 setAuthStep('idle');
               }
-            } catch (err: any) {
-              alert('通信エラー: ' + err.message);
-              setAuthStep('idle');
-            }
-          },
-        });
+            },
+          });
+          window.__gsiInitialized = true;
+        }
+
         btnEl.innerHTML = '';
         (window as any).google.accounts.id.renderButton(btnEl, {
           theme: 'filled_blue',
@@ -159,7 +159,7 @@ function LoginContent() {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
     };
-  }, []);
+  }, [isAuthChecking, authStep, router, searchParams]);
 
   async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
