@@ -70,6 +70,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'event_id and title are required' }, { status: 400 });
     }
 
+    // 対象イベントのグループが公式カレンダーかチェック
+    const event = await db.prepare('SELECT group_id FROM events WHERE id = ?').bind(event_id).first() as { group_id: string } | null;
+    if (!event) {
+      return NextResponse.json({ error: 'イベントが見つかりません' }, { status: 404 });
+    }
+
+    const isGroupOfficial = await db.prepare(
+      'SELECT 1 FROM group_officials WHERE group_id = ?'
+    ).bind(event.group_id).first();
+
+    if (isGroupOfficial) {
+      const isOfficialGroupUser = await db.prepare(
+        'SELECT 1 FROM group_officials WHERE group_id = ? AND user_id = ?'
+      ).bind(event.group_id, user.id).first();
+
+      if (!isOfficialGroupUser && !user.is_official) {
+        return NextResponse.json({ error: '公式カレンダーの予定に修正提案を送信することはできません' }, { status: 403 });
+      }
+    }
+
     // 先着3件チェック
     const countResult = await db.prepare(`
       SELECT COUNT(*) as count FROM event_proposals WHERE event_id = ?

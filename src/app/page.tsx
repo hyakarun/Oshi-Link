@@ -170,6 +170,25 @@ export function AppContent() {
     return g?.custom_theme_color || groupColorSolid(groupId);
   }, [allGroups, activeGroupId]);
 
+  const canAddEvent = useMemo(() => {
+    if (activeGroupId !== '0') {
+      const activeGroup = allGroups.find(g => g.id === activeGroupId);
+      if (activeGroup?.is_official) {
+        if (!user) return false;
+        return user.is_official || user.official_groups?.includes(activeGroupId);
+      }
+    }
+    return true;
+  }, [user, activeGroupId, allGroups]);
+
+  const postableGroups = useMemo(() => {
+    return followedGroups.filter(g => {
+      if (!g.is_official) return true;
+      if (!user) return false;
+      return user.is_official || user.official_groups?.includes(g.id);
+    });
+  }, [followedGroups, user]);
+
   // Handlers
   const handleToday = () => setCurrentMonth(new Date());
   const handlePrev = () => setCurrentMonth(view === 'month' ? subMonths(currentMonth, 1) : addDays(currentMonth, view === 'week' ? -7 : -1));
@@ -330,7 +349,7 @@ export function AppContent() {
                 return;
               }
               setDefaultEventData(null); 
-              setSelectedGroupId(activeGroupId === '0' ? followedGroups[0]?.id || '' : activeGroupId);
+              setSelectedGroupId(activeGroupId === '0' ? postableGroups[0]?.id || '' : activeGroupId);
               setIsAddModalOpen(true); 
             }}
             setIsMobileMenuOpen={setIsMobileMenuOpen}
@@ -338,6 +357,7 @@ export function AppContent() {
             setIsRightPanelOpen={setIsRightPanelOpen}
             themeColor={themeColor}
             activeGroupId={activeGroupId}
+            canAddEvent={canAddEvent}
           />
         )}
 
@@ -527,7 +547,7 @@ export function AppContent() {
         setEventSubCategory={setEventSubCategory}
         selectedLocation={selectedLocation}
         setSelectedLocation={setSelectedLocation}
-        groups={followedGroups}
+        groups={postableGroups}
         selectedGroupId={selectedGroupId}
         setSelectedGroupId={setSelectedGroupId}
         onSubmit={handleAddEventSubmit}

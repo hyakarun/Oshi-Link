@@ -50,6 +50,7 @@ export async function GET(request: NextRequest) {
     let query = `
       SELECT e.*, u.name as creator_name,
       (u.is_official OR EXISTS(SELECT 1 FROM group_officials go WHERE go.group_id = e.group_id AND go.user_id = e.added_by)) as creator_is_official,
+      EXISTS(SELECT 1 FROM group_officials go WHERE go.group_id = e.group_id) as group_is_official,
       (SELECT v.verification_status FROM verifications v WHERE v.event_id = e.id AND v.user_id = ?) as user_vote
       FROM events e 
       LEFT JOIN users u ON e.added_by = u.id 
@@ -60,6 +61,7 @@ export async function GET(request: NextRequest) {
     const mappedResults = (result.results ?? []).map((row: any) => ({
       ...row,
       creator_is_official: !!row.creator_is_official,
+      group_is_official: !!row.group_is_official,
       is_tentative: !!row.is_tentative
     }));
     return NextResponse.json(mappedResults);
@@ -136,6 +138,15 @@ export async function POST(request: NextRequest) {
     const isOfficialGroupUser = await db.prepare(
       'SELECT 1 FROM group_officials WHERE group_id = ? AND user_id = ?'
     ).bind(group_id, added_by).first();
+
+    const isGroupOfficial = await db.prepare(
+      'SELECT 1 FROM group_officials WHERE group_id = ?'
+    ).bind(group_id).first();
+
+    if (isGroupOfficial && !isOfficialGroupUser && !user.is_official) {
+      return NextResponse.json({ error: '公式カレンダーには管理者のみ予定を追加できます' }, { status: 403 });
+    }
+
     const isTentative = (user.is_official || isOfficialGroupUser) ? 0 : 1;
 
     await db.prepare(

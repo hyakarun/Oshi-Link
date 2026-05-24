@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
         g.description,
         g.avatar_url,
         g.created_at,
+        EXISTS(SELECT 1 FROM group_officials o WHERE o.group_id = g.id) as is_official,
         COUNT(DISTINCT e.id) as event_count,
         COUNT(DISTINCT f.id) as follower_count
       FROM groups g
@@ -43,6 +44,7 @@ export async function GET(request: NextRequest) {
 
     const groups = (result.results as any[]).map(g => ({
       ...g,
+      is_official: !!g.is_official,
       is_following: !!userFollowData[g.id],
       custom_bg_image: userFollowData[g.id]?.custom_bg_image,
       custom_theme_color: userFollowData[g.id]?.custom_theme_color,

@@ -241,7 +241,8 @@ export function EventDetailModal({
                 )}
 
                 {/* Accuracy Voting Section */}
-                <div className="space-y-4 border-t border-gray-100 dark:border-zinc-800 pt-8 mt-4 bg-gray-50/30 dark:bg-zinc-800/10 -mx-8 px-8 pb-8">
+                {!(selectedEvent.creator_is_official || selectedEvent.group_is_official) && (
+                  <div className="space-y-4 border-t border-gray-100 dark:border-zinc-800 pt-8 mt-4 bg-gray-50/30 dark:bg-zinc-800/10 -mx-8 px-8 pb-8">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">情報の正確さを投票</h3>
                     <div className="flex gap-4">
@@ -274,9 +275,11 @@ export function EventDetailModal({
                     </Button>
                   </div>
                 </div>
+                )}
 
                 {/* Community Update Section (Voting on Proposals) */}
-                <div className="mt-8 border-t border-gray-100 dark:border-zinc-800 pt-8">
+                {!selectedEvent.group_is_official && (
+                  <div className="mt-8 border-t border-gray-100 dark:border-zinc-800 pt-8">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-widest">修正提案（0時更新）</h3>
@@ -353,6 +356,7 @@ export function EventDetailModal({
                     )}
                   </div>
                 </div>
+                )}
               </>
             ) : (
               <form onSubmit={onProposeSubmit} className="space-y-6 animate-in fade-in zoom-in-95 duration-300">

@@ -17,6 +17,7 @@ interface CalendarHeaderProps {
   setIsRightPanelOpen: (open: boolean) => void;
   themeColor: string;
   activeGroupId: string;
+  canAddEvent?: boolean;
 }
 
 export function CalendarHeader({
@@ -31,7 +32,8 @@ export function CalendarHeader({
   isRightPanelOpen,
   setIsRightPanelOpen,
   themeColor,
-  activeGroupId
+  activeGroupId,
+  canAddEvent
 }: CalendarHeaderProps) {
   const handleShare = async () => {
     const isAll = activeGroupId === '0';
@@ -125,13 +127,15 @@ export function CalendarHeader({
           <Share2 className="w-5 h-5 text-gray-500 dark:text-zinc-400 group-hover:text-[#6366f1]" />
         </button>
 
-        <Button 
-          onClick={onAddEvent}
-          className="text-white rounded-xl h-10 md:h-11 px-4 md:px-6 text-xs font-black shadow-lg active:scale-95 transition-all flex items-center gap-2"
-          style={{ background: themeColor, color: 'white' }}
-        >
-          <Plus className="w-4 h-4" /> <span className="hidden md:inline">予定を追加</span>
-        </Button>
+        {canAddEvent !== false && (
+          <Button 
+            onClick={onAddEvent}
+            className="text-white rounded-xl h-10 md:h-11 px-4 md:px-6 text-xs font-black shadow-lg active:scale-95 transition-all flex items-center gap-2"
+            style={{ background: themeColor, color: 'white' }}
+          >
+            <Plus className="w-4 h-4" /> <span className="hidden md:inline">予定を追加</span>
+          </Button>
+        )}
       </div>
     </header>
   );

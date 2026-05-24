@@ -8,6 +8,7 @@ export type Group = {
   is_following?: boolean;
   custom_bg_image?: string;
   custom_theme_color?: string;
+  is_official?: boolean;
 };
 
 export type Event = {
@@ -32,6 +33,7 @@ export type Event = {
   disputes_count?: number;
   creator_name?: string;
   creator_is_official?: boolean;
+  group_is_official?: boolean;
   user_vote?: 'confirmed' | 'disputed' | null;
 };
 
