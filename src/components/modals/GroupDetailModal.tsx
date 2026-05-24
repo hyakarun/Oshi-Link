@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ShieldCheck, Calendar, Users, Loader2, MapPin, Clock, Info } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
+import { Group } from '@/lib/types';
 import { GroupAvatar } from '@/components/ui/shared';
 
 type UpcomingEvent = {
@@ -11,11 +12,7 @@ type UpcomingEvent = {
   location: string | null;
 };
 
-type GroupDetail = {
-  id: string;
-  name: string;
-  description: string | null;
-  avatar_url: string | null;
+type GroupDetail = Group & {
   created_at: string;
   is_official: boolean;
   follower_count: number;
@@ -52,8 +49,12 @@ export function GroupDetailModal({
         const headers = authHeaders ? authHeaders() : {};
         const res = await fetch(`/api/groups/detail?group_id=${groupId}`, { headers });
         if (res.ok) {
-          const data = await res.json() as { group: GroupDetail; upcoming_events: UpcomingEvent[] };
-          setDetail(data.group);
+          const data = await res.json() as { group: any; upcoming_events: UpcomingEvent[] };
+          setDetail({
+            ...data.group,
+            description: data.group.description || undefined,
+            avatar_url: data.group.avatar_url || undefined,
+          });
           setUpcomingEvents(data.upcoming_events);
         }
       } catch (e) {
