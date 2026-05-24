@@ -40,6 +40,21 @@ function LoginContent() {
   useEffect(() => {
     setMounted(true);
     async function checkAuth() {
+      const errorParam = searchParams.get('error');
+      if (errorParam) {
+        alert(errorParam);
+        router.replace('/login');
+        return;
+      }
+
+      const sessionTokenParam = searchParams.get('session_token');
+      if (sessionTokenParam) {
+        localStorage.setItem('oshi_session', sessionTokenParam);
+        const group = searchParams.get('group');
+        router.push(group ? `/?group=${group}` : '/');
+        return;
+      }
+
       const urlToken = searchParams.get('token');
       if (urlToken) {
         setAuthStep('logging_in');
@@ -82,7 +97,6 @@ function LoginContent() {
   }, [router, searchParams]);
 
 
-  // 2. Googleスクリプトの動的読み込み
   // 2. Googleログインボタンの初期化と描画
   useEffect(() => {
     let initTimer: NodeJS.Timeout;
@@ -103,41 +117,21 @@ function LoginContent() {
 
       const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
       try {
-        if (!window.__gsiInitialized) {
-          (window as any).google.accounts.id.initialize({
-            client_id: clientId,
-            auto_select: false,
-            cancel_on_tap_outside: true,
-            callback: async (response: any) => {
-              setAuthStep('logging_in');
-              try {
-                const body: Record<string, unknown> = { credential: response.credential };
-                if (isOfficialRef.current && calendarNameRef.current.trim()) {
-                  body.is_official = true;
-                  body.calendar_name = calendarNameRef.current.trim();
-                }
-                const res = await fetch('/api/auth/google', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(body),
-                });
-                const data = await res.json() as any;
-                if (res.ok && data.ok && data.sessionToken && data.user) {
-                  localStorage.setItem('oshi_session', data.sessionToken);
-                  const group = searchParams.get('group');
-                  router.push(group ? `/?group=${group}` : '/');
-                } else {
-                  alert('ログイン処理に失敗しました: ' + (data.error || '不明エラー'));
-                  setAuthStep('idle');
-                }
-              } catch (err: any) {
-                alert('通信エラー: ' + err.message);
-                setAuthStep('idle');
-              }
-            },
-          });
-          window.__gsiInitialized = true;
-        }
+        const stateObj = {
+          is_official: isOfficial,
+          calendar_name: calendarName.trim(),
+          group: searchParams.get('group') || '',
+        };
+        const stateStr = encodeURIComponent(JSON.stringify(stateObj));
+
+        (window as any).google.accounts.id.initialize({
+          client_id: clientId,
+          auto_select: false,
+          cancel_on_tap_outside: true,
+          ux_mode: 'redirect',
+          login_uri: `${window.location.origin}/api/auth/google`,
+          state: stateStr,
+        });
 
         btnEl.innerHTML = '';
         (window as any).google.accounts.id.renderButton(btnEl, {
@@ -159,7 +153,7 @@ function LoginContent() {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
     };
-  }, [isAuthChecking, authStep, router, searchParams]);
+  }, [isAuthChecking, authStep, router, searchParams, isOfficial, calendarName]);
 
   async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -301,7 +295,7 @@ function LoginContent() {
                   Googleアカウントで 1秒で登録・ログイン。<br />
                   面倒なパスワード設定は不要です。
                 </p>
-                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.7-config-object-export</p>
+                <p className="text-[8px] text-gray-200 mt-2 text-center">v1.0.8-redirect-ux</p>
               </div>
             </div>
 
