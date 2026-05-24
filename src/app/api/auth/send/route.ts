@@ -43,12 +43,14 @@ export async function POST(request: NextRequest) {
     user = { id: userId, name: userName, email };
   }
 
-  // 新規ユーザーかつ公式登録の場合：カレンダー作成 + group_officials登録
+  // 新規ユーザーかつ公式登録の場合：カレンダー作成 + group_officials登録 + デフォルトフォロー
   if (isNewUser && is_official && calendar_name?.trim()) {
     const groupId = crypto.randomUUID();
     await db.prepare('INSERT INTO groups (id, name) VALUES (?, ?)').bind(groupId, calendar_name.trim()).run();
     const officialId = crypto.randomUUID();
     await db.prepare('INSERT INTO group_officials (id, group_id, user_id) VALUES (?, ?, ?)').bind(officialId, groupId, user.id).run();
+    const followId = crypto.randomUUID();
+    await db.prepare('INSERT INTO user_group_follows (id, user_id, group_id) VALUES (?, ?, ?)').bind(followId, user.id, groupId).run();
   }
 
   // 2. 有効な Magic Link を生成（15分で失効）
