@@ -136,7 +136,7 @@ export function EventDetailModal({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] shadow-2xl ring-1 ring-gray-100 dark:ring-border top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
-        <div className="p-8 overflow-y-auto flex-1">
+        <div className="modal-surface p-8 overflow-y-auto flex-1">
           <div className="mb-6 flex flex-wrap items-center gap-2">
             {selectedEvent.creator_is_official ? (
               <div className="flex items-center gap-2 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-950/20 text-[#6366f1] dark:text-indigo-400 rounded-full border border-indigo-200 dark:border-indigo-900/30">

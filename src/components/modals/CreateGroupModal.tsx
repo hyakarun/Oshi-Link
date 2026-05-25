@@ -25,7 +25,7 @@ export function CreateGroupModal({
             新しい推しグループのカレンダーを作成し、みんなで予定を共有しましょう。
           </DialogDescription>
         </div>
-        <form onSubmit={handleCreateGroup} className="p-8 space-y-5">
+        <form onSubmit={handleCreateGroup} className="modal-surface p-8 space-y-5">
           <div className="space-y-1.5">
             <label className="text-[11px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-[0.1em]">グループ名 <span className="text-red-500">*</span></label>
             <input name="name" className="w-full h-12 bg-gray-50 dark:bg-secondary border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" placeholder="例: Virtual Idols Unit X" required />

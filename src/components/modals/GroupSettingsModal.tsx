@@ -30,7 +30,7 @@ export function GroupSettingsModal({
             あなただけのカレンダー画面にカスタマイズできます。※他のユーザーには公開されません。
           </DialogDescription>
         </div>
-        <form onSubmit={handleSavePersonalization} className="p-8 space-y-5">
+        <form onSubmit={handleSavePersonalization} className="modal-surface p-8 space-y-5">
           <input type="hidden" name="group_id" value={group.id} />
           
           <div className="space-y-1.5">

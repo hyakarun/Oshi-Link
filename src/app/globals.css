@@ -20,6 +20,8 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -91,6 +93,11 @@
 
   .dark .card-shadow {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 0px 1px, rgba(0, 0, 0, 0.25) 0px 2px 8px;
+  }
+
+  .modal-surface {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
   }
 
   /* iOS Safari: date/time input normalization */

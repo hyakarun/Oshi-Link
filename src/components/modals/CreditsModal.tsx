@@ -12,7 +12,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0 overflow-hidden border-none rounded-[32px] shadow-2xl flex flex-col h-[85vh]">
+      <DialogContent className="modal-surface max-w-4xl p-0 overflow-hidden border-none rounded-[32px] shadow-2xl flex flex-col h-[85vh]">
         {/* Beta Status Banner */}
         <div className="bg-indigo-600 text-white px-4 py-2.5 text-center text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shrink-0">
           <span className="relative flex h-2 w-2">

@@ -73,7 +73,7 @@ export function GroupDetailModal({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] border-none rounded-[32px] shadow-2xl p-0 overflow-hidden bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
-        <div className="h-[520px] flex flex-col">
+        <div className="modal-surface h-[520px] flex flex-col">
           {/* Header */}
           <div className="p-6 bg-gray-50 dark:bg-secondary border-b border-gray-100 dark:border-border flex items-center gap-4 shrink-0">
             {detail ? (
