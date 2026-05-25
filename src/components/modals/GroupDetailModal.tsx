@@ -23,6 +23,7 @@ type GroupDetailModalProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   groupId: string | null;
+  groupPrefs?: Pick<Group, 'custom_theme_color' | 'custom_bg_image'> | null;
   authHeaders?: () => Record<string, string>;
   isFollowing?: boolean;
   onOpenPersonalization?: (groupId: string) => void;
@@ -32,10 +33,12 @@ export function GroupDetailModal({
   isOpen,
   onOpenChange,
   groupId,
+  groupPrefs,
   authHeaders,
   isFollowing,
   onOpenPersonalization
 }: GroupDetailModalProps) {
+  const accentColor = groupPrefs?.custom_theme_color || '#6366f1';
   const [loading, setLoading] = useState(true);
   const [detail, setDetail] = useState<GroupDetail | null>(null);
   const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([]);
@@ -77,7 +80,7 @@ export function GroupDetailModal({
           {/* Header */}
           <div className="p-6 bg-gray-50 dark:bg-secondary border-b border-gray-100 dark:border-border flex items-center gap-4 shrink-0">
             {detail ? (
-              <GroupAvatar group={detail} size="md" />
+              <GroupAvatar group={{ ...detail, ...groupPrefs }} size="md" />
             ) : (
               <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-accent animate-pulse shrink-0" />
             )}
@@ -107,7 +110,7 @@ export function GroupDetailModal({
           <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {loading ? (
               <div className="h-full flex flex-col items-center justify-center gap-3 py-12">
-                <Loader2 className="animate-spin h-8 w-8 text-[#6366f1]" />
+                <Loader2 className="animate-spin h-8 w-8" style={{ color: accentColor }} />
                 <p className="text-xs font-bold text-gray-400 dark:text-zinc-500">カレンダー詳細を取得中...</p>
               </div>
             ) : detail ? (
@@ -116,12 +119,13 @@ export function GroupDetailModal({
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <h3 className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest flex items-center gap-1.5">
-                      <Info className="w-3.5 h-3.5 text-[#6366f1]" /> カレンダーの概要
+                      <Info className="w-3.5 h-3.5" style={{ color: accentColor }} /> カレンダーの概要
                     </h3>
                     {detail && isFollowing && onOpenPersonalization && (
                       <button
                         onClick={() => onOpenPersonalization(detail.id)}
-                        className="flex items-center gap-1 text-[10px] font-black text-[#6366f1] dark:text-indigo-400 hover:opacity-85 transition-opacity"
+                        className="flex items-center gap-1 text-[10px] font-black hover:opacity-85 transition-opacity"
+                        style={{ color: accentColor }}
                         title="個人設定（色・背景）"
                       >
                         <Palette className="w-3 h-3" />
@@ -139,7 +143,7 @@ export function GroupDetailModal({
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-4 bg-gray-50 dark:bg-secondary/40 rounded-2xl border border-gray-100 dark:border-border/30 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-secondary flex items-center justify-center text-[#6366f1] shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-secondary flex items-center justify-center shadow-sm" style={{ color: accentColor }}>
                       <Users className="w-5 h-5" />
                     </div>
                     <div>
@@ -149,7 +153,7 @@ export function GroupDetailModal({
                   </div>
 
                   <div className="p-4 bg-gray-50 dark:bg-secondary/40 rounded-2xl border border-gray-100 dark:border-border/30 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-secondary flex items-center justify-center text-[#6366f1] shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-secondary flex items-center justify-center shadow-sm" style={{ color: accentColor }}>
                       <Calendar className="w-5 h-5" />
                     </div>
                     <div>
@@ -177,8 +181,11 @@ export function GroupDetailModal({
                             key={event.id} 
                             className="p-3 border border-gray-150 dark:border-border rounded-xl flex items-start gap-3 shadow-sm hover:border-gray-250 dark:hover:border-muted-foreground/40 transition-colors"
                           >
-                            <div className="bg-indigo-50/50 dark:bg-indigo-950/20 px-2 py-1.5 rounded-lg text-center shrink-0 min-w-[50px] border border-indigo-100/30">
-                              <p className="text-[9px] font-black text-[#6366f1] leading-none mb-1">{format(dateObj, 'M/d')}</p>
+                            <div
+                              className="px-2 py-1.5 rounded-lg text-center shrink-0 min-w-[50px] border"
+                              style={{ backgroundColor: `${accentColor}18`, borderColor: `${accentColor}40` }}
+                            >
+                              <p className="text-[9px] font-black leading-none mb-1" style={{ color: accentColor }}>{format(dateObj, 'M/d')}</p>
                               <p className="text-[8px] font-bold text-gray-400 dark:text-zinc-500 leading-none">{format(dateObj, 'HH:mm')}</p>
                             </div>
                             <div className="min-w-0 flex-1">

@@ -23,7 +23,7 @@ export function GroupSettingsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
+      <DialogContent key={`${group.id}-${group.custom_theme_color || 'default'}`} className="sm:max-w-[480px] border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
         <div className="bg-gray-50 dark:bg-secondary p-8 border-b border-gray-100 dark:border-border">
           <DialogTitle className="text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tight">{group.name} の個人設定</DialogTitle>
           <DialogDescription className="text-gray-500 dark:text-zinc-400 font-medium mt-1">
@@ -53,7 +53,12 @@ export function GroupSettingsModal({
           */}
           
           <div className="pt-2">
-            <Button type="submit" disabled={loading} className="w-full bg-[#222222] hover:bg-black dark:bg-secondary dark:hover:bg-accent text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all hover:brightness-95"
+              style={{ backgroundColor: group.custom_theme_color || '#6366f1' }}
+            >
               {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : '個人設定を保存する'}
             </Button>
           </div>

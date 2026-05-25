@@ -100,16 +100,24 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
 
   const [groupLoading, setGroupLoading] = useState(false);
 
-  const handleSavePersonalization = async (e: React.FormEvent<HTMLFormElement>, group: Group | null, onSuccess: () => void) => {
+  const handleSavePersonalization = async (e: React.FormEvent<HTMLFormElement>, group: Group | null, onSuccess: (groupId: string) => void) => {
     e.preventDefault();
     if (!group) return;
     setGroupLoading(true);
     const fd = new FormData(e.currentTarget);
-    const body = {
-      group_id: (fd.get('group_id') as string) || group.id,
-      custom_theme_color: fd.get('custom_theme_color') as string | null,
-      custom_bg_image: (fd.get('custom_bg_image') as string | null) || null,
+    const groupId = (fd.get('group_id') as string) || group.id;
+    const custom_theme_color = (fd.get('custom_theme_color') as string) || null;
+    const custom_bg_image = (fd.get('custom_bg_image') as string | null) || null;
+    const body = { group_id: groupId, custom_theme_color, custom_bg_image };
+
+    const applyLocal = () => {
+      const patch = (g: Group) =>
+        g.id === groupId ? { ...g, custom_theme_color: custom_theme_color || undefined, custom_bg_image: custom_bg_image || undefined } : g;
+      setAllGroups(prev => prev.map(patch));
+      setFollowedGroups(prev => prev.map(patch));
     };
+
+    applyLocal();
     try {
       const res = await fetch('/api/groups/follow', {
         method: 'PATCH',
@@ -118,12 +126,14 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
       });
       if (res.ok) {
         await loadGroups();
-        onSuccess();
+        onSuccess(groupId);
       } else {
+        await loadGroups();
         const data = await res.json().catch(() => ({})) as { error?: string };
         alert(data.error || '設定の保存に失敗しました');
       }
     } catch {
+      await loadGroups();
       alert('通信エラーが発生しました');
     }
     setGroupLoading(false);

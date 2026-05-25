@@ -163,9 +163,12 @@ export function AppContent() {
   }, [allGroups, activeGroupId]);
 
   const getGroupColor = useCallback((groupId: string) => {
-    // 「すべての予定」表示の時は、予定の色を一律で青（#6366f1）にする
-    if (activeGroupId === '0') return '#6366f1';
-    
+    if (activeGroupId === '0') {
+      const g = allGroups.find(item => item.id === groupId);
+      return g?.custom_theme_color || groupColorSolid(groupId);
+    }
+    const activeGroup = allGroups.find(item => item.id === activeGroupId);
+    if (activeGroup?.custom_theme_color) return activeGroup.custom_theme_color;
     const g = allGroups.find(item => item.id === groupId);
     return g?.custom_theme_color || groupColorSolid(groupId);
   }, [allGroups, activeGroupId]);
@@ -558,7 +561,10 @@ export function AppContent() {
         onOpenChange={setPersonalizationOpen}
         group={allGroups.find(g => g.id === editingGroupId) || null}
         loading={groupLoading}
-        handleSavePersonalization={(e) => handleSavePersonalization(e, allGroups.find(g => g.id === editingGroupId) || null, () => setPersonalizationOpen(false))}
+        handleSavePersonalization={(e) => handleSavePersonalization(e, allGroups.find(g => g.id === editingGroupId) || null, (groupId) => {
+          setPersonalizationOpen(false);
+          setActiveGroupId(groupId);
+        })}
       />
 
       <CreateGroupModal 
@@ -582,6 +588,7 @@ export function AppContent() {
         isOpen={isGroupDetailOpen}
         onOpenChange={setIsGroupDetailOpen}
         groupId={detailGroupId}
+        groupPrefs={allGroups.find(g => g.id === detailGroupId) ?? null}
         authHeaders={authHeaders}
         isFollowing={followedGroups.some(g => g.id === detailGroupId)}
         onOpenPersonalization={(groupId) => {
