@@ -53,7 +53,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-border/60 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
         {...props}
@@ -61,7 +61,7 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
-            className="absolute top-4 right-4 h-9 w-9 rounded-full bg-white dark:bg-secondary border border-gray-100 dark:border-border text-gray-400 dark:text-muted-foreground hover:bg-gray-50 dark:hover:bg-accent hover:text-gray-600 dark:hover:text-foreground transition-all shadow-sm active:scale-95 flex items-center justify-center p-0 z-50"
+            className="absolute top-4 right-4 h-9 w-9 rounded-full bg-card border border-border text-muted-foreground hover:bg-accent hover:text-foreground transition-all shadow-sm active:scale-95 flex items-center justify-center p-0 z-50"
           >
             <XIcon className="size-4" />
             <span className="sr-only">Close</span>

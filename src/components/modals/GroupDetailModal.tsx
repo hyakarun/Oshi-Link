@@ -72,7 +72,7 @@ export function GroupDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] bg-white dark:bg-popover border-none rounded-[32px] shadow-2xl p-0 overflow-hidden bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
+      <DialogContent className="sm:max-w-[480px] border-none rounded-[32px] shadow-2xl p-0 overflow-hidden bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
         <div className="h-[520px] flex flex-col">
           {/* Header */}
           <div className="p-6 bg-gray-50 dark:bg-secondary border-b border-gray-100 dark:border-border flex items-center gap-4 shrink-0">
@@ -175,7 +175,7 @@ export function GroupDetailModal({
                         return (
                           <div 
                             key={event.id} 
-                            className="p-3 bg-white dark:bg-popover border border-gray-150 dark:border-border rounded-xl flex items-start gap-3 shadow-sm hover:border-gray-250 dark:hover:border-muted-foreground/40 transition-colors"
+                            className="p-3 border border-gray-150 dark:border-border rounded-xl flex items-start gap-3 shadow-sm hover:border-gray-250 dark:hover:border-muted-foreground/40 transition-colors"
                           >
                             <div className="bg-indigo-50/50 dark:bg-indigo-950/20 px-2 py-1.5 rounded-lg text-center shrink-0 min-w-[50px] border border-indigo-100/30">
                               <p className="text-[9px] font-black text-[#6366f1] leading-none mb-1">{format(dateObj, 'M/d')}</p>

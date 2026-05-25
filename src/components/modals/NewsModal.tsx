@@ -47,7 +47,7 @@ export function NewsModal({ isOpen, onOpenChange }: NewsModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-0 overflow-hidden rounded-[32px] border-none shadow-2xl bg-white bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2">
+      <DialogContent className="max-w-md p-0 overflow-hidden rounded-[32px] border-none shadow-2xl bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2">
         <div className="p-8 space-y-6">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-[#6366f1] rounded-2xl flex items-center justify-center text-white shadow-lg">

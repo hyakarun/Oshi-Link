@@ -23,14 +23,14 @@ export function GroupSettingsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] bg-white dark:bg-popover border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
+      <DialogContent className="sm:max-w-[480px] border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
         <div className="bg-gray-50 dark:bg-secondary p-8 border-b border-gray-100 dark:border-border">
           <DialogTitle className="text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tight">{group.name} の個人設定</DialogTitle>
           <DialogDescription className="text-gray-500 dark:text-zinc-400 font-medium mt-1">
             あなただけのカレンダー画面にカスタマイズできます。※他のユーザーには公開されません。
           </DialogDescription>
         </div>
-        <form onSubmit={handleSavePersonalization} className="p-8 space-y-5 bg-white dark:bg-popover">
+        <form onSubmit={handleSavePersonalization} className="p-8 space-y-5">
           <input type="hidden" name="group_id" value={group.id} />
           
           <div className="space-y-1.5">

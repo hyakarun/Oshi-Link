@@ -597,7 +597,7 @@ export function AppContent() {
 
       {/* 不正確判定への警告アラート */}
       <Dialog open={disputeWarning} onOpenChange={setDisputeWarning}>
-        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white dark:bg-popover border-none shadow-2xl top-1/2 -translate-y-1/2">
+        <DialogContent className="max-w-md p-8 rounded-[32px] border-none shadow-2xl top-1/2 -translate-y-1/2">
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-[#6366f1]" />

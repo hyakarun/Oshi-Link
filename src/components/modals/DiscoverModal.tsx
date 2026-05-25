@@ -38,7 +38,7 @@ export function DiscoverModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] bg-white dark:bg-popover shadow-2xl flex flex-col max-h-[90vh]">
+      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] shadow-2xl flex flex-col max-h-[90vh]">
         <div className="p-5 sm:p-6 border-b border-gray-100 dark:border-border shrink-0">
           <DialogTitle className="text-xl sm:text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tight mb-1">カレンダーを探す</DialogTitle>
           <DialogDescription className="text-gray-500 dark:text-zinc-400 text-[11px] sm:text-sm">
@@ -125,7 +125,7 @@ export function DiscoverModal({
                       disabled={followLoading === g.id}
                       className={`h-7 px-2.5 rounded-lg font-black text-[10px] transition-all ${
                         g.is_following
-                          ? 'bg-white dark:bg-popover border border-gray-200 dark:border-border text-gray-400 dark:text-zinc-400 hover:text-red-500 hover:border-red-500'
+                          ? 'border border-gray-200 dark:border-border text-gray-400 dark:text-zinc-400 hover:text-red-500 hover:border-red-500'
                           : 'bg-[#6366f1] text-white hover:bg-[#e00b41]'
                       }`}
                     >

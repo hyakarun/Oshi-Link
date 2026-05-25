@@ -12,7 +12,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0 overflow-hidden border-none rounded-[32px] bg-white dark:bg-popover shadow-2xl flex flex-col h-[85vh]">
+      <DialogContent className="max-w-4xl p-0 overflow-hidden border-none rounded-[32px] shadow-2xl flex flex-col h-[85vh]">
         {/* Beta Status Banner */}
         <div className="bg-indigo-600 text-white px-4 py-2.5 text-center text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shrink-0">
           <span className="relative flex h-2 w-2">
@@ -196,7 +196,7 @@ function TermSection({ title, children }: { title: string; children: React.React
 
 function CreditItem({ name, desc, url, license }: { name: string; desc: string; url: string; license?: string }) {
   return (
-    <div className="p-4 rounded-[20px] bg-white dark:bg-popover border border-gray-100 dark:border-border hover:border-[#6366f1]/30 dark:hover:border-[#6366f1]/50 transition-all group h-full flex flex-col">
+    <div className="p-4 rounded-[20px] border border-gray-100 dark:border-border hover:border-[#6366f1]/30 dark:hover:border-[#6366f1]/50 transition-all group h-full flex flex-col">
       <div className="flex items-start justify-between mb-1.5 gap-2">
         <span className="font-black text-[#222222] dark:text-zinc-100 text-[13px] leading-tight break-words flex-1">{name}</span>
         <a href={url} target="_blank" rel="noopener noreferrer" className="text-gray-300 dark:text-zinc-600 group-hover:text-[#6366f1] shrink-0 mt-0.5">

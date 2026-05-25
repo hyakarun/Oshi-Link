@@ -11,7 +11,7 @@ type LinkWarningModalProps = {
 export function LinkWarningModal({ url, onClose }: LinkWarningModalProps) {
   return (
     <Dialog open={!!url} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md p-8 border-none rounded-[32px] bg-white dark:bg-popover shadow-2xl">
+      <DialogContent className="max-w-md p-8 border-none rounded-[32px] shadow-2xl">
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="w-16 h-16 bg-orange-100 dark:bg-orange-950/30 rounded-full flex items-center justify-center mb-2">
             <AlertCircle className="w-8 h-8 text-orange-500" />

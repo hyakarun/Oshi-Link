@@ -135,7 +135,7 @@ export function EventDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white dark:bg-popover shadow-2xl ring-1 ring-gray-100 dark:ring-border top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+      <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] shadow-2xl ring-1 ring-gray-100 dark:ring-border top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
         <div className="p-8 overflow-y-auto flex-1">
           <div className="mb-6 flex flex-wrap items-center gap-2">
             {selectedEvent.creator_is_official ? (
@@ -256,7 +256,7 @@ export function EventDetailModal({
                       className={`rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${
                         selectedEvent.user_vote === 'confirmed'
                           ? 'bg-green-50 dark:bg-green-950/30 border-green-500 text-green-700 dark:text-green-400 shadow-inner'
-                          : 'bg-white dark:bg-popover border-green-100 dark:border-green-950/30 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/20 hover:border-green-200'
+                          : 'border-green-100 dark:border-green-950/30 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/20 hover:border-green-200'
                       } border-2`}
                     >
                       <ShieldCheck className={`w-5 h-5 ${selectedEvent.user_vote === 'confirmed' ? 'fill-green-200 dark:fill-green-950/40' : ''}`} /> 正確
@@ -268,7 +268,7 @@ export function EventDetailModal({
                       className={`rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${
                         selectedEvent.user_vote === 'disputed'
                           ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-500 text-orange-700 dark:text-orange-400 shadow-inner'
-                          : 'bg-white dark:bg-popover border-orange-100 dark:border-orange-950/30 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-200'
+                          : 'border-orange-100 dark:border-orange-950/30 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-200'
                       } border-2`}
                     >
                       <AlertCircle className={`w-5 h-5 ${selectedEvent.user_vote === 'disputed' ? 'fill-orange-200 dark:fill-orange-950/40' : ''}`} /> 不正確
@@ -303,7 +303,7 @@ export function EventDetailModal({
                       className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
                         myProposalVote === 'current' 
                           ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-500' 
-                          : 'bg-white dark:bg-popover border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40'
+                          : 'border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40'
                       }`}
                     >
                       <div className="min-w-0 flex-1">
@@ -324,7 +324,7 @@ export function EventDetailModal({
                         className={`p-4 rounded-2xl border-2 transition-all cursor-pointer space-y-3 ${
                           myProposalVote === p.id 
                             ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-500' 
-                            : 'bg-white dark:bg-popover border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40'
+                            : 'border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40'
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -396,7 +396,7 @@ export function EventDetailModal({
       </DialogContent>
       {/* リンクの安全性に関する詳細ダイアログ */}
       <Dialog open={showSafetyDialog} onOpenChange={setShowSafetyDialog}>
-        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white dark:bg-popover border-none shadow-2xl top-1/2 -translate-y-1/2">
+        <DialogContent className="max-w-md p-8 rounded-[32px] border-none shadow-2xl top-1/2 -translate-y-1/2">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm">
