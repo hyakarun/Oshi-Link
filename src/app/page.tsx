@@ -298,9 +298,9 @@ export function AppContent() {
 
   if (isAuthChecking || !mounted) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-white dark:bg-[#0f0f12]">
+      <div className="h-screen w-full flex items-center justify-center bg-white dark:bg-background">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-gray-100 dark:border-zinc-800 border-t-[#6366f1] rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-gray-100 dark:border-border border-t-[#6366f1] rounded-full animate-spin" />
           <p className="text-xs font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">Oshi-Link Loading...</p>
         </div>
       </div>
@@ -308,7 +308,7 @@ export function AppContent() {
   }
 
   return (
-    <div className="flex h-screen bg-[#fafafa] dark:bg-[#0f0f12] overflow-hidden text-[#222222] dark:text-zinc-100 font-sans selection:bg-indigo-100 selection:text-[#6366f1]">
+    <div className="flex h-screen bg-[#fafafa] dark:bg-background overflow-hidden text-[#222222] dark:text-foreground font-sans selection:bg-indigo-100 selection:text-[#6366f1]">
       <Sidebar 
         user={user}
         followedGroups={followedGroups}
@@ -484,7 +484,7 @@ export function AppContent() {
       {!isRightPanelOpen && (
         <button 
           onClick={() => setIsRightPanelOpen(true)}
-          className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-white dark:bg-zinc-900 border border-r-0 border-gray-100 dark:border-zinc-800 rounded-l-2xl p-3 shadow-xl hover:pr-5 transition-all group flex items-center justify-center"
+          className="fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-white dark:bg-card border border-r-0 border-gray-100 dark:border-border rounded-l-2xl p-3 shadow-xl hover:pr-5 transition-all group flex items-center justify-center"
           title="予定一覧を表示"
         >
           <ChevronLeft className="w-5 h-5 text-gray-400 dark:text-zinc-500 group-hover:text-[#6366f1]" />
@@ -597,7 +597,7 @@ export function AppContent() {
 
       {/* 不正確判定への警告アラート */}
       <Dialog open={disputeWarning} onOpenChange={setDisputeWarning}>
-        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white dark:bg-zinc-900 border-none shadow-2xl top-1/2 -translate-y-1/2">
+        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white dark:bg-popover border-none shadow-2xl top-1/2 -translate-y-1/2">
           <div className="flex flex-col items-center text-center space-y-4">
             <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-[#6366f1]" />

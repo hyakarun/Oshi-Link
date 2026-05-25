@@ -135,7 +135,7 @@ export function EventDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white dark:bg-zinc-900 shadow-2xl ring-1 ring-gray-100 dark:ring-zinc-800 top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+      <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white dark:bg-popover shadow-2xl ring-1 ring-gray-100 dark:ring-border top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
         <div className="p-8 overflow-y-auto flex-1">
           <div className="mb-6 flex flex-wrap items-center gap-2">
             {selectedEvent.creator_is_official ? (
@@ -164,18 +164,18 @@ export function EventDetailModal({
                     {selectedEvent.title}
                   </h2>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <div className="flex items-center gap-2 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-zinc-700">
+                    <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
                       <Calendar className="w-4 h-4 text-[#6366f1]" />
                       <span className="text-sm font-bold text-gray-700 dark:text-zinc-300">{format(parseISO(selectedEvent.date), 'yyyy年MM月dd日 HH:mm')}</span>
                     </div>
                     {selectedEvent.location && (
-                      <div className="flex items-center gap-2 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-zinc-700">
+                      <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
                         <MapPin className="w-4 h-4 text-[#6366f1]" />
                         <span className="text-sm font-bold text-gray-700 dark:text-zinc-300">{selectedEvent.location}</span>
                       </div>
                     )}
                     {selectedEvent.creator_name && (
-                      <div className="flex items-center gap-2 bg-gray-50 dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-gray-100 dark:border-zinc-700">
+                      <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] text-white font-black ${selectedEvent.creator_is_official ? 'bg-[#6366f1]' : 'bg-gray-400'}`}>
                           {selectedEvent.creator_name[0]}
                         </div>
@@ -191,7 +191,7 @@ export function EventDetailModal({
                 </div>
 
                 {selectedEvent.description && (
-                  <div className="bg-gray-50/50 dark:bg-zinc-800/40 p-5 rounded-2xl border border-gray-100 dark:border-zinc-800 mb-6">
+                  <div className="bg-gray-50/50 dark:bg-secondary/40 p-5 rounded-2xl border border-gray-100 dark:border-border mb-6">
                     <p className="text-gray-600 dark:text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">{selectedEvent.description}</p>
                   </div>
                 )}
@@ -213,7 +213,7 @@ export function EventDetailModal({
                       公式ソース・関連リンクを開く
                     </button>
                     {/* URLを直接表示（目視確認用） */}
-                    <div className="mt-3 px-4 py-3 bg-gray-50 dark:bg-zinc-800/40 rounded-xl border border-gray-100 dark:border-zinc-800 overflow-hidden">
+                    <div className="mt-3 px-4 py-3 bg-gray-50 dark:bg-secondary/40 rounded-xl border border-gray-100 dark:border-border overflow-hidden">
                       <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                         <AlertCircle className="w-3 h-3 text-gray-300 dark:text-zinc-650" />
                         リンク先URL (目視確認用)
@@ -242,7 +242,7 @@ export function EventDetailModal({
 
                 {/* Accuracy Voting Section */}
                 {!(selectedEvent.creator_is_official || selectedEvent.group_is_official) && (
-                  <div className="space-y-4 border-t border-gray-100 dark:border-zinc-800 pt-8 mt-4 bg-gray-50/30 dark:bg-zinc-800/10 -mx-8 px-8 pb-8">
+                  <div className="space-y-4 border-t border-gray-100 dark:border-border pt-8 mt-4 bg-gray-50/30 dark:bg-secondary/10 -mx-8 px-8 pb-8">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">情報の正確さを投票</h3>
                     <div className="flex gap-4">
@@ -256,7 +256,7 @@ export function EventDetailModal({
                       className={`rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${
                         selectedEvent.user_vote === 'confirmed'
                           ? 'bg-green-50 dark:bg-green-950/30 border-green-500 text-green-700 dark:text-green-400 shadow-inner'
-                          : 'bg-white dark:bg-zinc-900 border-green-100 dark:border-green-950/30 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/20 hover:border-green-200'
+                          : 'bg-white dark:bg-popover border-green-100 dark:border-green-950/30 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/20 hover:border-green-200'
                       } border-2`}
                     >
                       <ShieldCheck className={`w-5 h-5 ${selectedEvent.user_vote === 'confirmed' ? 'fill-green-200 dark:fill-green-950/40' : ''}`} /> 正確
@@ -268,7 +268,7 @@ export function EventDetailModal({
                       className={`rounded-2xl h-14 font-black flex items-center justify-center gap-2 active:scale-95 transition-all ${
                         selectedEvent.user_vote === 'disputed'
                           ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-500 text-orange-700 dark:text-orange-400 shadow-inner'
-                          : 'bg-white dark:bg-zinc-900 border-orange-100 dark:border-orange-950/30 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-200'
+                          : 'bg-white dark:bg-popover border-orange-100 dark:border-orange-950/30 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:border-orange-200'
                       } border-2`}
                     >
                       <AlertCircle className={`w-5 h-5 ${selectedEvent.user_vote === 'disputed' ? 'fill-orange-200 dark:fill-orange-950/40' : ''}`} /> 不正確
@@ -279,7 +279,7 @@ export function EventDetailModal({
 
                 {/* Community Update Section (Voting on Proposals) */}
                 {!selectedEvent.group_is_official && (
-                  <div className="mt-8 border-t border-gray-100 dark:border-zinc-800 pt-8">
+                  <div className="mt-8 border-t border-gray-100 dark:border-border pt-8">
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-widest">修正提案（0時更新）</h3>
@@ -289,7 +289,7 @@ export function EventDetailModal({
                       <Button 
                         onClick={() => setIsEditing(true)} 
                         variant="ghost" 
-                        className="text-[#6366f1] hover:bg-red-50 dark:hover:bg-zinc-800 font-black text-xs h-9 rounded-xl gap-2"
+                        className="text-[#6366f1] hover:bg-red-50 dark:hover:bg-secondary font-black text-xs h-9 rounded-xl gap-2"
                       >
                         <MessageSquarePlus className="w-4 h-4" /> 修正案を出す
                       </Button>
@@ -303,14 +303,14 @@ export function EventDetailModal({
                       className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
                         myProposalVote === 'current' 
                           ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-500' 
-                          : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-zinc-800 hover:border-gray-200 dark:hover:border-zinc-700'
+                          : 'bg-white dark:bg-popover border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40'
                       }`}
                     >
                       <div className="min-w-0 flex-1">
                         <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-0.5">現状</p>
                         <p className="text-xs font-black text-[#222222] dark:text-zinc-100">現状のままで良い</p>
                       </div>
-                      <div className="flex items-center gap-2 bg-white dark:bg-zinc-800 px-3 py-1 rounded-full border border-gray-100 dark:border-zinc-700 shrink-0">
+                      <div className="flex items-center gap-2 bg-white dark:bg-secondary px-3 py-1 rounded-full border border-gray-100 dark:border-border shrink-0">
                         <ThumbsUp className={`w-3 h-3 ${myProposalVote === 'current' ? 'text-blue-500 fill-blue-500' : 'text-gray-300'}`} />
                         <span className="text-[11px] font-black text-gray-500 dark:text-zinc-400">{currentVotes}</span>
                       </div>
@@ -324,12 +324,12 @@ export function EventDetailModal({
                         className={`p-4 rounded-2xl border-2 transition-all cursor-pointer space-y-3 ${
                           myProposalVote === p.id 
                             ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-500' 
-                            : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-zinc-800 hover:border-gray-200 dark:hover:border-zinc-700'
+                            : 'bg-white dark:bg-popover border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">案 {i + 1} ({p.user_name})</p>
-                          <div className="flex items-center gap-2 bg-white dark:bg-zinc-800 px-3 py-1 rounded-full border border-gray-100 dark:border-zinc-700">
+                          <div className="flex items-center gap-2 bg-white dark:bg-secondary px-3 py-1 rounded-full border border-gray-100 dark:border-border">
                             <ThumbsUp className={`w-3 h-3 ${myProposalVote === p.id ? 'text-blue-500 fill-blue-500' : 'text-gray-350'}`} />
                             <span className="text-[11px] font-black text-gray-500 dark:text-zinc-400">{p.vote_count}</span>
                           </div>
@@ -337,7 +337,7 @@ export function EventDetailModal({
                         
                         <div className="space-y-2">
                           {p.reason && (
-                            <div className="bg-white/50 dark:bg-zinc-800/40 p-2.5 rounded-lg border border-blue-100/50 dark:border-blue-900/30">
+                            <div className="bg-white/50 dark:bg-secondary/40 p-2.5 rounded-lg border border-blue-100/50 dark:border-blue-900/30">
                               <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-1">修正理由</p>
                               <p className="text-[11px] font-medium text-gray-600 dark:text-zinc-300 leading-relaxed line-clamp-2">{p.reason}</p>
                             </div>
@@ -366,22 +366,22 @@ export function EventDetailModal({
                     <label className="text-[11px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">1. 修正の理由</label>
                     <textarea 
                       name="reason" 
-                      className="w-full h-24 bg-gray-50 dark:bg-zinc-800 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#6366f1] resize-none text-[#222222] dark:text-zinc-100" 
+                      className="w-full h-24 bg-gray-50 dark:bg-secondary rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#6366f1] resize-none text-[#222222] dark:text-zinc-100" 
                       placeholder="例：公式サイトで日時変更が発表されたため、誤字脱字の修正、など"
                       required
                     />
                   </div>
                   
-                  <div className="border-t border-gray-100 dark:border-zinc-800 pt-4 mt-2">
+                  <div className="border-t border-gray-100 dark:border-border pt-4 mt-2">
                     <p className="text-[11px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-4">2. 変更後の内容</p>
                     <div className="space-y-4">
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-gray-400 dark:text-zinc-500">イベント名</label>
-                        <input name="title" defaultValue={selectedEvent.title} className="w-full h-12 bg-gray-50 dark:bg-zinc-800 rounded-xl px-4 font-bold outline-none border-none focus:ring-2 focus:ring-[#6366f1] text-[#222222] dark:text-zinc-100" required />
+                        <input name="title" defaultValue={selectedEvent.title} className="w-full h-12 bg-gray-50 dark:bg-secondary rounded-xl px-4 font-bold outline-none border-none focus:ring-2 focus:ring-[#6366f1] text-[#222222] dark:text-zinc-100" required />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[10px] font-bold text-gray-400 dark:text-zinc-500">詳細説明</label>
-                        <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 dark:bg-zinc-800 rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#6366f1] resize-none text-[#222222] dark:text-zinc-100" />
+                        <textarea name="description" defaultValue={selectedEvent.description} className="w-full h-32 bg-gray-50 dark:bg-secondary rounded-xl p-4 font-medium outline-none border-none focus:ring-2 focus:ring-[#6366f1] resize-none text-[#222222] dark:text-zinc-100" />
                       </div>
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export function EventDetailModal({
       </DialogContent>
       {/* リンクの安全性に関する詳細ダイアログ */}
       <Dialog open={showSafetyDialog} onOpenChange={setShowSafetyDialog}>
-        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white dark:bg-zinc-900 border-none shadow-2xl top-1/2 -translate-y-1/2">
+        <DialogContent className="max-w-md p-8 rounded-[32px] bg-white dark:bg-popover border-none shadow-2xl top-1/2 -translate-y-1/2">
           <div className="space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-blue-50 dark:bg-blue-950/20 rounded-2xl flex items-center justify-center text-blue-500 shadow-sm">
@@ -409,7 +409,7 @@ export function EventDetailModal({
             </div>
 
             <div className="space-y-4">
-              <div className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl border border-gray-100 dark:border-zinc-800">
+              <div className="p-4 bg-gray-50 dark:bg-secondary rounded-2xl border border-gray-100 dark:border-border">
                 <h4 className="text-[12px] font-black text-[#222222] dark:text-zinc-100 mb-1 flex items-center gap-2">
                   <span className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-[8px]">1</span>
                   サーバーサイド検証
@@ -419,7 +419,7 @@ export function EventDetailModal({
                 </p>
               </div>
 
-              <div className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl border border-gray-100 dark:border-zinc-800">
+              <div className="p-4 bg-gray-50 dark:bg-secondary rounded-2xl border border-gray-100 dark:border-border">
                 <h4 className="text-[12px] font-black text-[#222222] dark:text-zinc-100 mb-1 flex items-center gap-2">
                   <span className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-[8px]">2</span>
                   目視確認
@@ -429,7 +429,7 @@ export function EventDetailModal({
                 </p>
               </div>
 
-              <div className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-2xl border border-gray-100 dark:border-zinc-800">
+              <div className="p-4 bg-gray-50 dark:bg-secondary rounded-2xl border border-gray-100 dark:border-border">
                 <h4 className="text-[12px] font-black text-[#222222] dark:text-zinc-100 mb-1 flex items-center gap-2">
                   <span className="w-4 h-4 bg-blue-500 text-white rounded-full flex items-center justify-center text-[8px]">3</span>
                   コミュニティ報告
@@ -452,7 +452,7 @@ export function EventDetailModal({
 
             <Button 
               onClick={() => setShowSafetyDialog(false)}
-              className="w-full bg-[#222222] hover:bg-black dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white h-12 rounded-xl font-black transition-all"
+              className="w-full bg-[#222222] hover:bg-black dark:bg-secondary dark:hover:bg-accent text-white h-12 rounded-xl font-black transition-all"
             >
               閉じる
             </Button>

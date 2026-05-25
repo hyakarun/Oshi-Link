@@ -106,15 +106,15 @@ function TimeGrid({
   }, [getRelativeY]);
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-[#121215] overflow-hidden select-none">
+    <div className="flex flex-col h-full bg-white dark:bg-card overflow-hidden select-none">
       {/* ── Header ─────────────────────────────────── */}
-      <div className="flex border-b border-gray-100 dark:border-zinc-800 shrink-0 bg-white dark:bg-[#121215] z-10">
-        <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 dark:border-zinc-800" />
+      <div className="flex border-b border-gray-100 dark:border-border shrink-0 bg-white dark:bg-card z-10">
+        <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 dark:border-border" />
         <div className="flex-1 flex">
           {days.map(d => (
             <div
               key={d.toISOString()}
-              className={`flex-1 py-3 text-center border-r border-gray-100 dark:border-zinc-800 last:border-r-0 ${
+              className={`flex-1 py-3 text-center border-r border-gray-100 dark:border-border last:border-r-0 ${
                 isSameDay(d, new Date()) ? 'bg-[#6366f1]/5 dark:bg-[#6366f1]/10' : ''
               }`}
             >
@@ -134,11 +134,11 @@ function TimeGrid({
         <div className="flex" style={{ height: HOUR_HEIGHT * 24 }}>
 
           {/* Time labels */}
-          <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 dark:border-zinc-800 relative">
+          <div className="w-16 md:w-20 shrink-0 border-r border-gray-100 dark:border-border relative">
             {HOURS.map(h => (
               <div
                 key={h}
-                className="absolute w-full border-t border-gray-100 dark:border-zinc-800"
+                className="absolute w-full border-t border-gray-100 dark:border-border"
                 style={{ top: h * HOUR_HEIGHT }}
               >
                 {h !== 0 && (
@@ -157,7 +157,7 @@ function TimeGrid({
               {HOURS.map(h => (
                 <div
                   key={h}
-                  className="absolute w-full border-t border-gray-100 dark:border-zinc-800"
+                  className="absolute w-full border-t border-gray-100 dark:border-border"
                   style={{ top: h * HOUR_HEIGHT }}
                 />
               ))}
@@ -165,7 +165,7 @@ function TimeGrid({
               {HOURS.map(h => (
                 <div
                   key={`h-${h}`}
-                  className="absolute w-full border-t border-gray-50 dark:border-zinc-800/40"
+                  className="absolute w-full border-t border-gray-50 dark:border-border/40"
                   style={{ top: h * HOUR_HEIGHT + HOUR_HEIGHT / 2 }}
                 />
               ))}
@@ -180,7 +180,7 @@ function TimeGrid({
               return (
                 <div
                   key={day.toISOString()}
-                  className="flex-1 relative border-r border-gray-100 dark:border-zinc-800 last:border-r-0 cursor-crosshair"
+                  className="flex-1 relative border-r border-gray-100 dark:border-border last:border-r-0 cursor-crosshair"
                   onMouseDown={e => handleMouseDown(e, day)}
                 >
                   {/* Events */}
@@ -277,8 +277,8 @@ export function CalendarView({
           <div
             key={d.toISOString()}
             onClick={() => onDateClick(d)}
-            className={`min-h-[100px] md:min-h-[120px] p-2 border-r border-b border-gray-100 dark:border-zinc-800 transition-colors cursor-pointer hover:bg-gray-50/50 dark:hover:bg-zinc-800/20 ${
-              !isSameMonth(d, monthStart) ? 'bg-gray-50/30 dark:bg-zinc-900/20' : ''
+            className={`min-h-[100px] md:min-h-[120px] p-2 border-r border-b border-gray-100 dark:border-border transition-colors cursor-pointer hover:bg-gray-50/50 dark:hover:bg-accent/40 ${
+              !isSameMonth(d, monthStart) ? 'bg-gray-50/30 dark:bg-muted/50' : ''
             }`}
           >
             <div className="mb-1">
@@ -321,7 +321,7 @@ export function CalendarView({
       );
       cells = [];
     }
-    return <div className="bg-white dark:bg-[#121215] h-full flex flex-col">{rows}</div>;
+    return <div className="bg-white dark:bg-card h-full flex flex-col">{rows}</div>;
   }
 
   // ── Week View ──────────────────────────────────

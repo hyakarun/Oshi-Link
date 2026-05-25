@@ -82,12 +82,12 @@ export function Sidebar({
 
       {/* Sidebar Content */}
       <aside className={`
-        fixed md:relative inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-[#121215] border-r border-gray-100 dark:border-zinc-800 flex flex-col 
+        fixed md:relative inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-card border-r border-gray-100 dark:border-border flex flex-col 
         transition-all duration-500 ease-out shadow-2xl md:shadow-none h-screen
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         {/* Header */}
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-zinc-800 flex items-center gap-3">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-border flex items-center gap-3">
           <div 
             className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md" 
             style={{ background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 33%, #34A853 66%, #4285F4 100%)' }}
@@ -107,7 +107,7 @@ export function Sidebar({
           </div>
           <button
             onClick={() => setIsProfileModalOpen(true)}
-            className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-zinc-800 flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all shrink-0 overflow-hidden"
+            className="w-8 h-8 rounded-xl bg-gray-100 dark:bg-secondary flex items-center justify-center text-gray-500 dark:text-zinc-400 hover:bg-gray-200 dark:hover:bg-accent transition-all shrink-0 overflow-hidden"
           >
             {user ? (
               user.avatar_url ? (
@@ -125,13 +125,13 @@ export function Sidebar({
 
         {/* View Switcher (Mobile Only) */}
         <div className="px-3 pt-4 md:hidden">
-          <div className="flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl">
+          <div className="flex bg-gray-100 dark:bg-secondary p-1 rounded-xl">
             {(['month', 'week', 'day'] as View[]).map((v) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
                 className={`flex-1 py-2 rounded-lg text-[11px] font-black transition-all ${
-                  view === v ? 'bg-white dark:bg-zinc-700 text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-400 hover:text-gray-600 dark:hover:text-zinc-200'
+                  view === v ? 'bg-white dark:bg-accent text-[#222222] dark:text-zinc-100 shadow-sm' : 'text-gray-400 dark:text-zinc-400 hover:text-gray-600 dark:hover:text-zinc-200'
                 }`}
               >
                 {v === 'month' ? '月' : v === 'week' ? '週' : '日'}
@@ -146,13 +146,13 @@ export function Sidebar({
             onClick={() => { setActiveGroupId('0'); setIsMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all font-bold text-sm ${
               activeGroupId === '0'
-                ? 'text-[#222222] dark:text-zinc-100 bg-gray-50 dark:bg-zinc-800/30'
-                : 'text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800/30'
+                ? 'text-[#222222] dark:text-zinc-100 bg-gray-50 dark:bg-secondary/30'
+                : 'text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-secondary/30'
             }`}
             style={activeGroupId === '0' ? { backgroundColor: `${themeColor}15`, color: themeColor } : {}}
           >
             <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-              activeGroupId === '0' ? '' : 'bg-gray-100 dark:bg-zinc-800 text-gray-400 dark:text-zinc-500'
+              activeGroupId === '0' ? '' : 'bg-gray-100 dark:bg-secondary text-gray-400 dark:text-zinc-500'
             }`} style={activeGroupId === '0' ? { backgroundColor: themeColor, color: 'white' } : {}}>
               <Star className="w-3.5 h-3.5" />
             </div>
@@ -169,7 +169,7 @@ export function Sidebar({
         <div className="flex-1 overflow-y-auto px-3 pb-3">
           {followedGroups.length === 0 ? (
             <div className="p-5 text-center">
-              <div className="w-12 h-12 bg-gray-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-gray-100 dark:bg-secondary rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-gray-300 dark:text-zinc-600" />
               </div>
               <p className="text-xs font-bold text-gray-400 dark:text-zinc-500 mb-1">フォロー中なし</p>
@@ -184,7 +184,7 @@ export function Sidebar({
                     key={g.id}
                     onClick={() => { setActiveGroupId(g.id); setIsMobileMenuOpen(false); }}
                     className={`group w-full flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all cursor-pointer ${
-                      isActive ? 'bg-gray-50 dark:bg-zinc-800/30' : 'hover:bg-gray-50 dark:hover:bg-zinc-800/30'
+                      isActive ? 'bg-gray-50 dark:bg-secondary/30' : 'hover:bg-gray-50 dark:hover:bg-secondary/30'
                     }`}
                     style={isActive ? { backgroundColor: `${getGroupColor(g.id)}12` } : {}}
                   >
@@ -218,7 +218,7 @@ export function Sidebar({
                             alert('共有URLをコピーしました！');
                           }
                         }}
-                        className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-700"
+                        className="p-1.5 md:p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-accent"
                         title="カレンダーを共有"
                       >
                         <Share2 className="w-3.5 h-3.5 md:w-3 md:h-3 text-gray-400 dark:text-zinc-500" />
@@ -240,7 +240,7 @@ export function Sidebar({
         </div>
 
         {/* Footer actions */}
-        <div className="px-3 py-4 border-t border-gray-100 dark:border-zinc-800 space-y-2">
+        <div className="px-3 py-4 border-t border-gray-100 dark:border-border space-y-2">
           <div className="flex gap-2">
             {/* Note Manual Link */}
             <a
@@ -248,7 +248,7 @@ export function Sidebar({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
             >
               <div className="flex items-center gap-1.5 min-w-0">
                 <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500 shrink-0" />
@@ -259,7 +259,7 @@ export function Sidebar({
 
             <button
               onClick={() => { setIsNewsOpen(true); setIsMobileMenuOpen(false); }}
-              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
             >
               <div className="flex items-center gap-1.5 min-w-0">
                 <Bell className="w-3.5 h-3.5 group-hover:text-blue-500 shrink-0" />

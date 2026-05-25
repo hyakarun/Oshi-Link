@@ -12,7 +12,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0 overflow-hidden border-none rounded-[32px] bg-white dark:bg-zinc-900 shadow-2xl flex flex-col h-[85vh]">
+      <DialogContent className="max-w-4xl p-0 overflow-hidden border-none rounded-[32px] bg-white dark:bg-popover shadow-2xl flex flex-col h-[85vh]">
         {/* Beta Status Banner */}
         <div className="bg-indigo-600 text-white px-4 py-2.5 text-center text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shrink-0">
           <span className="relative flex h-2 w-2">
@@ -22,7 +22,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           Oshi-Link Public Beta Test
         </div>
 
-        <DialogHeader className="p-8 bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-800 shrink-0">
+        <DialogHeader className="p-8 bg-gray-50 dark:bg-secondary border-b border-gray-100 dark:border-border shrink-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-2xl bg-[#6366f1] flex items-center justify-center shadow-lg shadow-[#6366f1]/20">
               <ShieldCheck className="w-6 h-6 text-white" />
@@ -33,22 +33,22 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
             </div>
           </div>
 
-          <div className="flex gap-2 p-1 bg-gray-100 dark:bg-zinc-800 rounded-xl w-full">
+          <div className="flex gap-2 p-1 bg-gray-100 dark:bg-secondary rounded-xl w-full">
             <button 
               onClick={() => setActiveTab('credits')}
-              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'credits' ? 'bg-white dark:bg-zinc-700 text-[#6366f1] dark:text-indigo-400 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
+              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'credits' ? 'bg-white dark:bg-accent text-[#6366f1] dark:text-indigo-400 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
             >
               TECH<br />CREDITS
             </button>
             <button 
               onClick={() => setActiveTab('terms')}
-              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'terms' ? 'bg-white dark:bg-zinc-700 text-[#6366f1] dark:text-indigo-400 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
+              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'terms' ? 'bg-white dark:bg-accent text-[#6366f1] dark:text-indigo-400 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
             >
               利用規約
             </button>
             <button 
               onClick={() => setActiveTab('privacy')}
-              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'privacy' ? 'bg-white dark:bg-zinc-700 text-[#6366f1] dark:text-indigo-400 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
+              className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-black rounded-lg transition-all leading-tight ${activeTab === 'privacy' ? 'bg-white dark:bg-accent text-[#6366f1] dark:text-indigo-400 shadow-sm' : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
             >
               プライバシー<br />ポリシー
             </button>
@@ -172,7 +172,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
           )}
         </div>
 
-        <div className="p-6 border-t border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 shrink-0 text-center">
+        <div className="p-6 border-t border-gray-100 dark:border-border bg-gray-50 dark:bg-secondary shrink-0 text-center">
           <p className="text-[12px] text-gray-400 dark:text-zinc-500 font-bold flex items-center justify-center gap-1.5 uppercase tracking-widest leading-none mb-2">
             Presented by <span className="text-[#6366f1]">TSUKURO!</span>
           </p>
@@ -196,7 +196,7 @@ function TermSection({ title, children }: { title: string; children: React.React
 
 function CreditItem({ name, desc, url, license }: { name: string; desc: string; url: string; license?: string }) {
   return (
-    <div className="p-4 rounded-[20px] bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 hover:border-[#6366f1]/30 dark:hover:border-[#6366f1]/50 transition-all group h-full flex flex-col">
+    <div className="p-4 rounded-[20px] bg-white dark:bg-popover border border-gray-100 dark:border-border hover:border-[#6366f1]/30 dark:hover:border-[#6366f1]/50 transition-all group h-full flex flex-col">
       <div className="flex items-start justify-between mb-1.5 gap-2">
         <span className="font-black text-[#222222] dark:text-zinc-100 text-[13px] leading-tight break-words flex-1">{name}</span>
         <a href={url} target="_blank" rel="noopener noreferrer" className="text-gray-300 dark:text-zinc-600 group-hover:text-[#6366f1] shrink-0 mt-0.5">

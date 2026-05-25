@@ -72,14 +72,14 @@ export function GroupDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] bg-white dark:bg-zinc-900 border-none rounded-[32px] shadow-2xl p-0 overflow-hidden bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
+      <DialogContent className="sm:max-w-[480px] bg-white dark:bg-popover border-none rounded-[32px] shadow-2xl p-0 overflow-hidden bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
         <div className="h-[520px] flex flex-col">
           {/* Header */}
-          <div className="p-6 bg-gray-50 dark:bg-zinc-800 border-b border-gray-100 dark:border-zinc-800 flex items-center gap-4 shrink-0">
+          <div className="p-6 bg-gray-50 dark:bg-secondary border-b border-gray-100 dark:border-border flex items-center gap-4 shrink-0">
             {detail ? (
               <GroupAvatar group={detail} size="md" />
             ) : (
-              <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-zinc-700 animate-pulse shrink-0" />
+              <div className="w-12 h-12 rounded-xl bg-gray-200 dark:bg-accent animate-pulse shrink-0" />
             )}
             <div className="min-w-0 flex-1">
               {detail ? (
@@ -96,8 +96,8 @@ export function GroupDetailModal({
                 </>
               ) : (
                 <div className="space-y-2">
-                  <div className="h-5 w-40 bg-gray-200 dark:bg-zinc-700 rounded animate-pulse" />
-                  <div className="h-3.5 w-24 bg-gray-200 dark:bg-zinc-700 rounded animate-pulse" />
+                  <div className="h-5 w-40 bg-gray-200 dark:bg-accent rounded animate-pulse" />
+                  <div className="h-3.5 w-24 bg-gray-200 dark:bg-accent rounded animate-pulse" />
                 </div>
               )}
             </div>
@@ -129,7 +129,7 @@ export function GroupDetailModal({
                       </button>
                     )}
                   </div>
-                  <div className="p-4 bg-gray-50 dark:bg-zinc-800/40 rounded-2xl border border-gray-100 dark:border-zinc-800/30">
+                  <div className="p-4 bg-gray-50 dark:bg-secondary/40 rounded-2xl border border-gray-100 dark:border-border/30">
                     <p className="text-xs text-gray-600 dark:text-zinc-300 leading-relaxed font-medium whitespace-pre-wrap">
                       {detail.description || 'このカレンダーの説明はありません。'}
                     </p>
@@ -138,8 +138,8 @@ export function GroupDetailModal({
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 bg-gray-50 dark:bg-zinc-800/40 rounded-2xl border border-gray-100 dark:border-zinc-800/30 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 flex items-center justify-center text-[#6366f1] shadow-sm">
+                  <div className="p-4 bg-gray-50 dark:bg-secondary/40 rounded-2xl border border-gray-100 dark:border-border/30 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-secondary flex items-center justify-center text-[#6366f1] shadow-sm">
                       <Users className="w-5 h-5" />
                     </div>
                     <div>
@@ -148,8 +148,8 @@ export function GroupDetailModal({
                     </div>
                   </div>
 
-                  <div className="p-4 bg-gray-50 dark:bg-zinc-800/40 rounded-2xl border border-gray-100 dark:border-zinc-800/30 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-800 flex items-center justify-center text-[#6366f1] shadow-sm">
+                  <div className="p-4 bg-gray-50 dark:bg-secondary/40 rounded-2xl border border-gray-100 dark:border-border/30 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-secondary flex items-center justify-center text-[#6366f1] shadow-sm">
                       <Calendar className="w-5 h-5" />
                     </div>
                     <div>
@@ -166,7 +166,7 @@ export function GroupDetailModal({
                 </div>
 
                 {/* Upcoming Events */}
-                <div className="space-y-2 border-t border-gray-100 dark:border-zinc-800 pt-5">
+                <div className="space-y-2 border-t border-gray-100 dark:border-border pt-5">
                   <h3 className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest">近日中の予定 (直近3件)</h3>
                   <div className="space-y-2">
                     {upcomingEvents.length > 0 ? (
@@ -175,7 +175,7 @@ export function GroupDetailModal({
                         return (
                           <div 
                             key={event.id} 
-                            className="p-3 bg-white dark:bg-zinc-900 border border-gray-150 dark:border-zinc-800 rounded-xl flex items-start gap-3 shadow-sm hover:border-gray-250 dark:hover:border-zinc-700 transition-colors"
+                            className="p-3 bg-white dark:bg-popover border border-gray-150 dark:border-border rounded-xl flex items-start gap-3 shadow-sm hover:border-gray-250 dark:hover:border-muted-foreground/40 transition-colors"
                           >
                             <div className="bg-indigo-50/50 dark:bg-indigo-950/20 px-2 py-1.5 rounded-lg text-center shrink-0 min-w-[50px] border border-indigo-100/30">
                               <p className="text-[9px] font-black text-[#6366f1] leading-none mb-1">{format(dateObj, 'M/d')}</p>
@@ -193,7 +193,7 @@ export function GroupDetailModal({
                         );
                       })
                     ) : (
-                      <div className="py-6 text-center bg-gray-50 dark:bg-zinc-800/20 rounded-2xl border border-dashed border-gray-200 dark:border-zinc-800/40">
+                      <div className="py-6 text-center bg-gray-50 dark:bg-secondary/20 rounded-2xl border border-dashed border-gray-200 dark:border-border/40">
                         <Calendar className="w-8 h-8 text-gray-200 dark:text-zinc-850 mx-auto mb-2" />
                         <p className="text-[10px] text-gray-400 dark:text-zinc-500 font-bold">近日中の予定はありません</p>
                       </div>

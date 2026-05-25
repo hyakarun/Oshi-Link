@@ -38,8 +38,8 @@ export function DiscoverModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] bg-white dark:bg-zinc-900 shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="p-5 sm:p-6 border-b border-gray-100 dark:border-zinc-800 shrink-0">
+      <DialogContent className="max-w-[95vw] lg:max-w-7xl w-full p-0 overflow-hidden border-none rounded-[32px] bg-white dark:bg-popover shadow-2xl flex flex-col max-h-[90vh]">
+        <div className="p-5 sm:p-6 border-b border-gray-100 dark:border-border shrink-0">
           <DialogTitle className="text-xl sm:text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tight mb-1">カレンダーを探す</DialogTitle>
           <DialogDescription className="text-gray-500 dark:text-zinc-400 text-[11px] sm:text-sm">
             推しのグループカレンダーをフォローして、予定を見逃さないようにしよう
@@ -51,7 +51,7 @@ export function DiscoverModal({
               placeholder="グループ名で検索..."
               value={discoverSearch}
               onChange={e => setDiscoverSearch(e.target.value)}
-              className="w-full h-11 bg-gray-50 dark:bg-zinc-800 rounded-xl pl-10 pr-4 outline-none border-none focus:ring-2 focus:ring-[#6366f1] font-medium text-[#222222] dark:text-zinc-100 text-sm"
+              className="w-full h-11 bg-gray-50 dark:bg-secondary rounded-xl pl-10 pr-4 outline-none border-none focus:ring-2 focus:ring-[#6366f1] font-medium text-[#222222] dark:text-zinc-100 text-sm"
             />
           </div>
 
@@ -62,8 +62,8 @@ export function DiscoverModal({
               { icon: <Bell className="w-4 h-4" />, title: "通知でリマインド", desc: "イベント開始前に通知。見逃しを防止します。" },
               { icon: <Calendar className="w-4 h-4" />, title: "情報の正確性", desc: "みんなでチェックして正確な情報を維持。" },
             ].map((f, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 dark:bg-zinc-800/50 border border-gray-100/50 dark:border-zinc-800/30">
-                <div className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-800 flex items-center justify-center text-[#6366f1] shadow-sm shrink-0">
+              <div key={i} className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 dark:bg-secondary/50 border border-gray-100/50 dark:border-border/30">
+                <div className="w-8 h-8 rounded-lg bg-white dark:bg-secondary flex items-center justify-center text-[#6366f1] shadow-sm shrink-0">
                   {f.icon}
                 </div>
                 <div>
@@ -91,7 +91,7 @@ export function DiscoverModal({
               {discoverFiltered.map(g => (
                 <div
                   key={g.id}
-                  className={`flex items-center gap-3 p-2.5 sm:p-3 rounded-xl transition-all border ${g.is_following ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-[#6366f1] dark:border-indigo-900/30 border-opacity-20' : 'bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-800 hover:border-gray-200 dark:hover:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-800/60'}`}
+                  className={`flex items-center gap-3 p-2.5 sm:p-3 rounded-xl transition-all border ${g.is_following ? 'bg-indigo-50/50 dark:bg-indigo-950/20 border-[#6366f1] dark:border-indigo-900/30 border-opacity-20' : 'bg-white dark:bg-secondary border-gray-100 dark:border-border hover:border-gray-200 dark:hover:border-muted-foreground/40 hover:bg-gray-50 dark:hover:bg-secondary/60'}`}
                 >
                   <div 
                     onClick={(ev) => {
@@ -125,7 +125,7 @@ export function DiscoverModal({
                       disabled={followLoading === g.id}
                       className={`h-7 px-2.5 rounded-lg font-black text-[10px] transition-all ${
                         g.is_following
-                          ? 'bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 text-gray-400 dark:text-zinc-400 hover:text-red-500 hover:border-red-500'
+                          ? 'bg-white dark:bg-popover border border-gray-200 dark:border-border text-gray-400 dark:text-zinc-400 hover:text-red-500 hover:border-red-500'
                           : 'bg-[#6366f1] text-white hover:bg-[#e00b41]'
                       }`}
                     >
@@ -140,12 +140,12 @@ export function DiscoverModal({
           )}
         </div>
         
-        <div className="p-6 border-t border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 flex items-center justify-between">
+        <div className="p-6 border-t border-gray-100 dark:border-border bg-gray-50 dark:bg-secondary flex items-center justify-between">
           <p className="text-sm text-gray-500 dark:text-zinc-400">{discoverFiltered.length}件のカレンダー</p>
           <Button
             onClick={openCreateGroup}
             variant="outline"
-            className="rounded-xl h-9 px-4 text-sm font-bold border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300"
+            className="rounded-xl h-9 px-4 text-sm font-bold border-gray-200 dark:border-border text-gray-600 dark:text-zinc-300"
           >
             <Plus className="w-4 h-4 mr-1" /> 新規作成
           </Button>

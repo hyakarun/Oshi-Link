@@ -23,14 +23,14 @@ export function GroupSettingsModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] bg-white dark:bg-zinc-900 border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
-        <div className="bg-gray-50 dark:bg-zinc-800 p-8 border-b border-gray-100 dark:border-zinc-800">
+      <DialogContent className="sm:max-w-[480px] bg-white dark:bg-popover border-none rounded-[32px] shadow-2xl p-0 overflow-hidden">
+        <div className="bg-gray-50 dark:bg-secondary p-8 border-b border-gray-100 dark:border-border">
           <DialogTitle className="text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tight">{group.name} の個人設定</DialogTitle>
           <DialogDescription className="text-gray-500 dark:text-zinc-400 font-medium mt-1">
             あなただけのカレンダー画面にカスタマイズできます。※他のユーザーには公開されません。
           </DialogDescription>
         </div>
-        <form onSubmit={handleSavePersonalization} className="p-8 space-y-5 bg-white dark:bg-zinc-900">
+        <form onSubmit={handleSavePersonalization} className="p-8 space-y-5 bg-white dark:bg-popover">
           <input type="hidden" name="group_id" value={group.id} />
           
           <div className="space-y-1.5">
@@ -42,7 +42,7 @@ export function GroupSettingsModal({
                 name="custom_theme_color" 
                 type="color"
                 defaultValue={group.custom_theme_color || '#ff385c'}
-                className="w-12 h-12 bg-gray-50 dark:bg-zinc-800 p-1 rounded-xl cursor-pointer" 
+                className="w-12 h-12 bg-gray-50 dark:bg-secondary p-1 rounded-xl cursor-pointer" 
               />
               <span className="text-xs text-gray-400 dark:text-zinc-550 font-bold">推しのメンバーカラー等を選択</span>
             </div>
@@ -53,7 +53,7 @@ export function GroupSettingsModal({
           */}
           
           <div className="pt-2">
-            <Button type="submit" disabled={loading} className="w-full bg-[#222222] hover:bg-black dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
+            <Button type="submit" disabled={loading} className="w-full bg-[#222222] hover:bg-black dark:bg-secondary dark:hover:bg-accent text-white h-14 rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all">
               {loading ? <Loader2 className="animate-spin mr-2 h-5 w-5" /> : '個人設定を保存する'}
             </Button>
           </div>

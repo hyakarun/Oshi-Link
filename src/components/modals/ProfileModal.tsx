@@ -39,7 +39,7 @@ export function ProfileModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white dark:bg-zinc-900 bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
+      <DialogContent className="max-w-md p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white dark:bg-popover bottom-0 sm:bottom-auto top-auto sm:top-1/2 translate-y-0 sm:-translate-y-1/2 transition-all duration-500">
         <div className="p-8 space-y-6 h-[580px] flex flex-col">
           <div className="flex items-center gap-4 shrink-0">
             <div 
@@ -76,7 +76,7 @@ export function ProfileModal({
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-gray-100 dark:border-zinc-800 shrink-0">
+          <div className="flex border-b border-gray-100 dark:border-border shrink-0">
             <button
               type="button"
               onClick={() => setActiveTab('settings')}
@@ -108,7 +108,7 @@ export function ProfileModal({
                 <div className="space-y-4">
                   <div className="space-y-1.5">
                     <label className="text-[11px] font-black text-gray-400 dark:text-zinc-400 uppercase tracking-[0.1em]">表示名</label>
-                    <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 dark:bg-zinc-800 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" required />
+                    <input name="name" type="text" defaultValue={user.name} className="w-full h-12 bg-gray-50 dark:bg-secondary border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100" required />
                   </div>
 
                   {/* 管理中の公式カレンダー */}
@@ -135,7 +135,7 @@ export function ProfileModal({
                 </div>
 
                 {/* テーマ設定 */}
-                <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
+                <div className="space-y-4 pt-4 border-t border-gray-100 dark:border-border">
                   <div className="flex items-center gap-2 mb-1">
                     <Palette className="w-4 h-4 text-[#6366f1]" />
                     <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-wider">表示設定</h3>
@@ -151,7 +151,7 @@ export function ProfileModal({
                           className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-2xl border-2 transition-all active:scale-[0.97] cursor-pointer ${
                             theme === t
                               ? 'border-[#6366f1] bg-indigo-50/20 dark:bg-indigo-950/20 text-[#6366f1]'
-                              : 'border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800/40 text-gray-500 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-700'
+                              : 'border-gray-100 dark:border-border bg-gray-50 dark:bg-secondary/40 text-gray-500 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-muted-foreground/40'
                           }`}
                         >
                           {t === 'light' && <Sun className="w-4 h-4" />}
@@ -167,7 +167,7 @@ export function ProfileModal({
                 </div>
 
                 {/* 通知設定セクション */}
-                <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-zinc-800">
+                <div className="space-y-4 pt-2 border-t border-gray-100 dark:border-border">
                   <div className="flex items-center gap-2 mb-1">
                     <Bell className="w-4 h-4 text-[#6366f1]" />
                     <h3 className="text-sm font-black text-[#222222] dark:text-zinc-100 uppercase tracking-wider">通知設定</h3>
@@ -175,9 +175,9 @@ export function ProfileModal({
 
                   <div className="space-y-3">
                     {/* メール通知 */}
-                    <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-zinc-800/50 rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+                    <label className="flex items-center justify-between p-4 bg-gray-50 dark:bg-secondary/50 rounded-2xl cursor-pointer hover:bg-gray-100 dark:hover:bg-secondary transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-white dark:bg-zinc-700 rounded-lg shadow-sm">
+                        <div className="p-2 bg-white dark:bg-accent rounded-lg shadow-sm">
                           <Mail className="w-4 h-4 text-gray-600 dark:text-zinc-300" />
                         </div>
                         <div>
@@ -195,7 +195,7 @@ export function ProfileModal({
                   </div>
                 </div>
 
-                <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black dark:bg-zinc-800 dark:hover:bg-zinc-700 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
+                <button type="submit" disabled={loading} className="w-full h-12 bg-[#222222] hover:bg-black dark:bg-secondary dark:hover:bg-accent text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50">
                   {loading ? '保存中...' : '設定を保存'}
                 </button>
               </form>
@@ -206,10 +206,10 @@ export function ProfileModal({
                   href="https://note.com/tsukuro_team/n/nad616c182cc9"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all group cursor-pointer"
+                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary transition-all group cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-700 flex items-center justify-center shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-accent flex items-center justify-center shadow-sm">
                       <BookOpen className="w-5 h-5 text-gray-400 group-hover:text-[#6366f1]" />
                     </div>
                     <div className="text-left">
@@ -225,10 +225,10 @@ export function ProfileModal({
                     onOpenChange(false);
                     setIsCreditsOpen(true);
                   }}
-                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-zinc-800/50 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-all group cursor-pointer"
+                  className="w-full flex items-center justify-between p-4 rounded-2xl bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary transition-all group cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-zinc-700 flex items-center justify-center shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-accent flex items-center justify-center shadow-sm">
                       <Info className="w-5 h-5 text-gray-400 group-hover:text-[#6366f1]" />
                     </div>
                     <div className="text-left">

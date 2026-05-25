@@ -52,7 +52,7 @@ export function AddEventModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-[540px] w-full p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white dark:bg-zinc-900 shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+      <DialogContent className="max-w-[95vw] sm:max-w-[540px] w-full p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] bg-white dark:bg-popover shadow-2xl top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
         <div className="p-6 sm:p-8 overflow-y-auto overflow-x-hidden min-w-0">
           <form onSubmit={onSubmit} className="space-y-6 w-full">
             <div className="flex items-center justify-between mb-2">
@@ -66,12 +66,12 @@ export function AddEventModal({
                   <select 
                     value={selectedGroupId}
                     onChange={(e) => setSelectedGroupId(e.target.value)}
-                    className="w-full h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border text-[#222222] dark:text-zinc-100"
+                    className="w-full h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border text-[#222222] dark:text-zinc-100"
                     required
                   >
-                    <option value="" disabled className="dark:bg-zinc-900">カレンダーを選択してください</option>
+                    <option value="" disabled className="dark:bg-popover">カレンダーを選択してください</option>
                     {groups.map(g => (
-                      <option key={g.id} value={g.id} className="dark:bg-zinc-900">{g.name}</option>
+                      <option key={g.id} value={g.id} className="dark:bg-popover">{g.name}</option>
                     ))}
                   </select>
                   <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#6366f1] transition-colors">
@@ -85,7 +85,7 @@ export function AddEventModal({
                 <input 
                   name="title" 
                   placeholder="ライブ、リリースイベントなど" 
-                  className="w-full h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-5 font-bold transition-all outline-none box-border text-[#222222] dark:text-zinc-100"
+                  className="w-full h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-5 font-bold transition-all outline-none box-border text-[#222222] dark:text-zinc-100"
                   required 
                 />
               </div>
@@ -96,7 +96,7 @@ export function AddEventModal({
                   type="date" 
                   name="date" 
                   defaultValue={defaultEventData?.date || format(new Date(), 'yyyy-MM-dd')}
-                  className="h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-5 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
+                  className="h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-5 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
                   style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                   required 
                 />
@@ -108,7 +108,7 @@ export function AddEventModal({
                   type="button"
                   onClick={() => setIsAllDay(v => !v)}
                   className={`relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none shrink-0 ${
-                    isAllDay ? 'bg-[#6366f1]' : 'bg-gray-200 dark:bg-zinc-700'
+                    isAllDay ? 'bg-[#6366f1]' : 'bg-gray-200 dark:bg-accent'
                   }`}
                 >
                   <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white dark:bg-zinc-200 rounded-full shadow transition-transform duration-200 ${
@@ -133,7 +133,7 @@ export function AddEventModal({
                       type="time" 
                       name="startTime" 
                       defaultValue={defaultEventData?.startTime}
-                      className="h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-3 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
+                      className="h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-3 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
                       style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                       required
                     />
@@ -144,7 +144,7 @@ export function AddEventModal({
                       type="time" 
                       name="endTime" 
                       defaultValue={defaultEventData?.endTime}
-                      className="h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-3 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
+                      className="h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-3 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
                       style={{ display: 'block', width: '100%', minWidth: 0, boxSizing: 'border-box' }}
                     />
                   </div>
@@ -163,10 +163,10 @@ export function AddEventModal({
                         // カテゴリ変更時にサブカテゴリをリセット
                         setEventSubCategory(newCat === 'オフライン系' ? 'ライブ・コンサート' : 'YouTube生配信');
                       }}
-                      className="w-full h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border text-[#222222] dark:text-zinc-100"
+                      className="w-full h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border text-[#222222] dark:text-zinc-100"
                     >
-                      <option value="オフライン系" className="dark:bg-zinc-900">オフライン系</option>
-                      <option value="オンライン系" className="dark:bg-zinc-900">オンライン系</option>
+                      <option value="オフライン系" className="dark:bg-popover">オフライン系</option>
+                      <option value="オンライン系" className="dark:bg-popover">オンライン系</option>
                     </select>
                     <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within/select:text-[#6366f1] transition-colors">
                       <ChevronDown className="w-5 h-5" />
@@ -179,25 +179,25 @@ export function AddEventModal({
                     <select 
                       value={eventSubCategory}
                       onChange={(e) => setEventSubCategory(e.target.value)}
-                      className="w-full h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border text-[#222222] dark:text-zinc-100"
+                      className="w-full h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-5 font-bold transition-all outline-none appearance-none cursor-pointer pr-12 box-border text-[#222222] dark:text-zinc-100"
                     >
                       {eventCategory === 'オフライン系' ? (
                         <>
-                          <option value="ライブ・コンサート" className="dark:bg-zinc-900">ライブ・コンサート</option>
-                          <option value="リリースイベント" className="dark:bg-zinc-900">リリースイベント</option>
-                          <option value="サイン会・お渡し会" className="dark:bg-zinc-900">サイン会・お渡し会</option>
-                          <option value="コラボカフェ・展示" className="dark:bg-zinc-900">コラボカフェ・展示</option>
-                          <option value="聖地・ロケ地" className="dark:bg-zinc-900">聖地・ロケ地</option>
-                          <option value="その他" className="dark:bg-zinc-900">その他</option>
+                          <option value="ライブ・コンサート" className="dark:bg-popover">ライブ・コンサート</option>
+                          <option value="リリースイベント" className="dark:bg-popover">リリースイベント</option>
+                          <option value="サイン会・お渡し会" className="dark:bg-popover">サイン会・お渡し会</option>
+                          <option value="コラボカフェ・展示" className="dark:bg-popover">コラボカフェ・展示</option>
+                          <option value="聖地・ロケ地" className="dark:bg-popover">聖地・ロケ地</option>
+                          <option value="その他" className="dark:bg-popover">その他</option>
                         </>
                       ) : (
                         <>
-                          <option value="YouTube生配信" className="dark:bg-zinc-900">YouTube生配信</option>
-                          <option value="テレビ出演" className="dark:bg-zinc-900">テレビ出演</option>
-                          <option value="ラジオ出演" className="dark:bg-zinc-900">ラジオ出演</option>
-                          <option value="雑誌発売" className="dark:bg-zinc-900">雑誌発売</option>
-                          <option value="グッズ発売" className="dark:bg-zinc-900">グッズ発売</option>
-                          <option value="その他" className="dark:bg-zinc-900">その他</option>
+                          <option value="YouTube生配信" className="dark:bg-popover">YouTube生配信</option>
+                          <option value="テレビ出演" className="dark:bg-popover">テレビ出演</option>
+                          <option value="ラジオ出演" className="dark:bg-popover">ラジオ出演</option>
+                          <option value="雑誌発売" className="dark:bg-popover">雑誌発売</option>
+                          <option value="グッズ発売" className="dark:bg-popover">グッズ発売</option>
+                          <option value="その他" className="dark:bg-popover">その他</option>
                         </>
                       )}
                     </select>
@@ -229,7 +229,7 @@ export function AddEventModal({
                   <input 
                     name="location" 
                     placeholder="チャンネル名、番組名、URLなど..." 
-                    className="w-full h-12 bg-gray-50 dark:bg-zinc-800 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100 transition-all"
+                    className="w-full h-12 bg-gray-50 dark:bg-secondary border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] dark:text-zinc-100 transition-all"
                   />
                 ) : (
                   <>
@@ -247,7 +247,7 @@ export function AddEventModal({
                 <textarea 
                   name="description" 
                   placeholder="イベントの詳細や持ち物など" 
-                  className="w-full h-32 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl p-5 font-medium transition-all outline-none resize-none text-[#222222] dark:text-zinc-100"
+                  className="w-full h-32 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl p-5 font-medium transition-all outline-none resize-none text-[#222222] dark:text-zinc-100"
                 />
               </div>
 
@@ -256,7 +256,7 @@ export function AddEventModal({
                 <input 
                   name="source_url" 
                   placeholder="公式サイト、告知ツイートなど" 
-                  className="w-full h-14 bg-gray-50 dark:bg-zinc-800 border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-zinc-700 rounded-2xl px-5 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
+                  className="w-full h-14 bg-gray-50 dark:bg-secondary border-2 border-transparent focus:border-[#6366f1] focus:bg-white dark:focus:bg-accent rounded-2xl px-5 font-bold transition-all outline-none text-[#222222] dark:text-zinc-100"
                   required
                 />
               </div>

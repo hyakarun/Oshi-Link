@@ -53,24 +53,24 @@
 }
 
 .dark {
-  --background: #0f0f12;
-  --foreground: #f3f4f6;
-  --card: #18181b;
-  --card-foreground: #f3f4f6;
-  --popover: #18181b;
-  --popover-foreground: #f3f4f6;
+  --background: #1a1a1f;
+  --foreground: #ececef;
+  --card: #242429;
+  --card-foreground: #ececef;
+  --popover: #2c2c32;
+  --popover-foreground: #ececef;
   --primary: #6366f1;
   --primary-foreground: #ffffff;
-  --secondary: #27272a;
-  --secondary-foreground: #f3f4f6;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #f3f4f6;
+  --secondary: #35353d;
+  --secondary-foreground: #ececef;
+  --muted: #2e2e35;
+  --muted-foreground: #a8a8b3;
+  --accent: #35353d;
+  --accent-foreground: #ececef;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #27272a;
-  --input: #27272a;
+  --border: #43434d;
+  --input: #35353d;
   --ring: #6366f1;
 }
 
@@ -87,6 +87,10 @@
   }
   .hover-shadow:hover {
     box-shadow: rgba(0,0,0,0.08) 0px 4px 12px;
+  }
+
+  .dark .card-shadow {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 0px 1px, rgba(0, 0, 0, 0.25) 0px 2px 8px;
   }
 
   /* iOS Safari: date/time input normalization */
