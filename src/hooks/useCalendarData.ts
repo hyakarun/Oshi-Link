@@ -106,21 +106,26 @@ export function useCalendarData({ user, authHeaders }: UseCalendarDataProps) {
     setGroupLoading(true);
     const fd = new FormData(e.currentTarget);
     const body = {
-      group_id: group.id,
-      custom_theme_color: fd.get('custom_theme_color'),
-      custom_bg_image: fd.get('custom_bg_image'),
+      group_id: (fd.get('group_id') as string) || group.id,
+      custom_theme_color: fd.get('custom_theme_color') as string | null,
+      custom_bg_image: (fd.get('custom_bg_image') as string | null) || null,
     };
     try {
-      const res = await fetch('/api/groups', {
-        method: 'PUT',
+      const res = await fetch('/api/groups/follow', {
+        method: 'PATCH',
         headers: authHeaders(),
         body: JSON.stringify(body),
       });
       if (res.ok) {
         await loadGroups();
         onSuccess();
+      } else {
+        const data = await res.json().catch(() => ({})) as { error?: string };
+        alert(data.error || '設定の保存に失敗しました');
       }
-    } catch {}
+    } catch {
+      alert('通信エラーが発生しました');
+    }
     setGroupLoading(false);
   };
 
