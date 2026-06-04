@@ -17,6 +17,7 @@ export type Event = {
   title: string;
   date: string;
   end_time?: string;
+  is_all_day?: boolean;
   location?: string;
   category?: string;
   sub_category?: string;
@@ -33,7 +34,11 @@ export type Event = {
   disputes_count?: number;
   creator_name?: string;
   creator_is_official?: boolean;
+  added_by_group_official?: boolean;
   group_is_official?: boolean;
+  created_at?: string;
+  added_by?: string;
+  creator_edit_used?: boolean;
   user_vote?: 'confirmed' | 'disputed' | null;
 };
 
@@ -48,6 +53,11 @@ export type User = {
   push_enabled?: boolean;
   is_official?: boolean;
   official_groups?: string[];
+  official_application?: {
+    status: 'pending' | 'rejected' | 'approved';
+    calendar_name: string;
+    admin_note?: string | null;
+  } | null;
   notification_timing?: '10m' | '1h' | '1d' | '1w'; // 無料は10m固定
 };
 

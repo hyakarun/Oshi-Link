@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/compone
 import { ShieldCheck, Calendar, Users, Loader2, MapPin, Clock, Info, Palette } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { Group } from '@/lib/types';
+import { isAllDayEvent } from '@/lib/utils';
 import { GroupAvatar } from '@/components/ui/shared';
 
 type UpcomingEvent = {
@@ -176,6 +177,7 @@ export function GroupDetailModal({
                     {upcomingEvents.length > 0 ? (
                       upcomingEvents.map(event => {
                         const dateObj = parseISO(event.date);
+                        const allDay = isAllDayEvent({ date: event.date });
                         return (
                           <div 
                             key={event.id} 
@@ -186,7 +188,9 @@ export function GroupDetailModal({
                               style={{ backgroundColor: `${accentColor}18`, borderColor: `${accentColor}40` }}
                             >
                               <p className="text-[9px] font-black leading-none mb-1" style={{ color: accentColor }}>{format(dateObj, 'M/d')}</p>
-                              <p className="text-[8px] font-bold text-gray-400 dark:text-zinc-500 leading-none">{format(dateObj, 'HH:mm')}</p>
+                              <p className="text-[8px] font-bold text-gray-400 dark:text-zinc-500 leading-none">
+                                {allDay ? '終日' : format(dateObj, 'HH:mm')}
+                              </p>
                             </div>
                             <div className="min-w-0 flex-1">
                               <h4 className="text-xs font-black text-[#222222] dark:text-zinc-100 truncate leading-snug">{event.title}</h4>

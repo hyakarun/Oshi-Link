@@ -2,7 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, Calendar, Users, Bell, Loader2, Plus } from 'lucide-react';
+import { Search, Calendar, Users, Loader2, Plus } from 'lucide-react';
 import { Group } from '@/lib/types';
 import { GroupAvatar } from '@/components/ui/shared';
 
@@ -55,24 +55,6 @@ export function DiscoverModal({
             />
           </div>
 
-          {/* サービス説明 */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
-            {[
-              { icon: <Users className="w-4 h-4" />, title: "コミュニティ管理", desc: "みんなで情報を更新。最新の予定が分かります。" },
-              { icon: <Bell className="w-4 h-4" />, title: "通知でリマインド", desc: "イベント開始前に通知。見逃しを防止します。" },
-              { icon: <Calendar className="w-4 h-4" />, title: "情報の正確性", desc: "みんなでチェックして正確な情報を維持。" },
-            ].map((f, i) => (
-              <div key={i} className="flex items-start gap-3 p-3 rounded-2xl bg-gray-50 dark:bg-secondary/50 border border-gray-100/50 dark:border-border/30">
-                <div className="w-8 h-8 rounded-lg bg-white dark:bg-secondary flex items-center justify-center text-[#6366f1] shadow-sm shrink-0">
-                  {f.icon}
-                </div>
-                <div>
-                  <h3 className="text-[11px] font-black text-[#222222] dark:text-zinc-100">{f.title}</h3>
-                  <p className="text-[9px] text-gray-400 dark:text-zinc-400 font-medium leading-tight mt-0.5">{f.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="overflow-y-auto flex-1 min-h-0">

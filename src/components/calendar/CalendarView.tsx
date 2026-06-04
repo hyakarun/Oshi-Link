@@ -5,7 +5,9 @@ import {
   format, startOfMonth, endOfMonth, startOfWeek, endOfWeek,
   addDays, isSameDay, isSameMonth, parseISO, differenceInMinutes
 } from 'date-fns';
+import { ja } from 'date-fns/locale';
 import { Event, View } from '@/lib/types';
+import { isAllDayEvent } from '@/lib/utils';
 import { MapPin, Clock, Calendar } from 'lucide-react';
 
 interface CalendarViewProps {
@@ -20,6 +22,13 @@ interface CalendarViewProps {
 
 const HOUR_HEIGHT = 80; // px per hour
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
+
+const WEEK_OPTS = { locale: ja, weekStartsOn: 0 as const };
+
+/** 日〜土の曜日ラベル（月表示ヘッダー用） */
+const WEEKDAY_LABELS = Array.from({ length: 7 }, (_, i) =>
+  format(addDays(startOfWeek(new Date(), WEEK_OPTS), i), 'EEE', { locale: ja })
+);
 
 /** 分 → "HH:mm" 変換（15分単位に丸める） */
 const minsToTime = (totalMins: number) => {
@@ -118,8 +127,8 @@ function TimeGrid({
                 isSameDay(d, new Date()) ? 'bg-[#6366f1]/5 dark:bg-[#6366f1]/10' : ''
               }`}
             >
-              <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-widest mb-0.5">
-                {format(d, 'EEE')}
+              <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 mb-0.5">
+                {format(d, 'EEE', { locale: ja })}
               </p>
               <p className={`text-xl font-black ${isSameDay(d, new Date()) ? 'text-[#6366f1]' : 'text-[#222222] dark:text-zinc-100'}`}>
                 {format(d, 'd')}
@@ -186,7 +195,9 @@ function TimeGrid({
                   {/* Events */}
                   {dayEvents.map(e => {
                     const startDate = parseISO(e.date);
+                    const allDay = isAllDayEvent(e);
                     const startMins = startDate.getHours() * 60 + startDate.getMinutes();
+                    const isUnofficial = !(e.group_is_official && e.added_by_group_official);
                     let durationMins = 60;
                     if (e.end_time) {
                       const endDate = parseISO(e.end_time);
@@ -210,8 +221,13 @@ function TimeGrid({
                             className="text-[10px] font-black leading-none truncate"
                             style={{ color }}
                           >
-                            {format(startDate, 'HH:mm')}
+                            {allDay ? '終日' : format(startDate, 'HH:mm')}
                           </p>
+                          {isUnofficial && (
+                            <p className="text-[9px] font-black text-orange-600 dark:text-orange-400 leading-none mt-0.5">
+                              非公式
+                            </p>
+                          )}
                           <p className="text-[11px] font-black text-[#222] dark:text-zinc-200 line-clamp-2 leading-tight mt-0.5">
                             {e.title}
                           </p>
@@ -262,8 +278,8 @@ export function CalendarView({
   if (view === 'month') {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
+    const startDate = startOfWeek(monthStart, WEEK_OPTS);
+    const endDate = endOfWeek(monthEnd, WEEK_OPTS);
 
     const rows: React.ReactNode[] = [];
     let cells: React.ReactNode[] = [];
@@ -321,12 +337,28 @@ export function CalendarView({
       );
       cells = [];
     }
-    return <div className="bg-white dark:bg-card h-full flex flex-col">{rows}</div>;
+    return (
+      <div className="bg-white dark:bg-card h-full flex flex-col">
+        <div className="grid grid-cols-7 border-b border-gray-100 dark:border-border shrink-0 bg-white dark:bg-card sticky top-0 z-10">
+          {WEEKDAY_LABELS.map((label, i) => (
+            <div
+              key={label + i}
+              className={`py-2 text-center text-[10px] md:text-xs font-black border-r border-gray-100 dark:border-border last:border-r-0 ${
+                i === 0 ? 'text-red-500 dark:text-red-400' : i === 6 ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-zinc-400'
+              }`}
+            >
+              {label}
+            </div>
+          ))}
+        </div>
+        <div className="flex-1 flex flex-col overflow-auto">{rows}</div>
+      </div>
+    );
   }
 
   // ── Week View ──────────────────────────────────
   if (view === 'week') {
-    const startDate = startOfWeek(currentMonth);
+    const startDate = startOfWeek(currentMonth, WEEK_OPTS);
     const days = Array.from({ length: 7 }, (_, i) => addDays(startDate, i));
     return (
       <TimeGrid

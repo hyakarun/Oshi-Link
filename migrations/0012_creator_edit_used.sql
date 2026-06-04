@@ -1,0 +1,1 @@
+ALTER TABLE events ADD COLUMN creator_edit_used INTEGER NOT NULL DEFAULT 0;

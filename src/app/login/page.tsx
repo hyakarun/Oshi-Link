@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Calendar, Loader2, Users, Bell, ShieldCheck } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { OshiLinkLogo } from '@/components/OshiLinkLogo';
 
-// Minimal User interface to match existing
 interface User {
   id: string;
   email: string;
@@ -12,10 +12,6 @@ interface User {
   avatar_url?: string;
   role: string;
 }
-
-// モジュールレベルで管理：React再レンダリング・StrictModeの二重実行でもリセットされない
-// ※ windowに持たせることでHMR時のリセットも防ぐ
-declare global { interface Window { __gsiInitialized?: boolean } }
 
 function LoginContent() {
   const router = useRouter();
@@ -25,19 +21,9 @@ function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [authStep, setAuthStep] = useState<'idle' | 'sent' | 'logging_in'>('idle');
   const [authEmail, setAuthEmail] = useState('');
-  const [googleLoaded, setGoogleLoaded] = useState(false);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [isOfficial, setIsOfficial] = useState(false);
-  const [calendarName, setCalendarName] = useState('');
   const [loginTab, setLoginTab] = useState<'google' | 'email'>('google');
-  const isOfficialRef = React.useRef(false);
-  const calendarNameRef = React.useRef('');
 
-  // refをstateと同期（Googleコールバックのクロージャから最新値を参照するため）
-  React.useEffect(() => { isOfficialRef.current = isOfficial; }, [isOfficial]);
-  React.useEffect(() => { calendarNameRef.current = calendarName; }, [calendarName]);
-
-  // 1. セッションが既にあるか、URLトークンがあるかチェック
   useEffect(() => {
     setMounted(true);
     async function checkAuth() {
@@ -61,7 +47,12 @@ function LoginContent() {
         setAuthStep('logging_in');
         try {
           const res = await fetch(`/api/auth/verify?token=${urlToken}`);
-          const data = await res.json() as { ok?: boolean; sessionToken?: string; user?: User; error?: string };
+          const data = await res.json() as {
+            ok?: boolean;
+            sessionToken?: string;
+            user?: User;
+            error?: string;
+          };
           if (data.ok && data.sessionToken && data.user) {
             localStorage.setItem('oshi_session', data.sessionToken);
             const group = searchParams.get('group');
@@ -97,8 +88,6 @@ function LoginContent() {
     checkAuth();
   }, [router, searchParams]);
 
-
-  // 2. Googleログインボタンの初期化と描画
   useEffect(() => {
     let initTimer: NodeJS.Timeout;
     let cancelled = false;
@@ -116,14 +105,13 @@ function LoginContent() {
         return;
       }
 
-      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
+      const clientId =
+        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+        '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
       try {
-        const stateObj = {
-          is_official: isOfficial,
-          calendar_name: calendarName.trim(),
-          group: searchParams.get('group') || '',
-        };
-        const stateStr = encodeURIComponent(JSON.stringify(stateObj));
+        const stateStr = encodeURIComponent(
+          JSON.stringify({ group: searchParams.get('group') || '' })
+        );
 
         (window as any).google.accounts.id.initialize({
           client_id: clientId,
@@ -154,7 +142,7 @@ function LoginContent() {
       cancelled = true;
       if (initTimer) clearTimeout(initTimer);
     };
-  }, [isAuthChecking, authStep, router, searchParams, isOfficial, calendarName]);
+  }, [isAuthChecking, authStep, searchParams]);
 
   async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -163,23 +151,11 @@ function LoginContent() {
     const email = fd.get('email') as string;
     const name = fd.get('name') as string;
 
-    if (isOfficial && !calendarName.trim()) {
-      alert('公式カレンダーとして登録する場合はカレンダー名を入力してください');
-      setLoading(false);
-      return;
-    }
-
-    const body: Record<string, unknown> = { email, name };
-    if (isOfficial && calendarName.trim()) {
-      body.is_official = true;
-      body.calendar_name = calendarName.trim();
-    }
-
     try {
       const res = await fetch('/api/auth/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ email, name }),
       });
       if (res.ok) {
         setAuthEmail(email);
@@ -243,55 +219,12 @@ function LoginContent() {
                   Beta
                 </div>
               </div>
-              <div 
-                className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-white shadow-lg mb-3"
-                style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
-              >
-                <Calendar className="w-6 h-6" />
-              </div>
+              <OshiLinkLogo size={48} className="rounded-2xl shadow-lg mb-3 mx-auto" />
               <h2 className="text-xl font-black text-[#222222] tracking-tight">Oshi-Link をはじめる</h2>
-              <p className="text-xs text-gray-500 mt-1">
-                推しの予定を、これひとつで。
-              </p>
-              <p className="text-[8px] text-gray-200 mt-1 text-center">v1.0.11-typeerror-and-schema-fix</p>
+              <p className="text-xs text-gray-500 mt-1">推しの予定を、これひとつで。</p>
             </div>
 
             <div className="flex flex-col gap-3">
-              {/* 公式カレンダー登録オプション */}
-              <div className="rounded-xl border border-indigo-100 bg-indigo-50/40 p-3 space-y-2">
-                <label className="flex items-start gap-2 cursor-pointer">
-                  <input
-                    id="is-official-checkbox"
-                    type="checkbox"
-                    checked={isOfficial}
-                    onChange={(e) => {
-                      setIsOfficial(e.target.checked);
-                      if (!e.target.checked) setCalendarName('');
-                    }}
-                    className="mt-0.5 w-3.5 h-3.5 accent-[#6366f1] rounded shrink-0"
-                  />
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#6366f1]" />
-                      <span className="text-[11px] font-black text-[#222222]">公式カレンダーとして登録する</span>
-                    </div>
-                  </div>
-                </label>
-                {isOfficial && (
-                  <div className="pl-5">
-                    <input
-                      id="calendar-name-input"
-                      type="text"
-                      placeholder="カレンダー名 (例：〇〇 公式)"
-                      value={calendarName}
-                      onChange={(e) => setCalendarName(e.target.value)}
-                      maxLength={50}
-                      className="w-full h-9 bg-white border border-indigo-100 rounded-lg px-3 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-xs"
-                    />
-                  </div>
-                )}
-              </div>
-
               <div className="flex bg-gray-100 rounded-xl p-1">
                 <button
                   type="button"
@@ -327,9 +260,9 @@ function LoginContent() {
                     <div>
                       <input name="email" type="email" placeholder="メールアドレス *" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm" required />
                     </div>
-                    <button 
-                      type="submit" 
-                      disabled={loading} 
+                    <button
+                      type="submit"
+                      disabled={loading}
                       className="w-full h-12 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-sm mt-1"
                       style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
                     >
@@ -351,11 +284,13 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={
-      <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
-        <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex h-screen w-full bg-[#f2f2f2] items-center justify-center">
+          <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
+        </div>
+      }
+    >
       <LoginContent />
     </Suspense>
   );

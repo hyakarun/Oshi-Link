@@ -72,6 +72,17 @@ export function ProfileModal({
                   </span>
                 )}
               </div>
+              {user.official_application?.status === 'pending' && (
+                <p className="text-[10px] font-bold text-amber-600 dark:text-amber-400 mt-1">
+                  公式カレンダー申請審査中（{user.official_application.calendar_name}）
+                </p>
+              )}
+              {user.official_application?.status === 'rejected' && (
+                <p className="text-[10px] font-bold text-red-600 dark:text-red-400 mt-1">
+                  公式カレンダー申請は承認されませんでした
+                  {user.official_application.admin_note ? `：${user.official_application.admin_note}` : ''}
+                </p>
+              )}
             </div>
           </div>
 

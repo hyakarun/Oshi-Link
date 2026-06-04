@@ -1,8 +1,9 @@
 import React from 'react';
-import { Calendar, Star, Users, Search, Trash2, Palette, ChevronRight, Menu, X, Bell, Share2, Sun, Moon, Laptop, BookOpen, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Star, Users, Search, Trash2, Share2, Bell, BookOpen, ExternalLink, ShieldCheck, ChevronRight, Sun, Moon, Laptop } from 'lucide-react';
 import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 import { useTheme } from '@/components/ThemeProvider';
+import { OshiLinkLogo } from '@/components/OshiLinkLogo';
 
 interface SidebarProps {
   user: User | null;
@@ -88,12 +89,7 @@ export function Sidebar({
       `}>
         {/* Header */}
         <div className="px-5 py-4 border-b border-gray-100 dark:border-border flex items-center gap-3">
-          <div 
-            className="w-9 h-9 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md" 
-            style={{ background: 'linear-gradient(135deg, #EA4335 0%, #FBBC05 33%, #34A853 66%, #4285F4 100%)' }}
-          >
-            <Calendar className="w-5 h-5" />
-          </div>
+          <OshiLinkLogo size={36} />
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-black text-[#222222] dark:text-zinc-100 tracking-tight">Oshi-Link</p>
             <div className="flex items-center gap-1 min-w-0">
@@ -162,7 +158,7 @@ export function Sidebar({
 
         {/* Section label */}
         <div className="px-5 pt-4 pb-1 flex items-center justify-between">
-          <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-[0.15em]">追っているカレンダー</p>
+          <p className="text-[10px] font-black text-gray-400 dark:text-zinc-500 uppercase tracking-[0.15em]">フォローしているカレンダー</p>
         </div>
 
         {/* Followed groups list */}
@@ -248,23 +244,19 @@ export function Sidebar({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 h-11 bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group min-w-0"
             >
-              <div className="flex items-center gap-1.5 min-w-0">
-                <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500 shrink-0" />
-                <span className="truncate">使い方</span>
-              </div>
+              <BookOpen className="w-3.5 h-3.5 group-hover:text-emerald-500 shrink-0" />
+              <span className="truncate">使い方</span>
               <ExternalLink className="w-3 h-3 text-gray-400 dark:text-zinc-400 group-hover:text-gray-500 shrink-0" />
             </a>
 
             <button
               onClick={() => { setIsNewsOpen(true); setIsMobileMenuOpen(false); }}
-              className="flex-1 flex items-center justify-between px-3 h-11 bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group"
+              className="flex-1 flex items-center justify-center gap-1.5 px-3 h-11 bg-gray-50 dark:bg-secondary/50 hover:bg-gray-100 dark:hover:bg-secondary text-gray-600 dark:text-zinc-300 rounded-xl font-bold text-[11px] transition-all group min-w-0"
             >
-              <div className="flex items-center gap-1.5 min-w-0">
-                <Bell className="w-3.5 h-3.5 group-hover:text-blue-500 shrink-0" />
-                <span className="truncate">お知らせ</span>
-              </div>
+              <Bell className="w-3.5 h-3.5 group-hover:text-blue-500 shrink-0" />
+              <span className="truncate">お知らせ</span>
               {hasNewNews && (
                 <span className="bg-gradient-to-r from-[#EA4335] to-[#4285F4] text-white text-[8px] font-black px-1.5 py-0.5 rounded-full animate-bounce shadow-sm shrink-0">New!</span>
               )}
@@ -275,7 +267,7 @@ export function Sidebar({
             onClick={() => { setIsDiscoverOpen(true); setIsMobileMenuOpen(false); }}
             className="w-full flex items-center justify-center gap-2 h-11 border-2 border-[#6366f1] text-[#6366f1] dark:text-indigo-400 dark:border-indigo-500 rounded-xl font-black text-[11px] hover:bg-indigo-50 dark:hover:bg-indigo-950/20 transition-all active:scale-[0.98] group"
           >
-            <Search className="w-3.5 h-3.5" /> 
+            <Search className="w-3.5 h-3.5" />
             <span>カレンダーを探す</span>
           </button>
 

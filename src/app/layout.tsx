@@ -31,6 +31,14 @@ export const metadata = {
   alternates: {
     canonical: 'https://oshi-link.com',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '1024x1024' },
+    ],
+    apple: [{ url: '/apple-icon.png', type: 'image/png', sizes: '1024x1024' }],
+    shortcut: ['/favicon.ico'],
+  },
 };
 
 export default function RootLayout({

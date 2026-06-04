@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { User } from '@/lib/types';
+import { setBootstrapCache, type BootstrapPayload } from '@/lib/bootstrap-cache';
+
+type CheckAuthOptions = {
+  /** プロフィール再取得など、ユーザー情報のみ必要なとき */
+  userOnly?: boolean;
+};
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -15,34 +21,52 @@ export function useAuth() {
     setMounted(true);
   }, []);
 
-  const checkAuth = useCallback(async () => {
+  const checkAuth = useCallback(async (options?: CheckAuthOptions) => {
     const saved = localStorage.getItem('oshi_session');
     if (saved) {
       setSessionToken(saved);
       try {
-        const res = await fetch('/api/auth/me', {
-          headers: { 'Authorization': `Bearer ${saved}` },
+        const userOnly = options?.userOnly === true;
+        const url = userOnly ? '/api/auth/me' : '/api/bootstrap';
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${saved}` },
         });
         if (res.ok) {
-          const data = await res.json() as { user?: User; dispute_warning?: boolean };
+          const data = await res.json() as {
+            user?: User;
+            dispute_warning?: boolean;
+            groups?: BootstrapPayload['groups'];
+            events?: BootstrapPayload['events'];
+            news?: BootstrapPayload['news'];
+          };
           if (data.user) {
             setUser(data.user);
             if (data.dispute_warning) {
               setDisputeWarning(true);
             }
+            if (!userOnly && data.groups && data.events) {
+              setBootstrapCache({
+                user: data.user,
+                dispute_warning: data.dispute_warning,
+                groups: data.groups,
+                events: data.events,
+                news: data.news,
+              });
+            }
             setIsAuthChecking(false);
             return;
           }
         } else {
-          const data = await res.json() as { error?: string };
-          if (data.error) {
-            alert(data.error);
+          const errData = await res.json().catch(() => ({})) as { error?: string };
+          if (errData.error) {
+            alert(errData.error);
           }
         }
         localStorage.removeItem('oshi_session');
         setSessionToken(null);
-      } catch (err: any) {
-        alert('auth_me_catch_error: ' + err.message);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        alert('auth_me_catch_error: ' + message);
       }
     }
     setIsAuthChecking(false);
@@ -88,7 +112,7 @@ export function useAuth() {
         body: JSON.stringify(body),
       });
       if (res.ok) {
-        await checkAuth();
+        await checkAuth({ userOnly: true });
         if (onSuccess) onSuccess();
       }
     } catch {}

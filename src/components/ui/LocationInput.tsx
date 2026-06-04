@@ -12,11 +12,20 @@ type LocationResult = {
 
 type LocationInputProps = {
   onSelect: (result: LocationResult) => void;
+  onInputChange?: (value: string) => void;
   placeholder?: string;
   className?: string;
 };
 
-export function LocationInput({ onSelect, placeholder = '会場名を入力...', className = '' }: LocationInputProps) {
+const searchCache = new Map<string, LocationResult[]>();
+const CACHE_MAX = 40;
+
+export function LocationInput({
+  onSelect,
+  onInputChange,
+  placeholder = '会場名を入力...',
+  className = '',
+}: LocationInputProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<LocationResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -24,19 +33,47 @@ export function LocationInput({ onSelect, placeholder = '会場名を入力...',
   const [selected, setSelected] = useState<LocationResult | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   const search = useCallback(async (q: string) => {
-    if (q.length < 2) { setResults([]); return; }
+    const normalized = q.trim();
+    if (normalized.length < 2) {
+      setResults([]);
+      return;
+    }
+
+    const cached = searchCache.get(normalized);
+    if (cached) {
+      setResults(cached);
+      setShowDropdown(true);
+      return;
+    }
+
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     try {
-      const res = await fetch(`/api/location-search?q=${encodeURIComponent(q)}`);
+      const res = await fetch(
+        `/api/location-search?q=${encodeURIComponent(normalized)}`,
+        { signal: controller.signal }
+      );
       const data: LocationResult[] = await res.json();
-      setResults(data);
-      setShowDropdown(true);
-    } catch {
-      setResults([]);
+      if (!controller.signal.aborted) {
+        searchCache.set(normalized, data);
+        if (searchCache.size > CACHE_MAX) {
+          const firstKey = searchCache.keys().next().value;
+          if (firstKey) searchCache.delete(firstKey);
+        }
+        setResults(data);
+        setShowDropdown(true);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') return;
+      if (!controller.signal.aborted) setResults([]);
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) setLoading(false);
     }
   }, []);
 
@@ -44,18 +81,19 @@ export function LocationInput({ onSelect, placeholder = '会場名を入力...',
     const val = e.target.value;
     setQuery(val);
     setSelected(null);
+    onInputChange?.(val);
     if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => search(val), 400);
+    timerRef.current = setTimeout(() => search(val), 500);
   };
 
   const handleSelect = (result: LocationResult) => {
     setQuery(result.shortName);
     setSelected(result);
     setShowDropdown(false);
+    onInputChange?.(result.shortName);
     onSelect(result);
   };
 
-  // 外側クリックで閉じる
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -63,7 +101,10 @@ export function LocationInput({ onSelect, placeholder = '会場名を入力...',
       }
     };
     document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      abortRef.current?.abort();
+    };
   }, []);
 
   return (
@@ -100,7 +141,6 @@ export function LocationInput({ onSelect, placeholder = '会場名を入力...',
         </ul>
       )}
 
-      {/* 選択済みの住所を薄く表示 */}
       {selected && (
         <p className="text-[10px] text-gray-400 font-medium mt-1 ml-1 truncate">
           📍 {selected.address}

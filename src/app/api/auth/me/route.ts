@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getLatestOfficialApplication } from '@/lib/admin/official-applications';
+import { resolveDisputeWarning } from '@/lib/api/dispute-warning';
 
 export const runtime = 'edge';
 
@@ -14,16 +16,18 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
   if (!token) return null;
 
   const session = await db.prepare(
-    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url, u.premium_status, u.notifications_enabled, u.email_enabled, u.push_enabled, u.notification_timing, u.is_official FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
+    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url, u.premium_status, u.notifications_enabled, u.email_enabled, u.push_enabled, u.notification_timing, u.is_official, COALESCE(u.status, \'active\') as status FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
   ).bind(token).first() as {
     token: string; user_id: string; expires_at: string;
     uid: string; name: string; email: string; avatar_url: string; premium_status: string;
     notifications_enabled: number; email_enabled: number; push_enabled: number; notification_timing: string;
     is_official: number;
+    status: string;
   } | null;
 
   if (!session) return null;
   if (new Date(session.expires_at) < new Date()) return null;
+  if (session.status === 'banned' || session.status === 'frozen') return null;
 
   let official_groups: string[] = [];
   try {
@@ -33,6 +37,24 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
     official_groups = officials.results?.map(r => r.group_id) || [];
   } catch (err) {
     console.error('Failed to fetch official groups:', err);
+  }
+
+  let official_application: {
+    status: string;
+    calendar_name: string;
+    admin_note?: string | null;
+  } | null = null;
+  try {
+    const app = await getLatestOfficialApplication(db, session.uid);
+    if (app && (app.status === 'pending' || app.status === 'rejected')) {
+      official_application = {
+        status: app.status,
+        calendar_name: app.calendar_name,
+        admin_note: app.admin_note,
+      };
+    }
+  } catch (err) {
+    console.error('Failed to fetch official application:', err);
   }
 
   return { 
@@ -46,6 +68,7 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
     push_enabled: !!session.push_enabled,
     is_official: !!session.is_official,
     official_groups,
+    official_application,
     notification_timing: (session.notification_timing || '10m') as any
   };
 }
@@ -61,24 +84,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ user: null }, { status: 401 });
     }
 
-    // 不正確（disputed）と判定され、かつ未確認の予定があるかチェック
-    let hasNewDispute = false;
-    try {
-      const disputed = await db.prepare(
-        'SELECT id FROM events WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0 LIMIT 1'
-      ).bind(user.id).all();
-
-      hasNewDispute = !!(disputed.results && disputed.results.length > 0);
-
-      if (hasNewDispute) {
-        // 今回のログインで警告を出すため、既読（1）に更新
-        await db.prepare(
-          'UPDATE events SET dispute_acknowledged = 1 WHERE created_by = ? AND disputed = 1 AND dispute_acknowledged = 0'
-        ).bind(user.id).run();
-      }
-    } catch (err) {
-      console.error('Dispute warning check failed:', err);
-    }
+    const hasNewDispute = await resolveDisputeWarning(db, user.id);
 
     return NextResponse.json({ 
       user, 

@@ -1,0 +1,1 @@
+ALTER TABLE events ADD COLUMN is_all_day INTEGER DEFAULT 0;

@@ -6,11 +6,13 @@ import {
   Users, 
   Bell, 
   Calendar, 
-  Search 
+  Search,
+  ShieldCheck,
 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { format, addMonths, subMonths, isSameDay, parseISO, addDays } from 'date-fns';
 import { Group, Event, View } from '@/lib/types';
+import { isOfficialCalendarManager } from '@/lib/event-edit';
 
 // Components
 import { Sidebar } from '@/components/layout/Sidebar';
@@ -48,11 +50,21 @@ export function AppContent() {
 
   const {
     allGroups, followedGroups, events, loading, isInitialLoading, setLoading, groupLoading, followLoading,
-    loadGroups, loadEvents, handleFollowToggle, handleUnfollow, handleSavePersonalization, handleCreateGroup
+    loadGroups, loadEvents, hydrateFromBootstrap, handleFollowToggle, handleUnfollow, handleSavePersonalization,
+    handleCreateGroup, handleApplyOfficialCalendar,
   } = useCalendarData({ user, authHeaders });
 
   // UI States
   const [activeGroupId, setActiveGroupId] = useState<string>('0');
+  const [officialApplicationNotice, setOfficialApplicationNotice] = useState(false);
+
+  useEffect(() => {
+    if (isAuthChecking || !user) return;
+    if (user.official_application?.status !== 'pending') return;
+    if (sessionStorage.getItem('oshi_official_application_pending') !== '1') return;
+    sessionStorage.removeItem('oshi_official_application_pending');
+    setOfficialApplicationNotice(true);
+  }, [isAuthChecking, user]);
 
   // URL Parameter Handling
   useEffect(() => {
@@ -88,24 +100,14 @@ export function AppContent() {
   const [hasNewNews, setHasNewNews] = useState(false);
   const [discoverSearch, setDiscoverSearch] = useState('');
 
-  // お知らせの未読チェック
-  useEffect(() => {
-    async function checkNews() {
-      try {
-        const res = await fetch(`/api/news?t=${Date.now()}`);
-        if (res.ok) {
-          const data = await res.json() as { items: { pubDate: string }[] };
-          if (data.items && data.items.length > 0) {
-            const lastSeen = localStorage.getItem('oshi_news_last_seen');
-            if (lastSeen !== data.items[0].pubDate) {
-              setHasNewNews(true);
-            }
-          }
-        }
-      } catch {}
+  const applyNewsUnread = useCallback((items: { pubDate: string | null }[]) => {
+    if (items.length > 0 && items[0].pubDate) {
+      const lastSeen = localStorage.getItem('oshi_news_last_seen');
+      if (lastSeen !== items[0].pubDate) {
+        setHasNewNews(true);
+      }
     }
-    if (mounted) checkNews();
-  }, [mounted]);
+  }, []);
 
   // Selected Data
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -137,14 +139,13 @@ export function AppContent() {
 
   useEffect(() => {
     if (!isAuthChecking) {
-      loadGroups();
-      loadEvents();
+      hydrateFromBootstrap(applyNewsUnread);
     }
-  }, [loadGroups, loadEvents, isAuthChecking]);
+  }, [hydrateFromBootstrap, isAuthChecking, applyNewsUnread]);
 
   useEffect(() => {
     if (isProfileModalOpen && sessionToken) {
-      checkAuth();
+      checkAuth({ userOnly: true });
     }
   }, [isProfileModalOpen, sessionToken, checkAuth]);
 
@@ -192,6 +193,29 @@ export function AppContent() {
     });
   }, [followedGroups, user]);
 
+  const editEventGroups = useMemo(() => {
+    const ids = new Set<string>();
+    const result: { id: string; name: string }[] = [];
+
+    const add = (g: { id: string; name: string } | undefined) => {
+      if (g && !ids.has(g.id)) {
+        result.push({ id: g.id, name: g.name });
+        ids.add(g.id);
+      }
+    };
+
+    if (selectedEvent) {
+      add(allGroups.find((g) => g.id === selectedEvent.group_id));
+    }
+    for (const g of postableGroups) add(g);
+    if (user?.official_groups) {
+      for (const gid of user.official_groups) {
+        add(allGroups.find((g) => g.id === gid));
+      }
+    }
+    return result;
+  }, [selectedEvent, postableGroups, allGroups, user?.official_groups]);
+
   // Handlers
   const handleToday = () => setCurrentMonth(new Date());
   const handlePrev = () => setCurrentMonth(view === 'month' ? subMonths(currentMonth, 1) : addDays(currentMonth, view === 'week' ? -7 : -1));
@@ -204,6 +228,15 @@ export function AppContent() {
     const fd = new FormData(e.currentTarget);
     const dateVal = fd.get('date') as string;
     const isAllDay = fd.get('isAllDay') === '1';
+    const repeatByPeriod = fd.get('repeat_period') === '1';
+    const repeatByWeekday = fd.get('repeat_weekly') === '1';
+    const repeatUntil = repeatByPeriod ? (fd.get('repeat_until') as string) : null;
+    const repeatWeekdays = repeatByWeekday
+      ? String(fd.get('repeat_weekdays') || '')
+          .split(',')
+          .map((v) => Number(v))
+          .filter((v) => Number.isInteger(v) && v >= 0 && v <= 6)
+      : [];
     const startTime = isAllDay ? null : fd.get('startTime') as string;
     const endTime = isAllDay ? null : fd.get('endTime') as string;
     const dateStr = startTime ? `${dateVal}T${startTime}:00` : `${dateVal}T00:00:00`;
@@ -216,11 +249,16 @@ export function AppContent() {
       category: eventCategory,
       sub_category: eventSubCategory,
       location: fd.get('location'),
-      address: selectedLocation?.address || null,
+      address: selectedLocation?.address || (fd.get('location') as string) || null,
       latitude: selectedLocation?.latitude ?? null,
       longitude: selectedLocation?.longitude ?? null,
       description: fd.get('description'),
       source_url: fd.get('source_url'),
+      repeat_period: repeatByPeriod,
+      repeat_weekly: repeatByWeekday,
+      repeat_until: repeatUntil,
+      repeat_weekdays: repeatWeekdays,
+      is_all_day: isAllDay,
     };
 
     try {
@@ -230,10 +268,14 @@ export function AppContent() {
         body: JSON.stringify(body) 
       });
       if (res.ok) {
+        const created = await res.json() as { created_count?: number };
         await loadEvents();
         setIsAddModalOpen(false);
         setSelectedLocation(null);
         (e.target as HTMLFormElement).reset();
+        if ((created.created_count || 1) > 1) {
+          alert(`${created.created_count}件の予定をまとめて登録しました`);
+        }
       } else {
         const error = await res.json() as { error: string; details?: string };
         alert(error.details || error.error || '登録に失敗しました');
@@ -242,27 +284,98 @@ export function AppContent() {
     setLoading(false);
   };
 
-  const handleUpdateEvent = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateEvent = async (e: React.FormEvent<HTMLFormElement>, onSuccess?: () => void) => {
     e.preventDefault();
     if (!selectedEvent || !user) return;
     setLoading(true);
     const fd = new FormData(e.currentTarget);
-    const body = { id: selectedEvent.id, title: fd.get('title'), description: fd.get('description') };
+    const dateVal = fd.get('date') as string;
+    const isAllDay = fd.get('isAllDay') === '1';
+    const startTime = isAllDay ? null : (fd.get('startTime') as string);
+    const endTime = isAllDay ? null : (fd.get('endTime') as string);
+    const dateStr = startTime ? `${dateVal}T${startTime}:00` : `${dateVal}T00:00:00`;
+    const lat = fd.get('latitude') as string;
+    const lng = fd.get('longitude') as string;
+
+    const body = {
+      id: selectedEvent.id,
+      group_id: fd.get('group_id'),
+      title: fd.get('title'),
+      date: dateStr,
+      end_time: endTime ? `${dateVal}T${endTime}:00` : null,
+      category: fd.get('category'),
+      sub_category: fd.get('sub_category'),
+      location: fd.get('location') || null,
+      address: fd.get('address') || null,
+      latitude: lat ? Number(lat) : null,
+      longitude: lng ? Number(lng) : null,
+      description: fd.get('description') || null,
+      source_url: fd.get('source_url'),
+      is_all_day: isAllDay,
+    };
+
     try {
-      const res = await fetch('/api/events', { 
-        method: 'PUT', 
-        headers: { ...authHeaders(), 'Content-Type': 'application/json' }, 
-        body: JSON.stringify(body) 
+      const res = await fetch('/api/events', {
+        method: 'PUT',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
       });
       if (res.ok) {
         await loadEvents();
-        setIsEditing(false);
-        setSelectedEvent(prev => prev ? { ...prev, title: body.title as string, description: body.description as string } : null);
+        const isOfficialPoster =
+          isOfficialCalendarManager(user, body.group_id as string);
+        setSelectedEvent((prev) =>
+          prev
+            ? {
+                ...prev,
+                group_id: body.group_id as string,
+                title: body.title as string,
+                date: body.date as string,
+                end_time: (body.end_time as string) || undefined,
+                category: body.category as string,
+                sub_category: (body.sub_category as string) || undefined,
+                location: (body.location as string) || undefined,
+                address: (body.address as string) || undefined,
+                latitude: body.latitude ?? undefined,
+                longitude: body.longitude ?? undefined,
+                description: (body.description as string) || undefined,
+                source_url: body.source_url as string,
+                is_all_day: isAllDay,
+                creator_edit_used: isOfficialPoster ? prev.creator_edit_used : true,
+                is_tentative: isOfficialPoster ? prev.is_tentative : true,
+              }
+            : null
+        );
+        onSuccess?.();
       } else {
-        const error = await res.json() as any;
+        const error = await res.json() as { error?: string };
         alert(error.error || '更新に失敗しました');
       }
-    } catch { alert('通信エラーが発生しました'); }
+    } catch {
+      alert('通信エラーが発生しました');
+    }
+    setLoading(false);
+  };
+
+  const handleDeleteEvent = async (eventId: string) => {
+    if (!user) return;
+    if (!window.confirm('この予定を削除しますか？')) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/events?id=${encodeURIComponent(eventId)}`, {
+        method: 'DELETE',
+        headers: authHeaders(),
+      });
+      if (res.ok) {
+        await loadEvents();
+        setSelectedEvent(null);
+      } else {
+        const error = await res.json() as { error?: string };
+        alert(error.error || '削除に失敗しました');
+      }
+    } catch {
+      alert('通信エラーが発生しました');
+    }
     setLoading(false);
   };
 
@@ -501,10 +614,7 @@ export function AppContent() {
           onOpenChange={setIsProfileModalOpen} 
           user={user} 
           followedGroups={followedGroups}
-          handleProfileUpdate={(e) => handleProfileUpdate(e, () => {
-            loadEvents();
-            loadGroups();
-          })}
+          handleProfileUpdate={(e) => handleProfileUpdate(e)}
           handleLogout={logout}
           setIsCreditsOpen={setIsCreditsOpen}
           loading={authLoading}
@@ -524,9 +634,9 @@ export function AppContent() {
         onGroupIconClick={handleOpenGroupDetail}
       />
 
-      <EventDetailModal 
+      <EventDetailModal
         isOpen={!!selectedEvent}
-        onOpenChange={(open) => { if (!open) setSelectedEvent(null); }}
+        onOpenChange={(open) => { if (!open) { setSelectedEvent(null); setIsEditing(false); } }}
         selectedEvent={selectedEvent}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
@@ -534,8 +644,11 @@ export function AppContent() {
         setExternalUrlWarning={setExternalUrlWarning}
         handleVerify={handleVerify}
         handleUpdateEvent={handleUpdateEvent}
+        handleDeleteEvent={handleDeleteEvent}
         handleSubscribe={handleiCalExport}
         authHeaders={authHeaders}
+        user={user}
+        postableGroups={editEventGroups}
       />
 
       <AddEventModal 
@@ -567,10 +680,16 @@ export function AppContent() {
         })}
       />
 
-      <CreateGroupModal 
+      <CreateGroupModal
         isOpen={isGroupModalOpen}
         onOpenChange={setIsGroupModalOpen}
         handleCreateGroup={(e) => handleCreateGroup(e, () => setIsGroupModalOpen(false))}
+        handleApplyOfficialCalendar={(e) =>
+          handleApplyOfficialCalendar(e, async () => {
+            setIsGroupModalOpen(false);
+            await checkAuth();
+          })
+        }
         loading={groupLoading}
       />
 
@@ -601,6 +720,27 @@ export function AppContent() {
         isOpen={isNewsOpen}
         onOpenChange={setIsNewsOpen}
       />
+
+      <Dialog open={officialApplicationNotice} onOpenChange={setOfficialApplicationNotice}>
+        <DialogContent className="max-w-md p-8 rounded-[32px] border-none shadow-2xl top-1/2 -translate-y-1/2">
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center">
+              <ShieldCheck className="w-8 h-8 text-amber-600" />
+            </div>
+            <DialogTitle className="text-xl font-black text-[#222222]">公式カレンダー申請を受け付けました</DialogTitle>
+            <DialogDescription className="text-sm text-gray-500 font-medium leading-relaxed">
+              「{user?.official_application?.calendar_name}」の審査を開始しました。<br /><br />
+              承認されるまでカレンダーは作成されません。結果はプロフィール画面でも確認できます。
+            </DialogDescription>
+            <Button
+              onClick={() => setOfficialApplicationNotice(false)}
+              className="w-full bg-[#222222] hover:bg-black text-white h-12 rounded-xl font-black transition-all"
+            >
+              了解しました
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* 不正確判定への警告アラート */}
       <Dialog open={disputeWarning} onOpenChange={setDisputeWarning}>

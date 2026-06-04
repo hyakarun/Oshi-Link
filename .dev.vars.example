@@ -1,0 +1,2 @@
+# Copy to .dev.vars for local admin login (gitignored)
+ADMIN_PASSWORD=your-strong-password-here

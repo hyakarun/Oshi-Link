@@ -11,7 +11,7 @@
     "db:init:local": "wrangler d1 execute oshi-link-db --local --file=./schema.sql",
     "db:migrate:local": "wrangler d1 migrations apply oshi-link-db --local",
     "db:migrate:prod": "wrangler d1 migrations apply oshi-link-db --remote",
-    "deploy": "npm run build && npm run pages:build && wrangler pages deploy"
+    "deploy": "npm run build && npm run pages:build && wrangler pages deploy .vercel/output/static --project-name=oshi-link-official --commit-dirty=true"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

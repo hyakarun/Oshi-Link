@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { getSessionUser } from '@/app/api/auth/me/route';
+import { fetchGroupsList } from '@/lib/api/calendar-data';
 
 export const runtime = 'edge';
 
@@ -10,45 +11,8 @@ export async function GET(request: NextRequest) {
     const { env } = getRequestContext();
     const db = (env as unknown as { DB: D1Database }).DB;
 
-    // セッションがあればそのユーザーのフォロー状態を取得
     const user = await getSessionUser(db, request);
-    const userId = user?.id;
-
-    const result = await db.prepare(`
-      SELECT
-        g.id,
-        g.name,
-        g.description,
-        g.avatar_url,
-        g.created_at,
-        EXISTS(SELECT 1 FROM group_officials o WHERE o.group_id = g.id) as is_official,
-        COUNT(DISTINCT e.id) as event_count,
-        COUNT(DISTINCT f.id) as follower_count
-      FROM groups g
-      LEFT JOIN events e ON e.group_id = g.id
-      LEFT JOIN user_group_follows f ON f.group_id = g.id
-      GROUP BY g.id
-      ORDER BY follower_count DESC, g.name ASC
-    `).all();
-
-    let userFollowData: Record<string, { custom_bg_image: string | null; custom_theme_color: string | null }> = {};
-    if (userId) {
-      const followResult = await db.prepare(
-        'SELECT group_id, custom_bg_image, custom_theme_color FROM user_group_follows WHERE user_id = ?'
-      ).bind(userId).all();
-      
-      (followResult.results as any[]).forEach(r => {
-        userFollowData[r.group_id] = { custom_bg_image: r.custom_bg_image, custom_theme_color: r.custom_theme_color };
-      });
-    }
-
-    const groups = (result.results as any[]).map(g => ({
-      ...g,
-      is_official: !!g.is_official,
-      is_following: !!userFollowData[g.id],
-      custom_bg_image: userFollowData[g.id]?.custom_bg_image,
-      custom_theme_color: userFollowData[g.id]?.custom_theme_color,
-    }));
+    const groups = await fetchGroupsList(db, user?.id);
 
     return NextResponse.json({ groups });
   } catch (error: any) {

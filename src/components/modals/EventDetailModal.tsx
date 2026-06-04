@@ -2,8 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel, ThumbsUp, MessageSquarePlus } from 'lucide-react';
+import { Calendar, MapPin, ShieldCheck, AlertCircle, Hotel, ThumbsUp, MessageSquarePlus, Clock, Pencil, Trash2 } from 'lucide-react';
 import { Event } from '@/lib/types';
+import { normalizeExternalUrl, formatEventDateTime, isAllDayEvent } from '@/lib/utils';
+import {
+  canEditEvent,
+  canDeleteEvent,
+  creatorEditRemainingMs,
+  isUnlimitedOfficialEdit,
+  type EventEditUser,
+} from '@/lib/event-edit';
+import { EventCreatorEditForm } from '@/components/modals/EventCreatorEditForm';
 
 type Proposal = {
   id: string;
@@ -23,9 +32,12 @@ type EventDetailModalProps = {
   loading: boolean;
   setExternalUrlWarning: (url: string) => void;
   handleVerify: (status: 'confirmed' | 'disputed') => void;
-  handleUpdateEvent: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleUpdateEvent: (e: React.FormEvent<HTMLFormElement>, onSuccess?: () => void) => void;
+  handleDeleteEvent: (eventId: string) => void;
   handleSubscribe: (groupId: string) => void;
   authHeaders: () => Record<string, string>;
+  user: EventEditUser | null;
+  postableGroups: { id: string; name: string }[];
 };
 
 export function EventDetailModal({
@@ -38,14 +50,24 @@ export function EventDetailModal({
   setExternalUrlWarning,
   handleVerify,
   handleUpdateEvent,
+  handleDeleteEvent,
   handleSubscribe,
-  authHeaders
+  authHeaders,
+  user,
+  postableGroups,
 }: EventDetailModalProps) {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [currentVotes, setCurrentVotes] = useState(0);
   const [myProposalVote, setMyProposalVote] = useState<string | null>(null);
   const [showSafetyDialog, setShowSafetyDialog] = useState(false);
   const [isFetchingProposals, setIsFetchingProposals] = useState(false);
+  const [isCreatorEditing, setIsCreatorEditing] = useState(false);
+  const [editCountdownMs, setEditCountdownMs] = useState(0);
+
+  const isOfficialManager =
+    !!selectedEvent?.group_id && isUnlimitedOfficialEdit(user, selectedEvent.group_id);
+  const canEdit = !!selectedEvent && canEditEvent(selectedEvent, user);
+  const canDelete = !!selectedEvent && canDeleteEvent(selectedEvent, user);
 
   const fetchProposals = useCallback(async () => {
     if (!selectedEvent) return;
@@ -70,7 +92,21 @@ export function EventDetailModal({
     if (isOpen && selectedEvent) {
       fetchProposals();
     }
+    if (!isOpen) {
+      setIsCreatorEditing(false);
+    }
   }, [isOpen, selectedEvent, fetchProposals]);
+
+  useEffect(() => {
+    if (!canEdit || !selectedEvent || isOfficialManager) {
+      setEditCountdownMs(0);
+      return;
+    }
+    const tick = () => setEditCountdownMs(creatorEditRemainingMs(selectedEvent));
+    tick();
+    const timer = setInterval(tick, 30_000);
+    return () => clearInterval(timer);
+  }, [canEdit, isOfficialManager, selectedEvent]);
 
   const handleVote = async (proposalId: string | null) => {
     if (!selectedEvent) return;
@@ -124,6 +160,8 @@ export function EventDetailModal({
   };
 
   if (!selectedEvent) return null;
+  const isOfficialManagedEvent =
+    !!selectedEvent.group_is_official && !!selectedEvent.added_by_group_official;
 
   // 楽天トラベルへのアフィリエイトリンクを生成
   const rakutenAffiliateId = process.env.NEXT_PUBLIC_RAKUTEN_AFFILIATE_ID || '535601d9.adf03288.535601da.eabb1e44';
@@ -135,15 +173,24 @@ export function EventDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] shadow-2xl ring-1 ring-gray-100 dark:ring-border top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col">
+      <DialogContent
+        initialFocus={(openType) => openType === 'keyboard'}
+        className="w-full sm:max-w-[640px] p-0 overflow-hidden border-none rounded-t-[32px] sm:rounded-[32px] shadow-2xl ring-1 ring-gray-100 dark:ring-border top-auto bottom-0 translate-y-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 transition-all duration-500 max-h-[90vh] flex flex-col"
+      >
         <div className="modal-surface p-8 overflow-y-auto flex-1">
           <div className="mb-6 flex flex-wrap items-center gap-2">
-            {selectedEvent.creator_is_official ? (
+            {isOfficialManagedEvent ? (
               <div className="flex items-center gap-2 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-950/20 text-[#6366f1] dark:text-indigo-400 rounded-full border border-indigo-200 dark:border-indigo-900/30">
                 <ShieldCheck className="w-4 h-4 fill-indigo-100 dark:fill-indigo-950/40" />
                 <span className="text-[11px] font-black uppercase tracking-widest">公式情報（公認アカウント）</span>
               </div>
-            ) : selectedEvent.is_tentative ? (
+            ) : (
+              <div className="flex items-center gap-2 px-4 py-1.5 bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-400 rounded-full border border-orange-200 dark:border-orange-900/30">
+                <AlertCircle className="w-4 h-4" />
+                <span className="text-[11px] font-black uppercase tracking-widest">非公式</span>
+              </div>
+            )}
+            {selectedEvent.is_tentative ? (
               <div className="flex items-center gap-2 px-4 py-1.5 bg-yellow-50 dark:bg-yellow-950/20 text-yellow-700 dark:text-yellow-400 rounded-full border border-yellow-200 dark:border-yellow-900/30">
                 <AlertCircle className="w-4 h-4" />
                 <span className="text-[11px] font-black uppercase tracking-widest">情報の信頼度: 低（仮）</span>
@@ -156,24 +203,65 @@ export function EventDetailModal({
             )}
           </div>
 
-            {!isEditing ? (
+          {selectedEvent.category && !isCreatorEditing && (
+            <p className="mb-2 text-[10px] font-bold text-gray-400 dark:text-zinc-500 tracking-wide">
+              <span className="text-gray-400/80 dark:text-zinc-600">カテゴリ</span>
+              {' '}
+              {selectedEvent.category}
+              {selectedEvent.sub_category ? ` ・ ${selectedEvent.sub_category}` : ''}
+            </p>
+          )}
+
+            {isCreatorEditing ? (
+              <EventCreatorEditForm
+                event={selectedEvent}
+                groups={postableGroups}
+                loading={loading}
+                isOfficialManager={isOfficialManager}
+                onSubmit={(e) => handleUpdateEvent(e, () => setIsCreatorEditing(false))}
+                onCancel={() => setIsCreatorEditing(false)}
+              />
+            ) : !isEditing ? (
               <>
                 <div className="mb-8">
-                  <h2 className="text-3xl font-black text-[#222222] dark:text-zinc-100 tracking-tight leading-tight mb-4 flex items-center gap-3">
+                  <h2 className="text-3xl font-black text-[#222222] dark:text-zinc-100 tracking-tight leading-tight mb-3 flex items-center gap-3">
                     {selectedEvent.is_tentative && <AlertCircle className="w-8 h-8 text-yellow-500 shrink-0" />}
                     {selectedEvent.title}
                   </h2>
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
-                      <Calendar className="w-4 h-4 text-[#6366f1]" />
-                      <span className="text-sm font-bold text-gray-700 dark:text-zinc-300">{format(parseISO(selectedEvent.date), 'yyyy年MM月dd日 HH:mm')}</span>
+                  {selectedEvent.creator_edit_used && !isOfficialManager && (
+                    <p className="text-[10px] font-bold text-gray-400 dark:text-zinc-500 mb-2">
+                      投稿者が内容を修正済みです
+                    </p>
+                  )}
+                  {(canEdit || canDelete) && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {canEdit && (
+                        <Button
+                          type="button"
+                          onClick={() => setIsCreatorEditing(true)}
+                          variant="outline"
+                          className="rounded-xl h-10 font-black text-xs gap-2 border-amber-200 text-amber-700 hover:bg-amber-50 dark:border-amber-900/40 dark:text-amber-400"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                          {isOfficialManager
+                            ? '予定を編集'
+                            : `予定を修正（残り約${Math.max(1, Math.ceil(editCountdownMs / 60000))}分・1回限り）`}
+                        </Button>
+                      )}
+                      {canDelete && (
+                        <Button
+                          type="button"
+                          onClick={() => handleDeleteEvent(selectedEvent.id)}
+                          variant="outline"
+                          className="rounded-xl h-10 font-black text-xs gap-2 border-red-200 text-red-600 hover:bg-red-50 dark:border-red-900/40 dark:text-red-400"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          予定を削除
+                        </Button>
+                      )}
                     </div>
-                    {selectedEvent.location && (
-                      <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
-                        <MapPin className="w-4 h-4 text-[#6366f1]" />
-                        <span className="text-sm font-bold text-gray-700 dark:text-zinc-300">{selectedEvent.location}</span>
-                      </div>
-                    )}
+                  )}
+                  <div className="flex flex-wrap items-center gap-3 mb-3">
                     {selectedEvent.creator_name && (
                       <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
                         <div className={`w-4 h-4 rounded-full flex items-center justify-center text-[8px] text-white font-black ${selectedEvent.creator_is_official ? 'bg-[#6366f1]' : 'bg-gray-400'}`}>
@@ -187,6 +275,15 @@ export function EventDetailModal({
                         </span>
                       </div>
                     )}
+                    {selectedEvent.created_at && (
+                      <div className="flex items-center gap-2 bg-gray-50 dark:bg-secondary px-3 py-1.5 rounded-lg border border-gray-100 dark:border-border">
+                        <Clock className="w-4 h-4 text-[#6366f1]" />
+                        <span className="text-[11px] font-bold text-gray-550 dark:text-zinc-400">予定が追加された日</span>
+                        <span className="text-sm font-bold text-gray-700 dark:text-zinc-300">
+                          {format(parseISO(selectedEvent.created_at.includes('T') ? selectedEvent.created_at : selectedEvent.created_at.replace(' ', 'T')), 'yyyy年MM月dd日')}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -196,11 +293,47 @@ export function EventDetailModal({
                   </div>
                 )}
 
+                <div className="mb-4 space-y-3">
+                  <div className="flex items-center gap-3 px-4 py-4 bg-indigo-50/80 dark:bg-indigo-950/25 rounded-2xl border border-indigo-100 dark:border-indigo-900/40">
+                    <Calendar className="w-7 h-7 text-[#6366f1] shrink-0" />
+                    <div>
+                      <p className="text-[10px] font-black text-[#6366f1] dark:text-indigo-400 uppercase tracking-widest mb-0.5">予定の日時</p>
+                      <p className="text-xl sm:text-2xl font-black text-[#222222] dark:text-zinc-100 tracking-tight">
+                        {formatEventDateTime(selectedEvent.date, isAllDayEvent(selectedEvent))}
+                      </p>
+                    </div>
+                  </div>
+                  {(selectedEvent.location || selectedEvent.address) && (
+                    <div className="flex items-start gap-3 px-4 py-4 bg-gray-50/90 dark:bg-secondary/50 rounded-2xl border border-gray-100 dark:border-border">
+                      <MapPin className="w-7 h-7 text-[#6366f1] shrink-0 mt-0.5" />
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-black text-gray-500 dark:text-zinc-400 uppercase tracking-widest mb-0.5">場所</p>
+                        {selectedEvent.location && (
+                          <p className="text-lg sm:text-xl font-black text-[#222222] dark:text-zinc-100 tracking-tight leading-snug">
+                            {selectedEvent.location}
+                          </p>
+                        )}
+                        {selectedEvent.address && selectedEvent.address !== selectedEvent.location && (
+                          <p className="text-sm font-bold text-gray-600 dark:text-zinc-400 mt-1 leading-relaxed">
+                            {selectedEvent.address}
+                          </p>
+                        )}
+                        {!selectedEvent.location && selectedEvent.address && (
+                          <p className="text-lg sm:text-xl font-black text-[#222222] dark:text-zinc-100 tracking-tight leading-snug">
+                            {selectedEvent.address}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {selectedEvent.source_url && (
                   <div className="mb-4 pt-2">
                     <button
+                      type="button"
                       onClick={() => setShowSafetyDialog(true)}
-                      className="w-full flex items-center justify-center gap-1.5 py-2 text-[11px] font-black text-gray-400 dark:text-zinc-500 hover:text-[#6366f1] transition-colors mb-1"
+                      className="w-full flex items-center justify-center gap-1.5 py-2 text-[11px] font-black text-gray-400 dark:text-zinc-500 hover:text-[#6366f1] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366f1]/40 transition-colors mb-1"
                     >
                       <AlertCircle className="w-3.5 h-3.5" />
                       リンクの安全性について
@@ -219,7 +352,7 @@ export function EventDetailModal({
                         リンク先URL (目視確認用)
                       </p>
                       <p className="text-[11px] font-mono text-gray-500 dark:text-zinc-400 break-all select-all leading-relaxed">
-                        {selectedEvent.source_url}
+                        {normalizeExternalUrl(selectedEvent.source_url)}
                       </p>
                     </div>
                   </div>

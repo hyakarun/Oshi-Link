@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { AlertCircle } from 'lucide-react';
+import { normalizeExternalUrl } from '@/lib/utils';
 
 type LinkWarningModalProps = {
   url: string | null;
@@ -9,6 +10,14 @@ type LinkWarningModalProps = {
 };
 
 export function LinkWarningModal({ url, onClose }: LinkWarningModalProps) {
+  const externalUrl = url ? normalizeExternalUrl(url) : '';
+
+  const handleOpen = () => {
+    if (!externalUrl) return;
+    window.open(externalUrl, '_blank', 'noopener,noreferrer');
+    onClose();
+  };
+
   return (
     <Dialog open={!!url} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-md p-8 border-none rounded-[32px] shadow-2xl">
@@ -18,7 +27,7 @@ export function LinkWarningModal({ url, onClose }: LinkWarningModalProps) {
           </div>
           <DialogTitle className="text-2xl font-black text-[#222222] dark:text-zinc-100">外部サイトへ移動します</DialogTitle>
           <p className="text-sm font-medium text-gray-550 dark:text-zinc-400 bg-gray-50 dark:bg-secondary p-4 rounded-xl break-all w-full text-left max-h-[100px] overflow-y-auto">
-            {url}
+            {externalUrl || url}
           </p>
           <DialogDescription className="text-sm text-gray-500 dark:text-zinc-400">
             Oshi-Linkから離れ、コミュニティによって登録された外部サイトに移動しようとしています。<br/><br/>
@@ -26,15 +35,13 @@ export function LinkWarningModal({ url, onClose }: LinkWarningModalProps) {
           </DialogDescription>
           <div className="flex gap-3 w-full mt-4">
             <Button onClick={onClose} className="flex-1 bg-gray-100 dark:bg-secondary text-gray-600 dark:text-zinc-300 h-12 rounded-2xl font-black hover:bg-gray-200 dark:hover:bg-accent shadow-sm active:scale-95 transition-all">キャンセル</Button>
-            <a 
-              href={url || '#'} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="flex-1 bg-orange-500 text-white h-12 rounded-2xl font-black flex items-center justify-center hover:bg-orange-600 shadow-md active:scale-95 transition-all" 
-              onClick={onClose}
+            <Button
+              onClick={handleOpen}
+              disabled={!externalUrl}
+              className="flex-1 bg-orange-500 text-white h-12 rounded-2xl font-black text-sm whitespace-nowrap hover:bg-orange-600 shadow-md active:scale-95 transition-all"
             >
-              自己責任で開く
-            </a>
+              推しリンクページに飛ぶ
+            </Button>
           </div>
         </div>
       </DialogContent>

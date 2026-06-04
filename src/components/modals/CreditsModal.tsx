@@ -104,10 +104,14 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                   <Info className="w-4 h-4" /> Infrastructure & Libraries
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <CreditItem name="Cloudflare D1" desc="Transactional SQLite DB" url="https://cloudflare.com" />
+                  <CreditItem name="Cloudflare Pages / D1" desc="Hosting & Transactional SQLite DB" url="https://cloudflare.com" />
                   <CreditItem name="Next.js 16" desc="Full-stack Web Framework" url="https://nextjs.org" />
+                  <CreditItem name="Google Sign-In" desc="OAuth Authentication" url="https://developers.google.com/identity" />
+                  <CreditItem name="Resend" desc="Magic Link Email Delivery" url="https://resend.com" />
+                  <CreditItem name="OpenStreetMap" desc="Location Search (Nominatim) © OSM contributors" url="https://www.openstreetmap.org/copyright" license="ODbL" />
+                  <CreditItem name="Rakuten Travel" desc="Affiliate Hotel Search Links" url="https://travel.rakuten.co.jp" />
                   <CreditItem name="Lucide React" desc="Premium Icon Set" url="https://lucide.dev" />
-                  <CreditItem name="date-fns" desc="Timezone Utilities" url="https://date-fns.org" />
+                  <CreditItem name="date-fns" desc="Date Utilities" url="https://date-fns.org" />
                 </div>
               </section>
             </div>
@@ -124,6 +128,9 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                   <li>投稿された予定は、他のユーザーからの一定の承認によって「確定」となります。</li>
                   <li>不正確票が一定数に達した投稿は「虚偽情報」としてマークされます。</li>
                   <li>虚偽情報と判定された投稿が一定数に達したユーザーは、自動的に新規投稿機能が制限される場合があります。</li>
+                  <li>公式カレンダーの認定は、運営による審査・承認後に行われます。審査前の申請内容は公開されません。</li>
+                  <li>一般ユーザーが投稿した予定は、投稿後1時間以内に1回限り、投稿者本人による修正が可能です（以降はコミュニティによる修正提案フローとなります）。</li>
+                  <li>公式カレンダーの担当者は、当該カレンダー内の予定を制限なく編集・削除できます。</li>
                 </ul>
               </TermSection>
               <TermSection title="第3条（禁止事項）">
@@ -134,7 +141,11 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                   <li>他のユーザーへの誹謗中傷、嫌がらせ、またはプライバシーを侵害する行為</li>
                 </ul>
               </TermSection>
-              <TermSection title="第4条（免責事項）">
+              <TermSection title="第4条（外部リンク・アフィリエイト）">
+                本サービスには、予定に関連する外部サイトへのリンクや、楽天トラベル等のアフィリエイトリンクが含まれる場合があります。
+                これらのリンク先の内容・取引について、当団体は一切の責任を負いません。
+              </TermSection>
+              <TermSection title="第5条（免責事項）">
                 本サービスは、提供する情報の正確性を保証するものではありません。情報の利用はユーザー自身の責任において行ってください。
               </TermSection>
             </div>
@@ -148,6 +159,7 @@ export function CreditsModal({ isOpen, onOpenChange }: CreditsModalProps) {
                   <li>メールアドレス</li>
                   <li>氏名（Googleアカウントの表示名）</li>
                   <li>プロフィール画像のURL（Googleアカウント）</li>
+                  <li>場所検索時に入力されたキーワード（OpenStreetMap Nominatim へ送信）</li>
                 </ul>
               </TermSection>
               <TermSection title="2. 利用目的">

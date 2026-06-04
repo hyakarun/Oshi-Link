@@ -2,6 +2,7 @@ import React from 'react';
 import { format, isAfter, isToday, parseISO, startOfDay } from 'date-fns';
 import { ChevronRight, Calendar, MapPin, Clock } from 'lucide-react';
 import { Event } from '@/lib/types';
+import { formatEventTime, isAllDayEvent } from '@/lib/utils';
 
 interface RightPanelProps {
   isOpen: boolean;
@@ -69,7 +70,10 @@ export function RightPanel({
           ) : (
             upcomingEvents.map((e, i) => {
               const d = parseISO(e.date);
+              const allDay = isAllDayEvent(e);
+              const isUnofficial = !(e.group_is_official && e.added_by_group_official);
               const showDate = i === 0 || format(parseISO(upcomingEvents[i-1].date), 'yyyyMMdd') !== format(d, 'yyyyMMdd');
+              const timeLabel = formatEventTime(e.date, allDay);
 
               return (
                 <div key={e.id} className="space-y-3">
@@ -86,11 +90,21 @@ export function RightPanel({
                     onClick={() => onEventClick(e)}
                     className="group p-4 bg-white dark:bg-secondary border border-gray-100 dark:border-border rounded-2xl hover:border-gray-200 dark:hover:border-muted-foreground/40 hover:shadow-sm transition-all cursor-pointer active:scale-[0.98]"
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getGroupColor(e.group_id) }} />
-                      <span className="text-[10px] font-black" style={{ color: getGroupColor(e.group_id) }}>
-                        {format(d, 'HH:mm')}
-                      </span>
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      {isUnofficial && (
+                        <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-900/40 text-[9px] font-black text-orange-700 dark:text-orange-400 shrink-0">
+                          非公式
+                        </div>
+                      )}
+                      <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: getGroupColor(e.group_id) }} />
+                      {timeLabel && (
+                        <span className="text-[10px] font-black" style={{ color: getGroupColor(e.group_id) }}>
+                          {timeLabel}
+                        </span>
+                      )}
+                      {allDay && (
+                        <span className="text-[10px] font-black text-gray-400 dark:text-zinc-500">終日</span>
+                      )}
                     </div>
                     
                     <h3 className="text-xs font-black text-[#222222] dark:text-zinc-100 mb-2 leading-tight group-hover:text-[#6366f1] transition-colors line-clamp-2">
@@ -101,6 +115,18 @@ export function RightPanel({
                       <div className="flex items-center gap-1.5 text-[10px] text-gray-400 dark:text-zinc-500 font-bold">
                         <MapPin className="w-3 h-3" />
                         <span className="truncate">{e.location}</span>
+                      </div>
+                    )}
+                    {e.created_at && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-gray-400 dark:text-zinc-500 font-bold mt-1">
+                        <Clock className="w-3 h-3 shrink-0" />
+                        <span>
+                          追加{' '}
+                          {format(
+                            parseISO(e.created_at.includes('T') ? e.created_at : e.created_at.replace(' ', 'T')),
+                            'yyyy年MM月dd日'
+                          )}
+                        </span>
                       </div>
                     )}
                   </div>
