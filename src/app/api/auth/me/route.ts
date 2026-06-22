@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { getLatestOfficialApplication } from '@/lib/admin/official-applications';
 import { resolveDisputeWarning } from '@/lib/api/dispute-warning';
+import { isPremiumStale, syncPremiumStatus, type PremiumEnv } from '@/lib/premium';
 
 export const runtime = 'edge';
 
-interface Env {
+interface Env extends PremiumEnv {
   DB: D1Database;
 }
 
@@ -16,10 +17,11 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
   if (!token) return null;
 
   const session = await db.prepare(
-    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url, u.premium_status, u.notifications_enabled, u.email_enabled, u.push_enabled, u.notification_timing, u.is_official, COALESCE(u.status, \'active\') as status FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
+    'SELECT s.*, u.id as uid, u.name, u.email, u.avatar_url, u.premium_status, u.discord_id, u.premium_synced_at, u.notifications_enabled, u.email_enabled, u.push_enabled, u.notification_timing, u.is_official, COALESCE(u.status, \'active\') as status FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ?'
   ).bind(token).first() as {
     token: string; user_id: string; expires_at: string;
     uid: string; name: string; email: string; avatar_url: string; premium_status: string;
+    discord_id: string | null; premium_synced_at: string | null;
     notifications_enabled: number; email_enabled: number; push_enabled: number; notification_timing: string;
     is_official: number;
     status: string;
@@ -62,6 +64,8 @@ export async function getSessionUser(db: D1Database, request: NextRequest) {
     name: session.name, 
     email: session.email, 
     avatar_url: session.avatar_url,
+    discord_id: session.discord_id,
+    premium_synced_at: session.premium_synced_at,
     premium_status: session.premium_status || 'free',
     notifications_enabled: !!session.notifications_enabled,
     email_enabled: !!session.email_enabled,
@@ -82,6 +86,23 @@ export async function GET(request: NextRequest) {
     const user = await getSessionUser(db, request);
     if (!user) {
       return NextResponse.json({ user: null }, { status: 401 });
+    }
+
+    // Discord連携済みユーザーは、Whop→ロール連動で会員状態を定期的に再同期
+    if (user.discord_id && isPremiumStale(user.premium_synced_at)) {
+      try {
+        const synced = await syncPremiumStatus(
+          db,
+          env as unknown as Env,
+          user.id,
+          user.discord_id,
+        );
+        if (synced) {
+          user.premium_status = synced;
+        }
+      } catch (err) {
+        console.error('premium sync failed on /me:', err);
+      }
     }
 
     const hasNewDispute = await resolveDisputeWarning(db, user.id);

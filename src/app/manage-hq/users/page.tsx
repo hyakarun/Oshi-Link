@@ -29,7 +29,7 @@ export default function ManageUsersPage() {
     setLoading(true);
     try {
       const data = await adminFetch<{ users: UserRow[] }>(
-        `/api/manage-hq/users${search ? `?q=${encodeURIComponent(search)}` : ''}`
+        `/api/manage-hq?resource=users${search ? `&q=${encodeURIComponent(search)}` : ''}`
       );
       setUsers(data.users);
     } catch (e) {
@@ -52,7 +52,7 @@ export default function ManageUsersPage() {
   async function saveEdit() {
     if (!editId) return;
     try {
-      await adminFetch('/api/manage-hq/users', {
+      await adminFetch('/api/manage-hq?resource=users', {
         method: 'PATCH',
         body: JSON.stringify({ id: editId, name: editName, status: editStatus }),
       });
@@ -67,7 +67,7 @@ export default function ManageUsersPage() {
   async function removeUser(id: string, email: string) {
     if (!confirm(`${email} を完全削除しますか？`)) return;
     try {
-      await adminFetch(`/api/manage-hq/users?id=${id}`, { method: 'DELETE' });
+      await adminFetch(`/api/manage-hq?resource=users&id=${id}`, { method: 'DELETE' });
       setMessage('削除しました');
       await load();
     } catch (e) {

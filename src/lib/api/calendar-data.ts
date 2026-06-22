@@ -17,6 +17,7 @@ export async function fetchGroupsList(db: D1Database, userId?: string | null) {
         g.description,
         g.avatar_url,
         g.created_at,
+        g.discord_channel_id,
         EXISTS(SELECT 1 FROM group_officials o WHERE o.group_id = g.id) as is_official,
         COUNT(DISTINCT e.id) as event_count,
         COUNT(DISTINCT f.id) as follower_count
@@ -56,6 +57,7 @@ export async function fetchGroupsList(db: D1Database, userId?: string | null) {
   return (result.results as Record<string, unknown>[]).map((g) => ({
     ...g,
     is_official: !!g.is_official,
+    discord_linked: !!g.discord_channel_id,
     is_following: !!userFollowData[g.id as string],
     custom_bg_image: userFollowData[g.id as string]?.custom_bg_image,
     custom_theme_color: userFollowData[g.id as string]?.custom_theme_color,

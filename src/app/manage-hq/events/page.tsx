@@ -37,7 +37,7 @@ export default function ManageEventsPage() {
   });
 
   const loadCalendars = useCallback(async () => {
-    const data = await adminFetch<{ calendars: CalendarOption[] }>('/api/manage-hq/calendars');
+    const data = await adminFetch<{ calendars: CalendarOption[] }>('/api/manage-hq?resource=calendars');
     setCalendars(data.calendars.map((c) => ({ id: c.id, name: c.name })));
   }, []);
 
@@ -48,7 +48,7 @@ export default function ManageEventsPage() {
       if (q) params.set('q', q);
       if (groupFilter) params.set('group_id', groupFilter);
       const data = await adminFetch<{ events: EventRow[] }>(
-        `/api/manage-hq/events?${params.toString()}`
+        `/api/manage-hq?resource=events&${params.toString()}`
       );
       setEvents(data.events);
     } catch (e) {
@@ -81,7 +81,7 @@ export default function ManageEventsPage() {
   async function saveEdit() {
     if (!editId) return;
     try {
-      await adminFetch('/api/manage-hq/events', {
+      await adminFetch('/api/manage-hq?resource=events', {
         method: 'PATCH',
         body: JSON.stringify({
           id: editId,
@@ -104,7 +104,7 @@ export default function ManageEventsPage() {
   async function removeEvent(id: string, title: string) {
     if (!confirm(`予定「${title}」を削除しますか？`)) return;
     try {
-      await adminFetch(`/api/manage-hq/events?id=${id}`, { method: 'DELETE' });
+      await adminFetch(`/api/manage-hq?resource=events&id=${id}`, { method: 'DELETE' });
       setMessage('削除しました');
       await load();
     } catch (e) {

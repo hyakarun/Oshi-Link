@@ -20,7 +20,13 @@ export async function POST(request: NextRequest) {
     const avatar_url = reqData.avatar_url !== undefined ? reqData.avatar_url : user.avatar_url;
     const email_enabled = reqData.email_enabled !== undefined ? reqData.email_enabled : user.email_enabled;
     const push_enabled = reqData.push_enabled !== undefined ? reqData.push_enabled : user.push_enabled;
-    const notification_timing = reqData.notification_timing !== undefined ? reqData.notification_timing : user.notification_timing;
+    const VALID_TIMING = ['10m', '1h', '1d', '1w'];
+    let notification_timing = reqData.notification_timing !== undefined ? reqData.notification_timing : user.notification_timing;
+    if (!VALID_TIMING.includes(notification_timing)) notification_timing = '10m';
+    // 10分前以外は有料会員限定
+    if (notification_timing !== '10m' && (user as any).premium_status !== 'pro') {
+      notification_timing = '10m';
+    }
 
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });

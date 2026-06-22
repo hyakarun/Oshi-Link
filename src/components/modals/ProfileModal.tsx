@@ -4,6 +4,13 @@ import { User, Group } from '@/lib/types';
 import { Bell, Mail, Info, Sun, Moon, Laptop, Palette, BookOpen, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 
+const TIMING_OPTIONS: { value: string; label: string }[] = [
+  { value: '10m', label: '10分前' },
+  { value: '1h', label: '1時間前' },
+  { value: '1d', label: '1日前' },
+  { value: '1w', label: '1週間前' },
+];
+
 type ProfileModalProps = {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -203,6 +210,36 @@ export function ProfileModal({
                         className="w-5 h-5 accent-[#6366f1] rounded-md"
                       />
                     </label>
+
+                    {/* 通知タイミング */}
+                    <div className="space-y-2 p-4 bg-muted rounded-2xl border border-border/50">
+                      <p className="text-[11px] font-black text-muted-foreground uppercase tracking-[0.1em]">通知タイミング（イベント開始の何分前）</p>
+                      <input type="hidden" name="notification_timing" value={selectedTiming} />
+                      <div className="grid grid-cols-2 gap-2">
+                        {TIMING_OPTIONS.map((opt) => {
+                          const locked = opt.value !== '10m' && user.premium_status !== 'pro';
+                          const selected = selectedTiming === opt.value;
+                          return (
+                            <button
+                              key={opt.value}
+                              type="button"
+                              disabled={locked}
+                              onClick={() => setSelectedTiming(opt.value)}
+                              className={`py-2.5 rounded-xl border-2 text-xs font-black transition-all active:scale-[0.97] ${
+                                selected
+                                  ? 'border-[#6366f1] bg-indigo-50/40 dark:bg-indigo-950/30 text-[#6366f1]'
+                                  : 'border-border bg-card text-muted-foreground hover:border-muted-foreground/60'
+                              } ${locked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                            >
+                              {opt.label}{locked ? ' 🔒' : ''}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {user.premium_status !== 'pro' && (
+                        <p className="text-[10px] text-muted-foreground font-medium">10分前以外は有料会員限定です。</p>
+                      )}
+                    </div>
                   </div>
                 </div>
 

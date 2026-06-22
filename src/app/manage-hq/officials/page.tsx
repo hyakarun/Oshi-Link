@@ -48,7 +48,7 @@ export default function ManageOfficialsPage() {
         links: LinkRow[];
         users: UserOption[];
         calendars: CalendarOption[];
-      }>('/api/manage-hq/officials');
+      }>('/api/manage-hq?resource=officials');
       setSystemOfficials(data.system_officials);
       setPendingApplications(data.pending_applications || []);
       setLinks(data.links);
@@ -67,7 +67,7 @@ export default function ManageOfficialsPage() {
     e.preventDefault();
     if (!appointUserId) return;
     try {
-      await adminFetch('/api/manage-hq/officials', {
+      await adminFetch('/api/manage-hq?resource=officials', {
         method: 'POST',
         body: JSON.stringify({ action: 'appoint_system', user_id: appointUserId }),
       });
@@ -83,7 +83,7 @@ export default function ManageOfficialsPage() {
     e.preventDefault();
     if (!linkUserId || !linkGroupId) return;
     try {
-      await adminFetch('/api/manage-hq/officials', {
+      await adminFetch('/api/manage-hq?resource=officials', {
         method: 'POST',
         body: JSON.stringify({ action: 'link', user_id: linkUserId, group_id: linkGroupId }),
       });
@@ -100,7 +100,7 @@ export default function ManageOfficialsPage() {
     e.preventDefault();
     if (!newCalUserId || !newCalName.trim()) return;
     try {
-      await adminFetch('/api/manage-hq/officials', {
+      await adminFetch('/api/manage-hq?resource=officials', {
         method: 'POST',
         body: JSON.stringify({
           action: 'create_official_calendar',
@@ -122,7 +122,7 @@ export default function ManageOfficialsPage() {
     const label = decision === 'approve' ? '承認' : '却下';
     if (!confirm(`この公式申請を${label}しますか？`)) return;
     try {
-      await adminFetch('/api/manage-hq/officials', {
+      await adminFetch('/api/manage-hq?resource=officials', {
         method: 'POST',
         body: JSON.stringify({
           action: 'review_application',
@@ -142,7 +142,7 @@ export default function ManageOfficialsPage() {
   async function revokeSystem(userId: string, email: string) {
     if (!confirm(`${email} の公式アカウント権限を解除しますか？`)) return;
     try {
-      await adminFetch(`/api/manage-hq/officials?type=system&user_id=${userId}`, { method: 'DELETE' });
+      await adminFetch(`/api/manage-hq?resource=officials&type=system&user_id=${userId}`, { method: 'DELETE' });
       setMessage('公式権限を解除しました');
       await load();
     } catch (err) {
@@ -154,7 +154,7 @@ export default function ManageOfficialsPage() {
     if (!confirm(`${row.user_email} × ${row.group_name} の紐付けを解除しますか？`)) return;
     try {
       await adminFetch(
-        `/api/manage-hq/officials?type=link&user_id=${row.user_id}&group_id=${row.group_id}`,
+        `/api/manage-hq?resource=officials&type=link&user_id=${row.user_id}&group_id=${row.group_id}`,
         { method: 'DELETE' }
       );
       setMessage('紐付けを解除しました');

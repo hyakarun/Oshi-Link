@@ -104,6 +104,7 @@ export function useAuth() {
       name: fd.get('name'),
       notifications_enabled: fd.get('notifications_enabled') === 'on',
       email_enabled: fd.get('email_enabled') === 'on',
+      notification_timing: fd.get('notification_timing') || '10m',
     };
     try {
       const res = await fetch('/api/users', {

@@ -29,7 +29,7 @@ export default function ManageCalendarsPage() {
     setLoading(true);
     try {
       const data = await adminFetch<{ calendars: CalendarRow[] }>(
-        `/api/manage-hq/calendars${q ? `?q=${encodeURIComponent(q)}` : ''}`
+        `/api/manage-hq?resource=calendars${q ? `&q=${encodeURIComponent(q)}` : ''}`
       );
       setCalendars(data.calendars);
     } catch (e) {
@@ -53,7 +53,7 @@ export default function ManageCalendarsPage() {
   async function saveEdit() {
     if (!editId) return;
     try {
-      await adminFetch('/api/manage-hq/calendars', {
+      await adminFetch('/api/manage-hq?resource=calendars', {
         method: 'PATCH',
         body: JSON.stringify({
           id: editId,
@@ -73,7 +73,7 @@ export default function ManageCalendarsPage() {
   async function removeCalendar(id: string, name: string) {
     if (!confirm(`カレンダー「${name}」を完全削除しますか？`)) return;
     try {
-      await adminFetch(`/api/manage-hq/calendars?id=${id}`, { method: 'DELETE' });
+      await adminFetch(`/api/manage-hq?resource=calendars&id=${id}`, { method: 'DELETE' });
       setMessage('削除しました');
       await load();
     } catch (e) {

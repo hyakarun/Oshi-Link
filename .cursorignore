@@ -1,0 +1,32 @@
+# Cursor AI インデックス対象から除外（発熱・CPU負荷軽減）
+node_modules/
+.next/
+.vercel/
+.wrangler/
+out/
+build/
+dist/
+.cache/
+coverage/
+.git/
+
+# ログ・DB・バイナリ
+*.log
+*.sqlite
+*.sqlite-journal
+*.tsbuildinfo
+
+# 画像・動画（AI解析不要）
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.mp4
+*.mov
+
+# 環境変数（秘密情報＋不要スキャン）
+.env
+.env.*
+.dev.vars

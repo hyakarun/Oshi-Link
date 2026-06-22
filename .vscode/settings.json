@@ -1,0 +1,28 @@
+{
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/.vercel/**": true,
+    "**/.wrangler/**": true,
+    "**/out/**": true,
+    "**/build/**": true,
+    "**/.cache/**": true,
+    "**/*.sqlite": true,
+    "**/.wrangler_dev.log": true,
+    "**/.next_dev.log": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/.vercel": true,
+    "**/.wrangler": true,
+    "**/out": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/.cache": true
+  },
+  "editor.codeLens": false,
+  "telemetry.telemetryLevel": "off"
+}

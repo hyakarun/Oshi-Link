@@ -9,6 +9,8 @@ export type Group = {
   custom_bg_image?: string;
   custom_theme_color?: string;
   is_official?: boolean;
+  discord_linked?: boolean;
+  discord_channel_id?: string | null;
 };
 
 export type Event = {

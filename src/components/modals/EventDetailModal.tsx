@@ -111,8 +111,8 @@ export function EventDetailModal({
   const handleVote = async (proposalId: string | null) => {
     if (!selectedEvent) return;
     try {
-      const res = await fetch('/api/events/proposals/vote', {
-        method: 'POST',
+      const res = await fetch('/api/events/proposals', {
+        method: 'PUT',
         headers: { ...authHeaders(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ event_id: selectedEvent.id, proposal_id: proposalId })
       });

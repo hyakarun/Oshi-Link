@@ -18,11 +18,7 @@ function LoginContent() {
   const searchParams = useSearchParams();
 
   const [mounted, setMounted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [authStep, setAuthStep] = useState<'idle' | 'sent' | 'logging_in'>('idle');
-  const [authEmail, setAuthEmail] = useState('');
   const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const [loginTab, setLoginTab] = useState<'google' | 'email'>('google');
 
   useEffect(() => {
     setMounted(true);
@@ -40,29 +36,6 @@ function LoginContent() {
         const group = searchParams.get('group');
         router.replace(group ? `/?group=${group}` : '/');
         return;
-      }
-
-      const urlToken = searchParams.get('token');
-      if (urlToken) {
-        setAuthStep('logging_in');
-        try {
-          const res = await fetch(`/api/auth/verify?token=${urlToken}`);
-          const data = await res.json() as {
-            ok?: boolean;
-            sessionToken?: string;
-            user?: User;
-            error?: string;
-          };
-          if (data.ok && data.sessionToken && data.user) {
-            localStorage.setItem('oshi_session', data.sessionToken);
-            const group = searchParams.get('group');
-            router.push(group ? `/?group=${group}` : '/');
-            return;
-          } else {
-            alert(data.error || 'ログインリンクが無効です');
-          }
-        } catch {}
-        setAuthStep('idle');
       }
 
       const saved = localStorage.getItem('oshi_session');
@@ -88,86 +61,11 @@ function LoginContent() {
     checkAuth();
   }, [router, searchParams]);
 
-  useEffect(() => {
-    let initTimer: NodeJS.Timeout;
-    let cancelled = false;
-
-    const setupGoogle = () => {
-      if (cancelled) return;
-      if (typeof window === 'undefined' || !(window as any).google) {
-        initTimer = setTimeout(setupGoogle, 200);
-        return;
-      }
-
-      const btnEl = document.getElementById('google-login-btn');
-      if (!btnEl) {
-        initTimer = setTimeout(setupGoogle, 200);
-        return;
-      }
-
-      const clientId =
-        process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-        '139254600214-fun6ds9iulrllq9uvkj7q8menvecqr35.apps.googleusercontent.com';
-      try {
-        const stateStr = encodeURIComponent(
-          JSON.stringify({ group: searchParams.get('group') || '' })
-        );
-
-        (window as any).google.accounts.id.initialize({
-          client_id: clientId,
-          auto_select: false,
-          cancel_on_tap_outside: true,
-          ux_mode: 'redirect',
-          login_uri: `${window.location.origin}/api/auth/google`,
-          state: stateStr,
-        });
-
-        btnEl.innerHTML = '';
-        (window as any).google.accounts.id.renderButton(btnEl, {
-          theme: 'filled_blue',
-          size: 'large',
-          width: 320,
-          shape: 'pill',
-          text: 'continue_with',
-          locale: 'ja',
-        });
-      } catch (e) {
-        console.error('Google init error:', e);
-      }
-    };
-
-    setupGoogle();
-
-    return () => {
-      cancelled = true;
-      if (initTimer) clearTimeout(initTimer);
-    };
-  }, [isAuthChecking, authStep, searchParams]);
-
-  async function handleSendMagicLink(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setLoading(true);
-    const fd = new FormData(e.currentTarget);
-    const email = fd.get('email') as string;
-    const name = fd.get('name') as string;
-
-    try {
-      const res = await fetch('/api/auth/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
-      });
-      if (res.ok) {
-        setAuthEmail(email);
-        setAuthStep('sent');
-      } else {
-        const data = await res.json() as { error?: string };
-        alert(data.error || 'エラーが発生しました');
-      }
-    } catch {
-      alert('エラーが発生しました');
-    }
-    setLoading(false);
+  function loginWithDiscord() {
+    const group = searchParams.get('group');
+    window.location.href = group
+      ? `/api/auth/discord?group=${encodeURIComponent(group)}`
+      : '/api/auth/discord';
   }
 
   if (!mounted || isAuthChecking) {
@@ -184,31 +82,7 @@ function LoginContent() {
   return (
     <div className="flex h-screen w-full bg-gradient-to-br from-[#f2f2f2] to-gray-100 items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-6 max-w-md w-full animate-in fade-in zoom-in-95 duration-500">
-        {authStep === 'logging_in' ? (
-          <div className="py-12 flex flex-col items-center gap-4">
-            <Loader2 className="animate-spin h-10 w-10 text-[#6366f1]" />
-            <h2 className="text-lg font-black text-[#222222]">ログイン中...</h2>
-          </div>
-        ) : authStep === 'sent' ? (
-          <div className="text-center space-y-4 py-8">
-            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto">
-              <span className="text-3xl">📧</span>
-            </div>
-            <h2 className="text-xl font-black text-[#222222]">メールを確認してください</h2>
-            <p className="text-sm text-gray-500 leading-relaxed">
-              <span className="font-bold text-[#222222]">{authEmail}</span> にログインリンクを送りました。<br />
-              メール内のボタンをクリックするとログインできます。
-            </p>
-            <p className="text-xs text-gray-400 mt-4">リンクは15分間有効です</p>
-            <button
-              onClick={() => { setAuthStep('idle'); setAuthEmail(''); }}
-              className="text-sm font-bold text-[#6366f1] hover:underline mt-4"
-            >
-              別のメールアドレスで試す
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="text-center relative">
               <div className="absolute top-0 right-0">
                 <div className="flex items-center gap-1 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-indigo-100/50">
@@ -224,59 +98,23 @@ function LoginContent() {
               <p className="text-xs text-gray-500 mt-1">推しの予定を、これひとつで。</p>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="flex bg-gray-100 rounded-xl p-1">
-                <button
-                  type="button"
-                  onClick={() => setLoginTab('google')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${loginTab === 'google' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-                >
-                  Googleで続ける
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLoginTab('email')}
-                  className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${loginTab === 'email' ? 'bg-white text-[#222222] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
-                >
-                  メールで続ける
-                </button>
-              </div>
+            <button
+              type="button"
+              onClick={loginWithDiscord}
+              className="w-full h-12 flex items-center justify-center gap-2 text-white font-black rounded-xl transition-all active:scale-[0.98] shadow-lg text-sm"
+              style={{ background: '#5865F2' }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.317 4.369a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.249a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.036A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.331c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+              </svg>
+              Discordで続ける
+            </button>
 
-              <div className="h-[210px] relative">
-                <div className={`transition-opacity duration-300 h-full ${loginTab === 'google' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
-                  <div className="flex flex-col justify-center items-center h-full pt-4">
-                    <div id="google-login-btn" className="flex justify-center h-11 w-full"></div>
-                    <p className="text-center text-[10px] text-gray-400 mt-4">
-                      Googleアカウントで安全にログインできます
-                    </p>
-                  </div>
-                </div>
-
-                <div className={`transition-opacity duration-300 h-full ${loginTab === 'email' ? 'opacity-100 relative z-10' : 'opacity-0 pointer-events-none absolute inset-0'}`}>
-                  <form onSubmit={handleSendMagicLink} className="space-y-3 pt-2">
-                    <div>
-                      <input name="name" type="text" placeholder="お名前（初回のみ）" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm" />
-                    </div>
-                    <div>
-                      <input name="email" type="email" placeholder="メールアドレス *" className="w-full h-11 bg-gray-50 border-none rounded-xl px-4 focus:ring-2 focus:ring-[#6366f1] outline-none font-bold text-[#222222] text-sm" required />
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full h-12 text-white font-black rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg text-sm mt-1"
-                      style={{ background: 'linear-gradient(135deg, #EA4335, #FBBC05, #34A853, #4285F4)' }}
-                    >
-                      {loading ? <Loader2 className="animate-spin h-4 w-4 mx-auto" /> : 'ログインリンクを送る 📧'}
-                    </button>
-                  </form>
-                  <p className="text-center text-[10px] text-gray-400 mt-2">
-                    アカウントがない場合は自動で作成されます
-                  </p>
-                </div>
-              </div>
-            </div>
+            <p className="text-center text-[10px] text-gray-400 leading-relaxed">
+              Discordアカウントでログインします。<br />
+              アカウントがない場合は自動で作成されます。
+            </p>
           </div>
-        )}
       </div>
     </div>
   );

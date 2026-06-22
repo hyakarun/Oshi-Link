@@ -62,7 +62,6 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json() as any;
-    console.log('Proposal POST Body:', body);
     const { event_id, title, description, reason, location, address, latitude, longitude, source_url } = body;
 
     if (!event_id || !title) {
@@ -118,12 +117,54 @@ export async function POST(request: NextRequest) {
         source_url || null
       ).run();
       
-      console.log('Proposal created successfully:', id);
       return NextResponse.json({ success: true, id });
     } catch (dbError: any) {
       console.error('DB Error creating proposal:', dbError);
       return NextResponse.json({ error: 'データベースエラーが発生しました', details: dbError.message }, { status: 500 });
     }
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+// 提案への投票（proposal_id が null なら「現状維持」）
+export async function PUT(request: NextRequest) {
+  try {
+    const { env } = getRequestContext();
+    const db = (env as any).DB;
+    const user = await getSessionUser(db, request);
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json() as any;
+    const { event_id, proposal_id } = body;
+
+    if (!event_id) {
+      return NextResponse.json({ error: 'event_id is required' }, { status: 400 });
+    }
+
+    if (proposal_id) {
+      const proposal = await db.prepare(`
+        SELECT id FROM event_proposals WHERE id = ? AND event_id = ?
+      `).bind(proposal_id, event_id).first();
+
+      if (!proposal) {
+        return NextResponse.json({ error: 'Invalid proposal ID for this event' }, { status: 400 });
+      }
+    }
+
+    await db.prepare(`
+      DELETE FROM proposal_votes WHERE event_id = ? AND user_id = ?
+    `).bind(event_id, user.id).run();
+
+    await db.prepare(`
+      INSERT INTO proposal_votes (event_id, user_id, proposal_id)
+      VALUES (?, ?, ?)
+    `).bind(event_id, user.id, proposal_id || null).run();
+
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

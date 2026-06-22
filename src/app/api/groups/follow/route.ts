@@ -73,7 +73,8 @@ export async function POST(request: NextRequest) {
       if (followCount >= limit) {
         return NextResponse.json({ 
           error: `フォロー上限に達しました（${limit}件）。アップグレードを検討してください。`,
-          limitReached: true 
+          limitReached: true,
+          upgradeUrl: 'https://whop.com/oshi-soku/oshi-soku-discord-da/'
         }, { status: 403 });
       }
 

@@ -1,9 +1,12 @@
 import React from 'react';
-import { Star, Users, Search, Trash2, Share2, Bell, BookOpen, ExternalLink, ShieldCheck, ChevronRight, Sun, Moon, Laptop } from 'lucide-react';
+import { Star, Users, Search, Trash2, Share2, Bell, BookOpen, ExternalLink, ShieldCheck, ChevronRight, Sun, Moon, Laptop, MessageCircle } from 'lucide-react';
+
+const DISCORD_INVITE_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL;
 import { Group, User, View } from '@/lib/types';
 import { GroupAvatar, groupColorSolid } from '@/components/ui/shared';
 import { useTheme } from '@/components/ThemeProvider';
 import { OshiLinkLogo } from '@/components/OshiLinkLogo';
+import { useDiscordNotify, DiscordNotifyButton, discordChannelUrl, DiscordMarkIcon } from '@/components/layout/DiscordNotifyToggle';
 
 interface SidebarProps {
   user: User | null;
@@ -47,6 +50,9 @@ export function Sidebar({
   onGroupIconClick
 }: SidebarProps) {
   const { theme, setTheme } = useTheme();
+
+  const hasLinkedGroup = followedGroups.some(g => g.discord_linked);
+  const { state: notifyState, pending: notifyPending, toggle: toggleNotify } = useDiscordNotify(hasLinkedGroup);
 
   function getGroupColor(groupId: string) {
     const g = allGroups.find(item => item.id === groupId);
@@ -201,8 +207,32 @@ export function Sidebar({
                       <p className="text-[10px] text-gray-400 dark:text-zinc-500">
                         {g.event_count || 0}件 · {g.follower_count || 0}人
                       </p>
+                      {g.discord_linked && (
+                        <DiscordNotifyButton
+                          groupId={g.id}
+                          state={notifyState}
+                          pending={notifyPending.has(g.id)}
+                          onToggle={toggleNotify}
+                        />
+                      )}
                     </div>
                     <div className="flex items-center shrink-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity gap-1 md:gap-0.5">
+                      {(() => {
+                        const channelUrl = g.discord_linked ? discordChannelUrl(notifyState.guildId, g.discord_channel_id) : null;
+                        return channelUrl ? (
+                          <a
+                            href={channelUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(ev) => ev.stopPropagation()}
+                            className="p-1.5 md:p-1 rounded-lg hover:bg-[#5865F2]/10 text-gray-400 dark:text-zinc-500 hover:text-[#5865F2] transition-colors"
+                            title="Discordのスレッドを開く"
+                          >
+                            <DiscordMarkIcon className="w-3.5 h-3.5 md:w-3 md:h-3" />
+                          </a>
+                        ) : null;
+                      })()}
+
                       <button
                         onClick={(ev) => {
                           ev.stopPropagation();
@@ -270,6 +300,19 @@ export function Sidebar({
             <Search className="w-3.5 h-3.5" />
             <span>カレンダーを探す</span>
           </button>
+
+          {DISCORD_INVITE_URL && (
+            <a
+              href={DISCORD_INVITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full flex items-center justify-center gap-2 h-11 bg-[#5865F2] hover:bg-[#4752c4] text-white rounded-xl font-black text-[11px] transition-all active:scale-[0.98]"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Discordで通知を受け取る</span>
+            </a>
+          )}
 
           <div className="pt-2 text-center flex flex-col items-center gap-1">
             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 rounded-full text-[8px] font-black uppercase tracking-tighter border border-indigo-100/50 dark:border-indigo-900/30">
